@@ -1,0 +1,15 @@
+# -*- Makefile -*-
+#
+# michael a.g. aïvázis
+# orthologue
+# (c) 1998-2013 all rights reserved
+#
+
+# global options for the spisce
+PROJECT = praxis
+
+# default locations
+PROJ_TMPDIR = $(BLD_TMPDIR)/$(PACKAGE)
+
+
+# end of file 

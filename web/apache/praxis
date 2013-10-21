@@ -1,0 +1,33 @@
+<VirtualHost *:80>
+    ServerName praxis.orthologue.com
+    ServerAdmin webmaster@localhost
+
+    DocumentRoot /home/projects/praxis/web/html
+    <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+    </Directory>
+    <Directory "/home/projects/praxis/web/html/">
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ScriptAlias /bin/ /home/projects/praxis/web/bin/
+    <Directory "/home/projects/praxis/web/bin">
+        AllowOverride None
+    	Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    	Order allow,deny
+    	Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/praxis-error.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel warn
+
+    CustomLog ${APACHE_LOG_DIR}/praxis-access.log combined
+
+</VirtualHost>
