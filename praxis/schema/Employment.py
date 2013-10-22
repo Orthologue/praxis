@@ -12,6 +12,8 @@ import praxis
 from .Temporary import Temporary
 # and the tables i refer to
 from .Entity import Entity
+from .PayType import PayType
+from .PayFrequency import PayFrequency
 
 
 # table declaration
@@ -23,6 +25,9 @@ class Employment(Temporary, id='employments'):
     id = praxis.db.str().primary()
     employee = praxis.db.reference(key=Entity.eid).notNull()
     employer = praxis.db.reference(key=Entity.eid).notNull()
+    rate = praxis.db.float()
+    type = praxis.db.reference(key=PayType.id).notNull()
+    frequency = praxis.db.reference(key=PayFrequency.id).notNull()
 
 
 # end of file 

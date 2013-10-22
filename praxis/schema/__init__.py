@@ -19,6 +19,8 @@ default = db.default
 from .EmailType import EmailType as emailType
 from .EntityType import EntityType as entityType
 from .LocationType import LocationType as locationType
+from .PayType import PayType as payType
+from .PayFrequency import PayFrequency as payFrequency
 from .PhoneType import PhoneType as phoneType
 from .URIType import URIType as uriType
 
@@ -44,7 +46,7 @@ from .Employment import Employment as employment
 dom = (
     # contact management
     # attribute types
-    emailType, entityType, locationType, phoneType, uriType,
+    emailType, entityType, locationType, payType, payFrequency, phoneType, uriType,
     # atoms
     entity, company, person,
     # attributes
