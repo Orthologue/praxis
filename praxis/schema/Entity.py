@@ -21,6 +21,7 @@ class Entity(praxis.db.table, id='entities'):
     # data layout
     eid = praxis.db.str().primary()
     kind = praxis.db.reference(key=EntityType.id).notNull()
+    name = praxis.db.str().notNull()
     
     # meta-methods
     def __str__(self):

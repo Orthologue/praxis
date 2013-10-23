@@ -18,7 +18,8 @@ class Person(praxis.db.table, id='people'):
     Basic people information
     """
 
-    entity = praxis.db.reference(key=Entity.eid).notNull()
+    entity = praxis.db.reference(key=Entity.eid).primary()
+
     first = praxis.db.str().notNull()
     middle = praxis.db.str()
     last = praxis.db.str().notNull()

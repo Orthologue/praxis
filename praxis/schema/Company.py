@@ -19,7 +19,7 @@ class Company(praxis.db.table, id='companies'):
     """
 
     # data layout
-    entity = praxis.db.reference(key=Entity.eid).notNull()
+    entity = praxis.db.reference(key=Entity.eid).primary()
     name = praxis.db.str().notNull()
 
     # meta-methods
