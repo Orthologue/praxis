@@ -52,11 +52,39 @@ class Primer(praxis.dbapp, family='praxis.shells.primer'):
 
         # aliases for the tables
         emails = schema.emailType
+        entities = schema.entityType
+        locations = schema.locationType
+        pay = schema.payType
+        phones = schema.phoneType
+        uris = schema.uriType
+
         # add them to the pile
         records += [
             # email types
             emails.pyre_immutable(id=idd(), description="home"),
             emails.pyre_immutable(id=idd(), description="work"),
+            # entity types
+            entities.pyre_immutable(id=idd(), description="companies"),
+            entities.pyre_immutable(id=idd(), description="persons"),
+            # location types
+            locations.pyre_immutable(id=idd(), description="home"),
+            locations.pyre_immutable(id=idd(), description="office"),
+            locations.pyre_immutable(id=idd(), description="shipping"),
+            locations.pyre_immutable(id=idd(), description="billing"),
+            # pay types
+            pay.pyre_immutable(id=idd(), description="hourly"),
+            pay.pyre_immutable(id=idd(), description="salary"),
+            # phone types
+            phones.pyre_immutable(id=idd(), description="cell"),
+            phones.pyre_immutable(id=idd(), description="fax"),
+            phones.pyre_immutable(id=idd(), description="land line"),
+            # uri types
+            uri.pyre_immutable(id=idd(), description="web"),
+            uri.pyre_immutable(id=idd(), description="facebook"),
+            uri.pyre_immutable(id=idd(), description="instagram"),
+            uri.pyre_immutable(id=idd(), description="twitter"),
+            uri.pyre_immutable(id=idd(), description="vine"),
+            uri.pyre_immutable(id=idd(), description="youtube"),
             ]
 
         # store
