@@ -53,6 +53,7 @@ class Primer(praxis.dbapp, family='praxis.shells.primer'):
         # aliases for the tables
         emails = schema.emailType
         entities = schema.entityType
+        items = schema.itemType
         locations = schema.locationType
         pay = schema.payType
         phones = schema.phoneType
@@ -66,6 +67,9 @@ class Primer(praxis.dbapp, family='praxis.shells.primer'):
             # entity types
             entities.pyre_immutable(id=idd(), description="companies"),
             entities.pyre_immutable(id=idd(), description="persons"),
+            # item types
+            items.pyre_immutable(id=idd(), description="products"),
+            items.pyre_immutable(id=idd(), description="services"),
             # location types
             locations.pyre_immutable(id=idd(), description="home"),
             locations.pyre_immutable(id=idd(), description="office"),
