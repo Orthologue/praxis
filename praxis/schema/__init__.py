@@ -18,6 +18,7 @@ default = db.default
 # types
 from .EmailType import EmailType as emailType
 from .EntityType import EntityType as entityType
+from .ItemType import ItemType as itemType
 from .LocationType import LocationType as locationType
 from .PayType import PayType as payType
 from .PayFrequency import PayFrequency as payFrequency
@@ -27,6 +28,7 @@ from .URIType import URIType as uriType
 # atoms
 from .Entity import Entity as entity
 from .Company import Company as company
+from .Item import Item as item
 from .Person import Person as person
 # attributes
 from .Email import Email as email
@@ -43,12 +45,12 @@ from .Employment import Employment as employment
 
 
 # the table list, sorted by dependency
-dom = (
+tables = (
     # contact management
     # attribute types
-    emailType, entityType, locationType, payType, payFrequency, phoneType, uriType,
+    emailType, entityType, itemType, locationType, payType, payFrequency, phoneType, uriType,
     # atoms
-    entity, company, person,
+    entity, company, item, person,
     # attributes
     email, location, phone, uri,
     # connections between atoms and their attributes

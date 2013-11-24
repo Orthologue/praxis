@@ -29,10 +29,10 @@ class Builder:
         # if the caller didn't specify which tables to build
         if not tables:
             # build them all
-            tables = {table.pyre_name for table in schema.dom}
+            tables = {table.pyre_name for table in schema.tables}
 
         # go through the schema
-        for table in schema.dom:
+        for table in schema.tables:
             # build all the requested tables
             if table.pyre_name in tables: db.createTable(table)
 
@@ -50,10 +50,10 @@ class Builder:
         # if the caller didn't specify which tables to build
         if not tables:
             # build them all
-            tables = {table.pyre_name for table in schema.dom}
+            tables = {table.pyre_name for table in schema.tables}
 
         # go through the schema
-        for table in reversed(schema.dom):
+        for table in reversed(schema.tables):
             # build all the requested tables
             if table.pyre_name in tables: db.dropTable(table)
 
