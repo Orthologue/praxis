@@ -83,12 +83,12 @@ class Primer(praxis.dbapp, family='praxis.shells.primer'):
             phones.pyre_immutable(id=idd(), description="fax"),
             phones.pyre_immutable(id=idd(), description="land line"),
             # uri types
-            uri.pyre_immutable(id=idd(), description="web"),
-            uri.pyre_immutable(id=idd(), description="facebook"),
-            uri.pyre_immutable(id=idd(), description="instagram"),
-            uri.pyre_immutable(id=idd(), description="twitter"),
-            uri.pyre_immutable(id=idd(), description="vine"),
-            uri.pyre_immutable(id=idd(), description="youtube"),
+            uris.pyre_immutable(id=idd(), description="web"),
+            uris.pyre_immutable(id=idd(), description="facebook"),
+            uris.pyre_immutable(id=idd(), description="instagram"),
+            uris.pyre_immutable(id=idd(), description="twitter"),
+            uris.pyre_immutable(id=idd(), description="vine"),
+            uris.pyre_immutable(id=idd(), description="youtube"),
             ]
 
         # store
