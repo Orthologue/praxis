@@ -22,6 +22,8 @@ EXPORT_PYTHON_MODULES = \
     EntityPhone.py \
     EntityType.py \
     EntityURI.py \
+    Item.py \
+    ItemType.py \
     Location.py \
     LocationType.py \
     PayType.py \
