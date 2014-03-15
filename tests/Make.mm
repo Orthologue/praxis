@@ -10,7 +10,21 @@ include praxis.def
 # the package name
 PACKAGE = tests
 
+RECURSE_DIRS = \
+    ecrs \
+
 # the standard build targets
-all: tidy
+all:
+	BLD_ACTION="all" $(MM) recurse
+
+tidy::
+	BLD_ACTION="tidy" $(MM) recurse
+
+clean::
+	BLD_ACTION="clean" $(MM) recurse
+
+distclean::
+	BLD_ACTION="distclean" $(MM) recurse
+
 
 # end of file

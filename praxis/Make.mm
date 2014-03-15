@@ -13,6 +13,7 @@ PACKAGE = praxis
 # the list of directories to visit
 RECURSE_DIRS = \
     components \
+    ecrs \
     ingest \
     queries \
     schema \
