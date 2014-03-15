@@ -42,6 +42,17 @@ class PunchParser:
             clockout = line[self.OFFSET_CLOCKOUT]
 
             # type conversions
+            # first the employee id and name
+            rawid, rawname = raw.split(None, 1)
+            # normalize
+            id = ''.join(rawid.split(','))
+            name = ' '.join(reversed(rawname.split(',  ')))
+            # now the clock punches
+            clockin = time.strptime(clockin, self.TIME_FORMAT)
+            clockout = time.strptime(clockout, self.TIME_FORMAT)
+
+            print(id, name, clockin, clockout)
+            
 
         # all done
         return punches
@@ -52,7 +63,7 @@ class PunchParser:
     OFFSET_CLOCKIN = 10
     OFFSET_CLOCKOUT = 11
 
-    TIME_FORMAT = "mm/DD/YYYY hh:mm:ss"
+    TIME_FORMAT = "%m/%d/%Y %I:%M:%S%p"
 
 
 # end of file
