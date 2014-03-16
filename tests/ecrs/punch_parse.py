@@ -8,20 +8,44 @@
 
 
 """
-Sanity check: verify that the package is accessible
+Parse the various test files and verify they are processed correctly
 """
 
 
+# the test script
 def test():
+    """
+    Run the various tests
+    """
     # get the package
     import praxis.ecrs
-
     # make a punch parser
     parser = praxis.ecrs.punchParser()
-    # open the data stream
-    with open("punches.csv") as stream:
+
+    # the empty file
+    with open("punches-empty.csv") as stream:
         # and parse it
         data = parser.parse(stream)
+        # verify the payload is empty
+        assert not data
+
+    # a complete cycle
+    with open("punches-inout.csv") as stream:
+        # parse it
+        data = parser.parse(stream)
+        # compute the hours
+        hours = computeHours(data)
+        # verify the payload is correct
+        assert hours['1000'] == 8
+
+    # all done
+    return
+
+
+# the workhorse
+def computeHours(data):
+    # build the table of hours
+    table = {}
     # check
     for id in sorted(data):
         # pull the activity for this employee
@@ -30,17 +54,17 @@ def test():
         hours = 0
         # go through all the punches
         for clockin, clockout in punches:
-            # if there is no clockout, there's nothing to do
-            if not clockout: continue
+            # if there is no clockin or clockout, there's nothing to do
+            if not (clockin and clockout): continue
             # otherwise, subtract the two timestamps
             delta = clockout - clockin
             # adjust the hours worked
             hours += 24*delta.days + delta.seconds/3600
-        # show me
-        print("{}: {:5.2f}".format(id, hours))
+        # save the calculated hours
+        table[id] = hours
     
     # all done
-    return
+    return table
 
 
 # main
