@@ -21,9 +21,23 @@ def test():
     # open the data stream
     with open("punches.csv") as stream:
         # and parse it
-        punches = parser.parse(stream)
+        data = parser.parse(stream)
     # check
-    print(punches)
+    for id in sorted(data):
+        # pull the activity for this employee
+        punches = data[id]
+        # zero out the number of hours worked
+        hours = 0
+        # go through all the punches
+        for clockin, clockout in punches:
+            # if there is no clockout, there's nothing to do
+            if not clockout: continue
+            # otherwise, subtract the two timestamps
+            delta = clockout - clockin
+            # adjust the hours worked
+            hours += 24*delta.days + delta.seconds/3600
+        # show me
+        print("{}: {:5.2f}".format(id, hours))
     
     # all done
     return

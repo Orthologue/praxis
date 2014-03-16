@@ -25,8 +25,8 @@ class PunchParser:
         """
         # get the csv package
         import csv
-        # the time package so we can parse timestamps
-        import time
+        # the datetime package so we can parse timestamps
+        import datetime
         # and pull in the {defaultdict}
         import collections
 
@@ -34,6 +34,7 @@ class PunchParser:
         punches = collections.defaultdict(list)
         # create a reader
         reader = csv.reader(stream, **kwds)
+
         # start reading
         for line in reader:
             # pull in the punch info
@@ -45,14 +46,14 @@ class PunchParser:
             # first the employee id and name
             rawid, rawname = raw.split(None, 1)
             # normalize
-            id = ''.join(rawid.split(','))
+            id = int(''.join(rawid.split(',')))
             name = ' '.join(reversed(rawname.split(',  ')))
             # now the clock punches
-            clockin = time.strptime(clockin, self.TIME_FORMAT)
-            clockout = time.strptime(clockout, self.TIME_FORMAT)
-
-            print(id, name, clockin, clockout)
+            clockin = datetime.datetime.strptime(clockin, self.TIME_FORMAT) if clockin else None
+            clockout = datetime.datetime.strptime(clockout, self.TIME_FORMAT) if clockout else None
             
+            # store
+            punches[id].append((clockin, clockout))
 
         # all done
         return punches
