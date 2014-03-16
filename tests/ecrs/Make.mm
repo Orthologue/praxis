@@ -18,7 +18,7 @@ sanity:
 	${PYTHON} ./sanity.py
 
 punches:
-	${PYTHON} ./punch-create.py
-	${PYTHON} ./punch-parse.py
+	${PYTHON} ./punch_create.py
+	${PYTHON} ./punch_parse.py
 
 # end of file
