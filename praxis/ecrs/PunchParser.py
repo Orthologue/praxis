@@ -46,7 +46,7 @@ class PunchParser:
             # first the employee id and name
             rawid, rawname = raw.split(None, 1)
             # normalize
-            id = int(''.join(rawid.split(',')))
+            id = ''.join(rawid.split(','))
             name = ' '.join(reversed(rawname.split(',  ')))
             # now the clock punches
             clockin = datetime.datetime.strptime(clockin, self.TIME_FORMAT) if clockin else None
