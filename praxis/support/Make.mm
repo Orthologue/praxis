@@ -13,6 +13,7 @@ PACKAGE = support
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
     Builder.py \
+    Primer.py \
     __init__.py
 
 # the standard build targets

@@ -6,8 +6,10 @@
 #
 
 
-from .Builder import Builder as builder
-from .Primer import Primer as primer
+class Primer:
+    """
+    Populate a freshly instantiate schema with canonical data
+    """
 
 
-# end of file 
+# end of file
