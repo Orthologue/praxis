@@ -18,7 +18,7 @@ class DBClient(pyre.db.client, family="praxis.db.clients"):
 
 
     # convenience
-    from .. import schema, queries
+    from .. import schema, queries, support
 
 
     # interface
@@ -38,9 +38,10 @@ class DBClient(pyre.db.client, family="praxis.db.clients"):
         # establish the connection
         self.db.attach()
 
-        # make a builder
-        from ..support import builder
-        self.builder = builder(datastore=self.db)
+        # make a table builder
+        self.builder = self.support.builder()
+        # make a table primer
+        self.primer =  self.support.primer()
 
         # all done
         return
@@ -48,6 +49,7 @@ class DBClient(pyre.db.client, family="praxis.db.clients"):
 
     # implementation details
     builder = None
+    primer = None
 
 
 # end of file 

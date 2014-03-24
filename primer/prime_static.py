@@ -27,9 +27,10 @@ class Primer(praxis.dbapp, family='praxis.shells.primer'):
         """
         # make sure we are creating tables in the {praxis} database
         assert self.db.database == 'praxis'
-
-        # initialize the type tables
-        self.initializeTypes()
+        # ask my primer to create the default dataset
+        records = self.primer.prime(tokenGenerator=self.idd, schema=self.schema)
+        # store
+        self.db.insert(*records)
 
         # store the state of {idd}
         self.idd.save(self.iddcfg)
@@ -90,9 +91,6 @@ class Primer(praxis.dbapp, family='praxis.shells.primer'):
             uris.pyre_immutable(id=idd(), description="vine"),
             uris.pyre_immutable(id=idd(), description="youtube"),
             ]
-
-        # store
-        self.db.insert(*records)
 
         # all done
         return

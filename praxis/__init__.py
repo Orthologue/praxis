@@ -29,6 +29,8 @@ from . import schema
 from . import queries
 # the external file layouts
 from . import ingest
+# auxiliaries
+from . import support
 
 
 # convenience for interactive explorations

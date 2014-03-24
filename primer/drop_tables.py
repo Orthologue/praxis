@@ -31,7 +31,7 @@ class Destroyer(praxis.dbapp, family='praxis.shells.tableDestructor'):
         # make sure we are dropping tables from the {praxis} database
         assert self.db.database == 'praxis'
         # get my builder to do it
-        self.builder.dropTables(self.tables)
+        self.builder.dropTables(db=self.db, schema=self.schema, tables=self.tables)
         # and report success
         return 0
 

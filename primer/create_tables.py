@@ -31,7 +31,7 @@ class Creator(praxis.dbapp, family='praxis.shells.tableCreator'):
         # make sure we are creating tables in the {praxis} database
         assert self.db.database == 'praxis'
         # get my builder to do it
-        self.builder.createTables(tables=self.tables)
+        self.builder.createTables(db=self.db, schema=self.schema, tables=self.tables)
         # and report success
         return 0
 

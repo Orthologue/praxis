@@ -6,30 +6,17 @@
 #
 
 
-# access to the framework
-from .. import schema
-
-
 # declaration
 class Builder:
 
 
-    # public data
-    datastore = None
-
-
     # interface
-    def createTables(self, tables):
+    def createTables(self, db, schema, tables=None):
         """
         Create the table structure of my database
         """
-        # cache
-        db = self.datastore
-
-        # if the caller didn't specify which tables to build
-        if not tables:
-            # build them all
-            tables = {table.pyre_name for table in schema.tables}
+        # if the caller didn't specify which tables to build, build them all
+        tables = tables if tables is not None else {table.pyre_name for table in schema.tables}
 
         # go through the schema
         for table in schema.tables:
@@ -40,17 +27,12 @@ class Builder:
         return self
 
 
-    def dropTables(self, tables):
+    def dropTables(self, db, schema, tables=None):
         """
         Remove all tables from the database; use with caution!
         """
-        # cache
-        db = self.datastore
-
-        # if the caller didn't specify which tables to build
-        if not tables:
-            # build them all
-            tables = {table.pyre_name for table in schema.tables}
+        # if the caller didn't specify which tables to build, build them all
+        tables = tables if tables is not None else {table.pyre_name for table in schema.tables}
 
         # go through the schema
         for table in reversed(schema.tables):
@@ -59,16 +41,6 @@ class Builder:
 
         # all done
         return self
-
-
-    # meta-methods
-    def __init__(self, datastore, **kwds):
-        # chain up
-        super().__init__(**kwds)
-        # save the datastore reference
-        self.datastore = datastore
-        # all done
-        return
 
 
 # end of file 
