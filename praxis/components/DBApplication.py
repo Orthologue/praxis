@@ -33,8 +33,6 @@ class DBApplication(DBClient, Application, family="praxis.shells.db"):
         # notify the user that this app is starting up
         self.info.line("startup:".format(self))
 
-        # make sure we are connecting to the right database
-        assert self.db.database.startswith('praxis')
         # let me know
         self.info.line("  connected to {.db.database!r}".format(self))
 
