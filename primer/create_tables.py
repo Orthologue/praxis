@@ -13,32 +13,12 @@ Create all database tables
 # access the package
 import praxis
 
-# app declaration
-class Creator(praxis.dbapp, family='praxis.shells.tableCreator'):
-    """
-    Build the entire table set
-    """
-
-    # configurable state
-    tables = praxis.properties.set(default=None, schema=praxis.properties.str())
-
-    # application obligations
-    @praxis.export
-    def main(self, *args, **kwds):
-        """
-        Build all database tables
-        """
-        # make sure we are creating tables in the {praxis} database
-        assert self.db.database == 'praxis'
-        # get my builder to do it
-        self.builder.createTables(db=self.db, schema=self.schema, tables=self.tables)
-        # and report success
-        return 0
-
 # main
 if __name__ == "__main__":
     # build the app
-    app = Creator(name='praxis:creator')
+    app = praxis.applications.creator(name='praxis:creator')
+    # make sure we are creating tables in the {praxis} database
+    assert app.db.database == 'praxis'
     # and run it
     status = app.run()
     # send the result to the shell

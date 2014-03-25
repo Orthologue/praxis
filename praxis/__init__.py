@@ -31,6 +31,8 @@ from . import queries
 from . import ingest
 # auxiliaries
 from . import support
+# default application bases
+from . import applications
 
 
 # convenience for interactive explorations

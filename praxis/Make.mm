@@ -12,6 +12,7 @@ PACKAGE = praxis
 
 # the list of directories to visit
 RECURSE_DIRS = \
+    applications \
     components \
     ecrs \
     ingest \

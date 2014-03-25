@@ -22,7 +22,7 @@ create:
 	$(PYTHON) create_tables.py
 
 # initialize the tables
-prime:
+praxis:
 	$(PYTHON) prime_static.py
 
 # wipe everything clean
