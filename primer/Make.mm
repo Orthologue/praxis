@@ -21,10 +21,6 @@ create:
 	$(PYTHON) create_database.py
 	$(PYTHON) create_tables.py
 
-# initialize the tables
-praxis:
-	$(PYTHON) prime_static.py
-
 # wipe everything clean
 drop:
 	-$(PYTHON) drop_tables.py
@@ -37,6 +33,7 @@ prime: praxis suppliers
 
 # populate the database with the administrative content
 praxis:
+	$(PYTHON) prime_static.py
 
 # add suplier info
 suppliers:
