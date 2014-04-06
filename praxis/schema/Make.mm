@@ -13,6 +13,7 @@ PACKAGE = schema
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
     Company.py \
+    ContactType.py \
     Email.py \
     EmailType.py \
     Employment.py \

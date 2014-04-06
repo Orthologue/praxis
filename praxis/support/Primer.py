@@ -23,6 +23,7 @@ class Primer:
         # walk through the chain of tables
         self.primeEntityTypes(tokenGenerator, schema, records, **kwds)
         self.primeItemTypes(tokenGenerator, schema, records, **kwds)
+        self.primeContactTypes(tokenGenerator, schema, records, **kwds)
         self.primeLocationTypes(tokenGenerator, schema, records, **kwds)
         self.primeEmailTypes(tokenGenerator, schema, records, **kwds)
         self.primePhoneTypes(tokenGenerator, schema, records, **kwds)
@@ -59,6 +60,24 @@ class Primer:
         records += [
             items.pyre_immutable(id=tokenGenerator(), description="products"),
             items.pyre_immutable(id=tokenGenerator(), description="services"),
+            ]
+        # all  done
+        return
+
+
+    def primeContactTypes(self, tokenGenerator, schema, records, **kwds):
+        """
+        Create the default contact types
+        """
+        # pull the contact types
+        contacts = schema.contactType
+        # add to the list of records; the values are supposed to match names of tables in
+        # the current schema that contain contact information
+        records += [
+            contacts.pyre_immutable(id=tokenGenerator(), description="email"),
+            contacts.pyre_immutable(id=tokenGenerator(), description="location"),
+            contacts.pyre_immutable(id=tokenGenerator(), description="phone"),
+            contacts.pyre_immutable(id=tokenGenerator(), description="uri"),
             ]
         # all  done
         return

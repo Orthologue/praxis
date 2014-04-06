@@ -16,6 +16,7 @@ default = db.default
 
 
 # types
+from .ContactType import ContactType as contactType
 from .EmailType import EmailType as emailType
 from .EntityType import EntityType as entityType
 from .ItemType import ItemType as itemType
@@ -48,7 +49,9 @@ from .Employment import Employment as employment
 tables = (
     # contact management
     # attribute types
-    emailType, entityType, itemType, locationType, payType, payFrequency, phoneType, uriType,
+    entityType, itemType,
+    contactType, emailType, locationType, phoneType, uriType,
+    payType, payFrequency, 
     # atoms
     entity, company, item, person,
     # attributes
