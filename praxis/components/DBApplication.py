@@ -44,6 +44,7 @@ class DBApplication(DBClient, Application, family="praxis.shells.db"):
         self.info.line("  initializing idd ".format(self))
         self.idd = praxis.idd(name='praxis:idd')
         self.idd.save(uri=self.iddcfg)
+        self.info.line("    first token: {0.idd.date}-{0.idd.tid}".format(self))
 
         # ready to go
         self.info.log()
