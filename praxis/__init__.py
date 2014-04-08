@@ -62,11 +62,7 @@ def boot():
     uri = executive.uri().coerce("vfs:/praxis/system")
     # add it to the configuration path
     cfgpath.append(uri)
-    for x in cfgpath: print(x.uri)
 
-    # create, load and configure the {praxis} package
-    nameserver.package(name='praxis', executive=executive)
-    
     # all done
     return
     
