@@ -14,6 +14,7 @@ PACKAGE = praxis
 RECURSE_DIRS = \
     applications \
     components \
+    dom \
     ecrs \
     ingest \
     queries \
