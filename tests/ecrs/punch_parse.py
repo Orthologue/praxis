@@ -25,16 +25,17 @@ def test():
     # the empty file
     with open("punches-empty.csv") as stream:
         # and parse it
-        data = parser.parse(stream)
+        names, punches = parser.parse(stream)
         # verify the payload is empty
-        assert not data
+        assert not names
+        assert not punches
 
     # a complete cycle
     with open("punches-inout.csv") as stream:
         # parse it
-        data = parser.parse(stream)
+        names, punches = parser.parse(stream)
         # compute the hours
-        hours = computeHours(data)
+        hours = computeHours(punches)
         # verify the payload is correct
         assert hours['1000'] == 8
 

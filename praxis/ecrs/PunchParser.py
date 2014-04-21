@@ -31,6 +31,7 @@ class PunchParser:
         import collections
 
         # build the payload
+        names = {}
         punches = collections.defaultdict(list)
         # create a reader
         reader = csv.reader(stream, **kwds)
@@ -46,17 +47,18 @@ class PunchParser:
             # first the employee id and name
             rawid, rawname = raw.split(None, 1)
             # normalize
-            id = ''.join(rawid.split(','))
+            eid = ''.join(rawid.split(','))
             name = ' '.join(reversed(rawname.split(',  ')))
             # now the clock punches
             clockin = datetime.datetime.strptime(clockin, self.TIME_FORMAT) if clockin else None
             clockout = datetime.datetime.strptime(clockout, self.TIME_FORMAT) if clockout else None
             
             # store
-            punches[id].append((clockin, clockout))
+            names[eid] = rawname
+            punches[eid].append((clockin, clockout))
 
         # all done
-        return punches
+        return names, punches
 
 
     # constants -- for version 3.2.02 of the CATAPULT report
