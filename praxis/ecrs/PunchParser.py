@@ -48,13 +48,13 @@ class PunchParser:
             rawid, rawname = raw.split(None, 1)
             # normalize
             eid = ''.join(rawid.split(','))
-            name = ' '.join(reversed(rawname.split(',  ')))
+            name = tuple(rawname.split(',  '))
             # now the clock punches
             clockin = datetime.datetime.strptime(clockin, self.TIME_FORMAT) if clockin else None
             clockout = datetime.datetime.strptime(clockout, self.TIME_FORMAT) if clockout else None
             
             # store
-            names[eid] = rawname
+            names[eid] = name
             punches[eid].append((clockin, clockout))
 
         # all done
