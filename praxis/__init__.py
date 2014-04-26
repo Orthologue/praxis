@@ -60,6 +60,8 @@ home, prefix, defaults = addPackageConfiguration(namespace='praxis', file=__file
 from .components import app, dbapp, idd
 # the database schema
 from . import schema
+# the data model
+from . import model
 # the queries
 from . import queries
 # the external file layouts

@@ -8,10 +8,11 @@
 # project defaults
 include praxis.def
 # the package name
-PACKAGE = dom
+PACKAGE = model
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
+    Punches.py \
     __init__.py
 
 # the standard build targets

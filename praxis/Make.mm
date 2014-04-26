@@ -9,14 +9,16 @@
 include praxis.def
 # the package name
 PACKAGE = praxis
+# clean up
+PROJ_CLEAN += $(EXPORT_MODULEDIR)
 
 # the list of directories to visit
 RECURSE_DIRS = \
     applications \
     components \
-    dom \
     ecrs \
     ingest \
+    model \
     queries \
     schema \
     support \

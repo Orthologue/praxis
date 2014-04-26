@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #
 # michael a.g. aïvázis
-# california institute of technology
-# (c) 1998-2013 all rights reserved
+# orthologue
+# (c) 1998-2014 all rights reserved
 #
 
 
@@ -27,12 +27,14 @@ class PunchParser:
         import csv
         # the datetime package so we can parse timestamps
         import datetime
-        # and pull in the {defaultdict}
+        # {defaultdict}
         import collections
+        # and the clock payload object
+        from .. import model
 
         # build the payload
         names = {}
-        punches = collections.defaultdict(list)
+        punches = collections.defaultdict(model.punchlist)
         # create a reader
         reader = csv.reader(stream, **kwds)
 
