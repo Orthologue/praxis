@@ -27,14 +27,14 @@ class PunchParser:
         import csv
         # the datetime package so we can parse timestamps
         import datetime
-        # {defaultdict}
-        import collections
+        # for {pyre.patterns.vivify}
+        import pyre
         # and the clock payload object
         from .. import model
 
         # build the payload
         names = {}
-        punches = collections.defaultdict(model.punchlist)
+        punches = pyre.patterns.vivify(levels=2, atom=model.punchlist)
         # create a reader
         reader = csv.reader(stream, **kwds)
 
@@ -49,15 +49,18 @@ class PunchParser:
             # first the employee id and name
             rawid, rawname = raw.split(None, 1)
             # normalize
-            eid = ''.join(rawid.split(','))
+            eid = ''.join(rawid.split(',')) # the {eids} have thousands separators...
             name = tuple(rawname.split(',  '))
             # now the clock punches
             clockin = datetime.datetime.strptime(clockin, self.TIME_FORMAT) if clockin else None
             clockout = datetime.datetime.strptime(clockout, self.TIME_FORMAT) if clockout else None
+
+            # build the date key
+            date = None if clockin is None else clockin.date()
             
             # store
             names[eid] = name
-            punches[eid].append((clockin, clockout))
+            punches[eid][date].append((clockin, clockout))
 
         # all done
         return names, punches
