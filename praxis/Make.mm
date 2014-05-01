@@ -16,6 +16,7 @@ PROJ_CLEAN += $(EXPORT_MODULEDIR)
 RECURSE_DIRS = \
     applications \
     components \
+    compliance \
     ecrs \
     ingest \
     model \

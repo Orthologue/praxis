@@ -8,6 +8,8 @@
 
 # access to the framework
 import pyre
+# and some of my parts
+from .. import compliance
 
 
 # declaration
@@ -15,6 +17,11 @@ class Application(pyre.application, family="praxis.shells.application"):
     """
     The base class for {praxis} applications
     """
+
+    
+    # public state
+    jurisdiction = compliance.jurisdiction(default='california')
+    jurisdiction.doc = 'compliant calculators for the default company jurisdiction'
 
 
 # end of file 

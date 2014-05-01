@@ -11,6 +11,7 @@ include praxis.def
 PACKAGE = tests
 
 RECURSE_DIRS = \
+    compliance \
     ecrs \
 
 # the standard build targets
