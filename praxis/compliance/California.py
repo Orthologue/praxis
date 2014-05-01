@@ -96,7 +96,7 @@ class California(pyre.component,
         regular = min(regular, 40)
 
         # consistency check
-        assert total == regular + sesqui + double
+        assert (total - regular - sesqui - double) < (1/3600) # expect second accuracy
         
         # all done
         return regular, sesqui, double
