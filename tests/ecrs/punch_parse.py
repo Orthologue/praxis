@@ -32,12 +32,15 @@ def test():
 
     # a complete cycle
     with open("punches-inout.csv") as stream:
+        # an employee id that is know to exist in this file
+        eid = '1000'
         # parse it
         names, punches = parser.parse(stream)
-        # compute the hours
-        hours = computeHours(punches)
+        # compute the hours: it is a double sum over the hours worked in a given day and over
+        # the days in the data set
+        total = sum(sum(card.hours()) for card in punches[eid].values())
         # verify the payload is correct
-        assert hours['1000'] == 8
+        assert total == 8
 
     # all done
     return
