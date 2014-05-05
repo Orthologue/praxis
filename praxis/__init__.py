@@ -9,27 +9,6 @@
 # externals
 import os
 
-
-# geography
-def home():
-    """
-    Return the package installation directory
-    """
-    return os.path.dirname(__file__)
-
-def prefix():
-    """
-    Compute the location of the {praxis} installation
-    """
-    return os.path.abspath(os.path.join(home(), os.path.pardir, os.path.pardir))
-
-def defaults():
-    """
-    Compute the location of the package configuration files
-    """
-    return os.path.abspath(os.path.join(prefix(), 'defaults'))
-
-    
 # convenience for interactive explorations
 def pg():
     # build a db component
