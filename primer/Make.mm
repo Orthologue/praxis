@@ -29,11 +29,14 @@ drop:
 
 
 # the overall target that populates all the database tables
-prime: praxis suppliers
+prime: praxis staff suppliers
 
 # populate the database with the administrative content
 praxis:
 	$(PYTHON) prime_static.py
+
+# add staff info
+staff:
 
 # add suplier info
 suppliers:

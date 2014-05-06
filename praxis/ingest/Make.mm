@@ -12,6 +12,7 @@ PACKAGE = ingest
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
+    Staff.py \
     __init__.py
 
 # the standard build targets
