@@ -24,7 +24,7 @@ from pyre import schemata, protocol, component, properties
 # decorators
 from pyre import export, provides
 # the runtime manager
-from pyre import executive, addPackageConfiguration
+from pyre import executive
 
 # db support
 from pyre import db, records, tabular
@@ -33,7 +33,11 @@ from pyre import db, records, tabular
 from pyre import tracking, units
 
 # fire up
-home, prefix, defaults = addPackageConfiguration(namespace='praxis', file=__file__)
+package = executive.registerPackage(name='praxis', file=__file__)
+# save the geography
+home = package.home
+prefix = package.prefix
+defaults = package.defaults
 
 # access to the default shells and other components
 from .components import app, dbapp, idd
