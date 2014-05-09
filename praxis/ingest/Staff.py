@@ -6,6 +6,8 @@
 #
 
 
+# externals
+import re
 # access to support for records
 import pyre.records
 
@@ -41,7 +43,7 @@ class Staff:
         cell = pyre.records.str()
         email = pyre.records.str()
         address = pyre.records.str()
-        rate = pyre.records.str()
+        rate = pyre.records.decimal()
         type = pyre.records.str()
 
         dob = pyre.records.str()
@@ -56,5 +58,22 @@ class Staff:
         terminated = pyre.records.date()
         terminated.format = '%m/%d/%Y'
         
+        @pyre.records.converter(traits=[rate])
+        def money(value, stripper=re.compile('[^\d.]')):
+            value = ''.join(stripper.split(value))        
+            if not value: return 0
+            return value
+
+        @pyre.records.converter(traits=[cell])
+        def phone(value, stripper=re.compile('[^\d+]')):
+            value = ''.join(stripper.split(value))        
+            if len(value) == 10:
+                value = '+1' + value
+            return value
+
+        @pyre.records.converter(traits=[ssn])
+        def ssnstrip(value, stripper=re.compile('[^\d]')):
+            return ''.join(stripper.split(value))
+
     
 # end of file 
