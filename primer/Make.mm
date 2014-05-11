@@ -29,16 +29,10 @@ drop:
 
 
 # the overall target that populates all the database tables
-prime: praxis staff suppliers
+prime: boot
 
 # populate the database with the administrative content
-praxis:
+boot:
 	$(PYTHON) prime_static.py
-
-# add staff info
-staff:
-
-# add suplier info
-suppliers:
 
 # end of file
