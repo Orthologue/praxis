@@ -34,7 +34,7 @@ distclean::
 
 #--------------------------------------------------------------------------
 #  shortcuts to building in my subdirectories
-.PHONY: bin defaults doc examples extensions lib packages schema tests web
+.PHONY: bin defaults praxis primer tests web
 
 bin:
 	(cd bin; $(MM))
@@ -42,23 +42,8 @@ bin:
 defaults:
 	(cd defaults; $(MM))
 
-doc:
-	(cd doc; $(MM))
-
-examples:
-	(cd examples; $(MM))
-
-extensions:
-	(cd extensions; $(MM))
-
-lib:
-	(cd lib; $(MM))
-
-packages:
-	(cd packages; $(MM))
-
-schema:
-	(cd schema; $(MM))
+praxis:
+	(cd praxis; $(MM))
 
 tests:
 	(cd tests; $(MM))
@@ -66,17 +51,18 @@ tests:
 web:
 	(cd web; $(MM))
 
-build: lib packages extensions defaults bin
+build: praxis defaults bin
 
-test: build tests examples
+test: build tests
 
 
 #--------------------------------------------------------------------------
 #
-PYRE_ZIP = $(EXPORT_ROOT)/pyre-1.0.zip
-zip: packages defaults
-	(cd $(EXPORT_ROOT)/packages; zip -r ${PYRE_ZIP} * )
-	(cd $(EXPORT_ROOT); zip -r ${PYRE_ZIP} defaults )
+PRAXIS_ZIP = $(EXPORT_ROOT)/praxis-1.0.zip
+zip: praxis defaults
+	@-$(RM_F) $(PRAXIS_ZIP)
+	@(cd $(EXPORT_ROOT)/packages; zip -r ${PRAXIS_ZIP} * )
+	@(cd $(EXPORT_ROOT); zip -r ${PRAXIS_ZIP} defaults )
 
 
 # end of file 
