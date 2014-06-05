@@ -35,9 +35,7 @@ from pyre import tracking, units
 # fire up
 package = executive.registerPackage(name='praxis', file=__file__)
 # save the geography
-home = package.home
-prefix = package.prefix
-defaults = package.defaults
+home, prefix, defaults = package.layout()
 
 # access to the default shells and other components
 from .components import app, dbapp, idd
