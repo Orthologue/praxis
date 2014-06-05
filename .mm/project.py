@@ -8,12 +8,11 @@
 
 def requirements(package):
     """
-    Build a dictionary with the external dependencies of the {pyre} project
+    Build a dictionary with the external dependencies of the {praxis} project
     """
 
     # build the package instances
     packages = [
-        package(name='libpq', optional=True),
         package(name='python', optional=False),
         ]
 
