@@ -11,13 +11,13 @@ import pyre
 # externals
 import datetime
 # and my protocol
-from .Jurisdiction import Jurisdiction as jurisdiction
+from .. import jurisdiction
 
 
 # class declaration
 class California(pyre.component,
                  implements = jurisdiction,
-                 family = "praxis.compliance.california"):
+                 family = "praxis.compliance.us.california"):
     """
     Encapsulation of calculators compliant with California law
     """

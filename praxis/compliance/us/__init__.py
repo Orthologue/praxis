@@ -6,10 +6,8 @@
 #
 
 
-# the protocol
-from .Jurisdiction import Jurisdiction as jurisdiction
-
 # the jurisdictions
-from . import us
+from .California import California as california
+
 
 # end of file 
