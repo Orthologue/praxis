@@ -20,7 +20,7 @@ class Application(pyre.application, family="praxis.shells.application"):
 
     
     # public state
-    jurisdiction = compliance.jurisdiction(default='california')
+    jurisdiction = compliance.jurisdiction(default='us.california')
     jurisdiction.doc = 'compliant calculators for the default company jurisdiction'
 
 
