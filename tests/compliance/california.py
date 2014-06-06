@@ -17,7 +17,7 @@ def test():
     import praxis
 
     # create a calculator compliant with California laws and regulations
-    california = praxis.compliance.california()
+    california = praxis.compliance.us.california()
 
     # four twelve-hour days
     hours = (12, 12, 12, 12, 0, 0, 0)
