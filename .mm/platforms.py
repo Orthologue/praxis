@@ -25,7 +25,7 @@ def platform(builder):
         systemincdir = os.path.join(systemdir, 'include')
 
         # set up {python}
-        pythonVersion = '3.3'
+        pythonVersion = '3.4'
         pythonMemoryModel = 'm'
         python = 'python' + pythonVersion
         pythonHome = os.path.join(
