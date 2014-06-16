@@ -8,12 +8,11 @@
 # project defaults
 include praxis.def
 # the package name
-PACKAGE = applications
+PACKAGE = actions
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
-    Creator.py \
-    Destroyer.py \
+    Command.py \
     Primer.py \
     __init__.py
 

@@ -6,11 +6,11 @@
 #
 
 
-from .Application import Application as app
-from .DBApplication import DBApplication as dbapp
-from .DBClient import DBClient as dbclient
-
 from .IDD import IDD as idd
+from .Layout import Layout as layout
+from .Action import Action as action
+from .Praxis import Praxis as plexus
+from .Datastore import Datastore as datastore
 
 
 # end of file 

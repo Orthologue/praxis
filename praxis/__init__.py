@@ -11,46 +11,51 @@ import os
 
 # convenience for interactive explorations
 def pg():
+    # build an application layout
+    cfg = layout()
     # build a db component
-    dbc = db.postgres(name="praxis:db")
+    dbc = db.postgres(name="{.project}:db".format(cfg))
     # establish the connection
     dbc.attach()
     # and return the component
     return dbc
 
 # import and publish pyre symbols
-# protocols, components and traits
-from pyre import schemata, protocol, component, properties
-# decorators
-from pyre import export, provides
-# the runtime manager
-from pyre import executive
-
-# db support
-from pyre import db, records, tabular
-
-# miscellaneous packages
-from pyre import tracking, units
+from pyre import (
+    # protocols, components and traits
+    schemata, protocol, component, properties,
+    # decorators
+    export, provides,
+    # the runtime manager
+    executive,
+    # db support
+    db, records, tabular,
+    # miscellaneous packages
+    tracking, units,
+)
 
 # fire up
 package = executive.registerPackage(name='praxis', file=__file__)
 # save the geography
 home, prefix, defaults = package.layout()
 
-# access to the default shells and other components
-from .components import app, dbapp, idd
-# the database schema
-from . import schema
-# the data model
-from . import model
-# the queries
-from . import queries
-# the external file layouts
-from . import ingest
-# auxiliaries
-from . import support
-# default application bases
-from . import applications
+# access to components
+from .components import idd, layout, action, datastore, plexus
+from .actions import command
+
+# and other {praxis} parts
+from . import (
+    # the database schema
+    schema,
+    # the data model
+    model,
+    # the queries
+    queries,
+    # the external file layouts
+    ingest,
+    # auxiliaries
+    support,
+)
 
 
 # end of file 

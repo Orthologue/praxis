@@ -13,12 +13,15 @@ class Primer:
 
 
     # interface
-    def prime(self, tokenGenerator, schema, records=None, **kwds):
+    def prime(self, tokenGenerator, datastore, records=None, **kwds):
         """
         Main entry point that delegates table priming to the more specialized hooks
         """
         # build the list of records we will add to the database
         records = records if records is not None else []
+
+        # get access to the schema
+        schema = datastore.schema
 
         # walk through the chain of tables
         self.primeEntityTypes(tokenGenerator, schema, records, **kwds)

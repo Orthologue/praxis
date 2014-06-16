@@ -30,6 +30,26 @@ class IDD(praxis.component, family="praxis.idd"):
     alphabet.doc = "the list of admissible characters"
 
 
+    # public data
+    cfg = 'file:idd.cfg'
+
+
+    # factories
+    @classmethod
+    def create(cls, layout):
+        """
+        Create an instance that is bound to the local configuration file
+        """
+        # load the configuration file
+        cls.pyre_executive.loadConfiguration(layout.iddcfg, locator=praxis.tracking.here())
+        # build one
+        idd = cls(name='{.project}:idd'.format(layout), cfg=layout.iddcfg)
+        # ask it to save its state
+        idd.save()
+        # and return it
+        return idd
+
+
     # interface
     def encode(self, tid, date):
         """
@@ -82,10 +102,12 @@ class IDD(praxis.component, family="praxis.idd"):
         return
 
 
-    def save(self, uri='file:idd.cfg'):
+    def save(self):
         """
-        Save the current state in {uri} assuming it is resolvable by the pyre fileserver
+        Save the current state in {uri}, assuming it is resolvable by the pyre fileserver
         """
+        # grab the uri of my configuration file
+        uri = self.cfg
         # ask the framework
         import pyre
         # for a weaver
@@ -103,9 +125,11 @@ class IDD(praxis.component, family="praxis.idd"):
 
         
     # meta-methods
-    def __init__(self, **kwds):
+    def __init__(self, cfg, **kwds):
         # chain up
         super().__init__(**kwds)
+        # save the uri of my configuration file
+        self.cfg = cfg
         # set up my number base
         self.base = len(self.alphabet)
         # my hash table

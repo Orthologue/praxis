@@ -14,7 +14,7 @@ PROJ_CLEAN += $(EXPORT_MODULEDIR)
 
 # the list of directories to visit
 RECURSE_DIRS = \
-    applications \
+    actions \
     components \
     compliance \
     ecrs \

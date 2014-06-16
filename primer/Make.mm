@@ -18,14 +18,14 @@ reset: drop create
 
 # build the database
 create:
-	$(PYTHON) create_database.py
-	$(PYTHON) create_tables.py
+	@praxis db create
+	@praxis db init
 
 # wipe everything clean
 drop:
-	-$(PYTHON) drop_tables.py
-	-$(PYTHON) drop_database.py
-	-$(RM_F) idd.cfg
+	-@praxis db clear
+	-@praxis db drop
+	-@$(RM_F) idd.cfg
 
 
 # the overall target that populates all the database tables
@@ -33,6 +33,6 @@ prime: boot
 
 # populate the database with the administrative content
 boot:
-	$(PYTHON) prime_static.py
+	praxis db prime
 
 # end of file

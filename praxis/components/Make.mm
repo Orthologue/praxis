@@ -12,10 +12,11 @@ PACKAGE = components
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
-    Application.py \
-    DBApplication.py \
-    DBClient.py \
+    Action.py \
+    Datastore.py \
     IDD.py \
+    Layout.py \
+    Praxis.py \
     __init__.py
 
 # the standard build targets

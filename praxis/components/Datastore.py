@@ -11,7 +11,7 @@ import pyre
 
 
 # declaration
-class DBClient(pyre.db.client, family="praxis.db.clients"):
+class Datastore(pyre.db.client, family="praxis.datastore"):
     """
     The base class for {praxis} components that connect to the database
     """
@@ -22,34 +22,22 @@ class DBClient(pyre.db.client, family="praxis.db.clients"):
 
 
     # interface
-    def lookup(self, query):
+    def select(self, query):
         """
         Run query against my data store and return the results
         """
         # easy enough
-        return self.db.select(query=query)
+        return self.server.select(query=query)
 
 
     # meta methods
     def __init__(self, **kwds):
         # chain up
         super().__init__(**kwds)
-
         # establish the connection
-        self.db.attach()
-
-        # make a table builder
-        self.builder = self.support.builder()
-        # make a table primer
-        self.primer =  self.support.primer()
-
+        self.server.attach()
         # all done
         return
-
-
-    # implementation details
-    builder = None
-    primer = None
 
 
 # end of file 
