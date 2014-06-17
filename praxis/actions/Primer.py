@@ -41,7 +41,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         Create my database
         """
         # get the name of my database
-        name = self.pyre_nameserver['praxis.datastore.name']
+        name = plexus.layout.project
         # tell me
         self.info.log('creating the database {!r}'.format(name))
 
@@ -67,8 +67,10 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # show me
         self.info.log('creating the schema: tables={.tables}'.format(self))
 
+        # get the application layout
+        layout = plexus.layout
         # instantiate a connection to the datastore
-        datastore = praxis.datastore(name='praxis:datastore')
+        datastore = praxis.datastore(name='{.project}:datastore'.format(layout))
         # get the set of tables to build
         tables = self.tables
         # make a builder
@@ -115,8 +117,10 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # show me
         self.info.log('clearing tables: {.tables}'.format(self))
 
+        # get the application layout
+        layout = plexus.layout
         # instantiate a connection to the datastore
-        datastore = praxis.datastore(name='praxis:datastore')
+        datastore = praxis.datastore(name='{.project}:datastore'.format(layout))
         # get the set of tables to build
         tables = self.tables
         # make a builder
@@ -133,7 +137,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         Drop the entrire database
         """
         # get the name of my database
-        name = self.pyre_nameserver['praxis.datastore.name']
+        name = plexus.layout.project
         # show me
         self.info.log('dropping the database {!r}'.format(name))
 
