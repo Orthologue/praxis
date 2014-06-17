@@ -1,0 +1,155 @@
+# -*- Python -*-
+# -*- coding: utf-8 -*-
+#
+# michael a.g. aïvázis
+# orthologue
+# (c) 1998-2014 all rights reserved
+#
+
+
+# externals
+import os
+
+
+# administrative
+def copyright():
+    """
+    Return the praxis copyright note
+    """
+    return _praxis_copyright
+
+def license():
+    """
+    Print the praxis license
+    """
+    print(_praxis_license)
+    return
+
+def version():
+    """
+    Return the praxis version
+    """
+    return _praxis_version
+
+def credits():
+    """
+    Print the acknowledgments
+    """
+    print(_praxis_acknowledgments)
+    return
+
+
+def usage(**kwds):
+    # print the usage screen
+    print(_praxis_usage)
+    # and return
+    return
+
+
+# convenience for interactive explorations
+def pg():
+    # build an application layout
+    cfg = layout()
+    # build a db component
+    dbc = db.postgres(name="{.project}:db".format(cfg))
+    # establish the connection
+    dbc.attach()
+    # and return the component
+    return dbc
+
+# import and publish pyre symbols
+from pyre import (
+    # protocols, components and traits
+    schemata, protocol, component, properties, constraints,
+    # decorators
+    export, provides,
+    # the runtime manager
+    executive,
+    # db support
+    db, records, tabular,
+    # miscellaneous packages
+    tracking, units,
+)
+
+# fire up
+package = executive.registerPackage(name='praxis', file=__file__)
+# save the geography
+home, prefix, defaults = package.layout()
+
+# access to components
+from .components import idd, layout, action, datastore, plexus
+from .actions import command
+
+# and other {praxis} parts
+from . import (
+    # the database schema
+    schema,
+    # the data model
+    model,
+    # the queries
+    queries,
+    # the external file layouts
+    ingest,
+    # auxiliaries
+    support,
+)
+
+
+# constants
+_praxis_version = (1, 0, BZR_REVNO)
+
+_praxis_tag = "praxis {}.{} revision {}".format(*_praxis_version)
+
+_praxis_copyright = "{}: Copyright (c) 1998-2014 Michael A.G. Aïvázis".format(_praxis_tag)
+
+_praxis_header = """
+    {}
+    Copyright (c) 1998-2014 Michael A.G. Aïvázis
+    All Rights Reserved
+    """.format(_praxis_tag)
+
+_praxis_license = _praxis_header + """
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions
+    are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in
+      the documentation and/or other materials provided with the
+      distribution.
+
+    * Neither the name praxis nor the names of its contributors may be
+      used to endorse or promote products derived from this software
+      without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+    FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+    COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+    BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+    LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+    ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+    """
+
+_praxis_acknowledgments = _praxis_header
+
+_praxis_usage = _praxis_header + """
+    Basic commands:
+        praxis db             manage the low level datastore
+
+        praxis license        terms of use
+        praxis copyright      the praxis copyright note
+
+    Visit http://praxis.orthologue.com for the latest documentation
+    """
+
+
+# end of file 
