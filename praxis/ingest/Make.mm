@@ -12,6 +12,8 @@ PACKAGE = ingest
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
+    ScheduleParser.py \
+    ScheduleScanner.py \
     Staff.py \
     __init__.py
 
