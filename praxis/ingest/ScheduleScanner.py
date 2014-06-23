@@ -19,14 +19,14 @@ class ScheduleScanner(pyre.parsing.scanner):
 
     # the tokens
     employee = pyre.parsing.token(
-        head='\[\s*', pattern='\w+\s\w+', tail='\s*\]')
+        head = '\[\s*', pattern='\w+\s\w+', tail='\s*\]')
 
     days = pyre.parsing.token(
-        head='on:\s*',
-        pattern= r'((\s*,\s*)|monday|tuesday|wednesday|thursday|friday|saturday|sunday)+')
+        pattern = r'((\s*,\s*)|monday|tuesday|wednesday|thursday|friday|saturday|sunday)+',
+        tail = '\s*:')
 
     task = pyre.parsing.token(
-        pattern='(?P<station>[a-z]+)\s@\s(?P<time>\d{1,2}:\d{2}(a|p)m)')
+        pattern = '(?P<station>[a-z-_.]+)\s@\s(?P<time>\d{1,2}:\d{2}(a|p)m)')
 
     comment = pyre.parsing.token(head=';', pattern=r'.*', tail='$')
     
