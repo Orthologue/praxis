@@ -24,12 +24,15 @@ class Primer(praxis.command, family='praxis.actions.db'):
 
     # command obligations
     @praxis.export
-    def help(self, **kwds ):
+    def help(self, plexus, **kwds ):
         """
         Show a help screen
         """
+        # here is the list of my commands
+        commands = ' | '.join(['create', 'init', 'prime', 'clear', 'drop'])
+        # show me
         self.info.log('provides direct access to my database')
-        self.info.line('usage:   praxis db [create | init | prime | clear | drop]')
+        self.info.line('usage:   {.pyre_namespace} db [{}]'.format(plexus, commands))
         self.info.log()
         # all done
         return 0
