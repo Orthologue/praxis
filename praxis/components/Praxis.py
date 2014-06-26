@@ -6,6 +6,8 @@
 #
 
 
+# externals
+import os
 # access the pyre framework
 import pyre
 # my action protocol
@@ -20,6 +22,8 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
     The main {praxis} action dispatcher
     """
 
+    # constants
+    pyre_namespace = 'praxis'
 
     # public state
     jurisdiction = compliance.jurisdiction(default='us.california')
@@ -64,6 +68,30 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         # and attach it
         return Layout()
 
+
+    def pyre_mountApplicationFolders(self):
+        # chain up
+        pfs = super().pyre_mountApplicationFolders()
+
+        # get my installation folder
+        prefix = self.prefix
+        # and my name
+        name = self.pyre_namespace
+        # look for my data folder
+        if prefix and self.pyre_namespace:
+            # the name of my data folder
+            alias = 'etc'
+            # it should be at {prefix}/{alias}/{name}; e.g. {~/tools/etc/praxis}
+            physical = os.path.join(prefix, alias, name)
+            # if this exists
+            if os.path.isdir(physical):
+                # mount it as {name}/{alias}; e.g. {/praxis/etc}
+                logical = self.vfs.local(root=physical).discover()
+                # and attach it to my private filespace
+                pfs[alias] = logical
+
+        # and return the {pfs}
+        return pfs
 
 
 # end of file 
