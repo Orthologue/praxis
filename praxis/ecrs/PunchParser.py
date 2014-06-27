@@ -41,16 +41,16 @@ class PunchParser:
         # start reading
         for line in reader:
             # pull in the punch info
-            raw = line[self.OFFSET_RAW]
+            info = line[self.OFFSET_EMPLOYEE]
             clockin = line[self.OFFSET_CLOCKIN]
             clockout = line[self.OFFSET_CLOCKOUT]
 
             # type conversions
             # first the employee id and name
-            rawid, rawname = raw.split(None, 1)
+            rawid, rawname = info.split(None, 1)
             # normalize
-            eid = ''.join(rawid.split(',')) # the {eids} have thousands separators...
-            name = tuple(rawname.split(',  '))
+            eid = ''.join(rawid.split(',')) # the raw ids have thousands separators...
+            name = tuple(rawname.split(',  ')) # the name portion is {last,  first}
             # now the clock punches
             clockin = datetime.datetime.strptime(clockin, self.TIME_FORMAT) if clockin else None
             clockout = datetime.datetime.strptime(clockout, self.TIME_FORMAT) if clockout else None
@@ -60,14 +60,14 @@ class PunchParser:
             
             # store
             names[eid] = name
-            punches[eid][date].append((clockin, clockout))
+            punches[eid][date].append(('in', clockin, clockout))
 
         # all done
         return names, punches
 
 
     # constants -- for version 3.2.02 of the CATAPULT report
-    OFFSET_RAW = 6
+    OFFSET_EMPLOYEE = 6
     OFFSET_CLOCKIN = 10
     OFFSET_CLOCKOUT = 11
 

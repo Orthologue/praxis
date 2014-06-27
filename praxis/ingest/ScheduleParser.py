@@ -154,16 +154,9 @@ class ScheduleParser(pyre.parsing.parser):
                     for day in days:
                         # it ends when this one starts
                         self.schedule[employee][day].append((currentStation, currentStart, time))
-                if station == 'out':
-                    # back to the beginning
-                    currentStation = None
-                    currentStart = None
-                # otherwise
-                else:
-                    # mark the task as the current one
-                    currentStation = station
-                    # and record its start time
-                    currentStart = time
+
+                # adjust my cursors
+                currentStation, currentStart = (None, None) if station == out else (station, time)
 
         # all done
         return

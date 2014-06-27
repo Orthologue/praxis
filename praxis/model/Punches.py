@@ -9,7 +9,10 @@
 # declaration
 class Punches(list):
     """
-    Encapsulation of time worked using pairs of timestamps to mark clock-in and clock-out
+    Encapsulation of time worked on a task using pairs of timestamps to mark clock-in and
+    clock-out. The format is
+
+        (task name, clock-in timestamp, clock-out timestamp)
     """
 
 
@@ -19,7 +22,7 @@ class Punches(list):
         Generate the number of hours worked based on the clock punches
         """
         # go through the punches
-        for clockin, clockout in self:
+        for task, clockin, clockout in self:
             # compute the time difference
             delta = clockout - clockin
             # convert into a number of hours and yield it
