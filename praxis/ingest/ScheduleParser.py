@@ -156,7 +156,7 @@ class ScheduleParser(pyre.parsing.parser):
                         self.schedule[employee][day].append((currentStation, currentStart, time))
 
                 # adjust my cursors
-                currentStation, currentStart = (None, None) if station == out else (station, time)
+                currentStation, currentStart = (None, None) if station == 'out' else (station, time)
 
         # all done
         return
