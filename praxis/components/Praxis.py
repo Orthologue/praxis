@@ -44,22 +44,8 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         return 0
 
 
-    # meta-methods
-    def __init__(self, **kwds):
-        # chain up
-        super().__init__(**kwds)
-        # build and attach my configuration options
-        self.layout = self.newLayout()
-        # all done
-        return
-
-
-    # implementation details
-    layout = None
-
-
     # initialization hooks
-    def newLayout(self):
+    def pyre_loadLayout(self):
         """
         Instantiate an object with the global project options
         """
@@ -69,28 +55,26 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         return Layout()
 
 
-    def pyre_mountApplicationFolders(self):
+    def pyre_mountApplicationFolders(self, pfs, prefix):
+        """
+        Map the standard runtime folder layout into my private filespace
+
+        Currently, there are two runtime folders that i am interested in:
+
+           {prefix}/etc/{self.pyre_namespace}: contains application auxiliary data
+           {prefix}/var/{self.pyre_namespace}: contains the application runtime state
+        """
         # chain up
-        pfs = super().pyre_mountApplicationFolders()
+        pfs = super().pyre_mountApplicationFolders(pfs=pfs, prefix=prefix)
 
-        # get my installation folder
-        prefix = self.prefix
-        # and my name
-        name = self.pyre_namespace
-        # look for my data folder
-        if prefix and self.pyre_namespace:
-            # the name of my data folder
-            alias = 'etc'
-            # it should be at {prefix}/{alias}/{name}; e.g. {~/tools/etc/praxis}
-            physical = os.path.join(prefix, alias, name)
-            # if this exists
-            if os.path.isdir(physical):
-                # mount it as {name}/{alias}; e.g. {/praxis/etc}
-                logical = self.vfs.local(root=physical).discover()
-                # and attach it to my private filespace
-                pfs[alias] = logical
+        # my runtime folders
+        folders = [ 'etc', 'var' ]
+        # go through them
+        for folder in folders:
+            # and mount each one
+            self.pyre_mountPrivateFolder(pfs=pfs, prefix=prefix, folder=folder)
 
-        # and return the {pfs}
+        # return my {pfs}
         return pfs
 
 
