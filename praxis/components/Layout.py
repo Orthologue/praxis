@@ -11,7 +11,7 @@ import pyre
 
 
 # declaration
-class Layout(pyre.component, family="praxis.layout"):
+class Layout(pyre.shells.layout, family="praxis.layout"):
     """
     A collection of configuration options that define the layout of a praxis deployment
     """
