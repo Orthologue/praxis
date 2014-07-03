@@ -8,6 +8,7 @@
 
 from .Staff import Staff as staff
 
+
 # helpers
 def schedule(uri, stream, locator=None):
     """
