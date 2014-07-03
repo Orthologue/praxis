@@ -121,4 +121,16 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         return client
 
 
+    def newDatastoreClient(self):
+        """
+        Build a connection to the project datastore
+        """
+        # get the top level package
+        import praxis
+        # create a connection
+        datastore = praxis.datastore(name='{.layout.project}:datastore'.format(self))
+        # and return it
+        return datastore
+
+
 # end of file 

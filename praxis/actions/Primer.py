@@ -46,7 +46,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # get the name of my database
         name = plexus.layout.project
         # tell me
-        self.info.log('creating the database {!r}'.format(name))
+        self.info.log('creating database {!r}'.format(name))
 
         # get the low level package
         import pyre.db
@@ -70,10 +70,8 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # show me
         self.info.log('creating the schema: tables={.tables}'.format(self))
 
-        # get the application layout
-        layout = plexus.layout
         # instantiate a connection to the datastore
-        datastore = praxis.datastore(name='{.project}:datastore'.format(layout))
+        datastore = plexus.newDatastoreClient()
         # get the set of tables to build
         tables = self.tables
         # make a builder
@@ -92,10 +90,8 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # show me
         self.info.log('priming the schema: tables={.tables}'.format(self))
 
-        # get the application layout
-        layout = plexus.layout
         # instantiate a connection to the datastore
-        datastore = praxis.datastore(name='{.project}:datastore'.format(layout))
+        datastore = plexus.newDatastoreClient()
         # get the set of tables to build
         tables = self.tables
         # make a token generator
@@ -120,10 +116,8 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # show me
         self.info.log('clearing tables: {.tables}'.format(self))
 
-        # get the application layout
-        layout = plexus.layout
         # instantiate a connection to the datastore
-        datastore = praxis.datastore(name='{.project}:datastore'.format(layout))
+        datastore = plexus.newDatastoreClient()
         # get the set of tables to build
         tables = self.tables
         # make a builder
@@ -142,7 +136,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # get the name of my database
         name = plexus.layout.project
         # show me
-        self.info.log('dropping the database {!r}'.format(name))
+        self.info.log('dropping database {!r}'.format(name))
 
         # access the low level package
         import pyre.db
