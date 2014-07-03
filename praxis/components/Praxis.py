@@ -44,6 +44,16 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         return 0
 
 
+    # meta-methods
+    def __init__(self, **kwds):
+        # chain up
+        super().__init__(**kwds)
+        # make my {idd} client
+        self.idd = self.newIDD()
+        # all done
+        return
+
+
     # initialization hooks
     def pyre_loadLayout(self):
         """
@@ -78,9 +88,10 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         return pfs
 
 
+    # factories for support objects that can be overridden by subclasses
     def newBuilder(self):
         """
-        Instantiate an table builder
+        Instantiate a table builder
         """
         # get the package
         from ..support import builder
@@ -90,12 +101,24 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
 
     def newPrimer(self):
         """
-        Instantiate an table primer
+        Instantiate a table primer
         """
         # get the package
         from ..support import primer
         # instantiate and return it
         return primer()
+
+
+    def newIDD(self):
+        """
+        Instantiate a token generator client
+        """
+        # get the factory
+        from . import idd
+        # build one bound to the configuration file in my layout
+        client = idd.create(project=self.layout.project, state=self.layout.iddcfg)
+        # and return it
+        return client
 
 
 # end of file 

@@ -36,14 +36,14 @@ class IDD(praxis.component, family="praxis.idd"):
 
     # factories
     @classmethod
-    def create(cls, layout):
+    def create(cls, project, state):
         """
         Create an instance that is bound to the local configuration file
         """
         # load the configuration file
-        cls.pyre_executive.loadConfiguration(layout.iddcfg, locator=praxis.tracking.here())
+        cls.pyre_executive.loadConfiguration(state, locator=praxis.tracking.here())
         # build one
-        idd = cls(name='{.project}:idd'.format(layout), cfg=layout.iddcfg)
+        idd = cls(name='{}:idd'.format(project), cfg=state)
         # ask it to save its state
         idd.save()
         # and return it
@@ -122,6 +122,14 @@ class IDD(praxis.component, family="praxis.idd"):
                 print(line, file=stream)
         # all done
         return
+
+
+    def normalize(self, token):
+        """
+        Normalize the token so it is in canonical form
+        """
+        # currently, all tokens are upper case letters
+        return token.upper()
 
         
     # meta-methods

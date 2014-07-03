@@ -99,7 +99,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # get the set of tables to build
         tables = self.tables
         # make a token generator
-        idd = praxis.idd.create(layout=layout)
+        idd = plexus.idd
         # make a primer
         primer = plexus.newPrimer()
         # get it to build records
