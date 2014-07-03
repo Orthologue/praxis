@@ -10,6 +10,10 @@
 from .Command import Command as command
 
 
+# pull in the actions supplied by the framework
+from pyre.shells.VFS import VFS as vfs
+
+
 # the list of actions
 def db():
     """
@@ -19,6 +23,26 @@ def db():
     from .Primer import Primer
     # and return it
     return Primer
+
+
+def schedule():
+    """
+    Grant access to the schedule manager
+    """
+    # get the action
+    from .Schedule import Schedule
+    # and return it
+    return Schedule
+
+
+def staff():
+    """
+    Grant access to the employee record manager
+    """
+    # get the action
+    from .Staff import Staff
+    # and return it
+    return Staff
 
 
 # end of file

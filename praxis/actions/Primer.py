@@ -32,7 +32,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         commands = ' | '.join(['create', 'init', 'prime', 'clear', 'drop'])
         # show me
         self.info.log('provides direct access to my database')
-        self.info.line('usage:   {.pyre_namespace} db [{}]'.format(plexus, commands))
+        self.info.line('usage: {.pyre_namespace} db [{}]'.format(plexus, commands))
         self.info.log()
         # all done
         return 0

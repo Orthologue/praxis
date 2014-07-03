@@ -14,6 +14,8 @@ PACKAGE = actions
 EXPORT_PYTHON_MODULES = \
     Command.py \
     Primer.py \
+    Staff.py \
+    Schedule.py \
     __init__.py
 
 # the standard build targets
