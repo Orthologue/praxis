@@ -25,6 +25,16 @@ def db():
     return Primer
 
 
+def idd():
+    """
+    Grant access to the schedule manager
+    """
+    # get the action
+    from .IDD import IDD
+    # and return it
+    return IDD
+
+
 def schedule():
     """
     Grant access to the schedule manager
