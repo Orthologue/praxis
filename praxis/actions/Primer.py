@@ -77,7 +77,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # get the set of tables to build
         tables = self.tables
         # make a builder
-        builder = praxis.support.builder()
+        builder = plexus.newBuilder()
         # ask it to do the work
         builder.createTables(datastore=datastore, tables=tables)
 
@@ -101,7 +101,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # make a token generator
         idd = praxis.idd.create(layout=layout)
         # make a primer
-        primer = praxis.support.primer()
+        primer = plexus.newPrimer()
         # get it to build records
         records = primer.prime(tokenGenerator=idd, datastore=datastore)
         # store them
@@ -127,7 +127,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # get the set of tables to build
         tables = self.tables
         # make a builder
-        builder = praxis.support.builder()
+        builder = plexus.newBuilder()
         # ask it to do the work
         builder.dropTables(datastore=datastore, tables=tables)
 

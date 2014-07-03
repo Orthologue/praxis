@@ -78,4 +78,24 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         return pfs
 
 
+    def newBuilder(self):
+        """
+        Instantiate an table builder
+        """
+        # get the package
+        from ..support import builder
+        # instantiate and return it
+        return builder()
+
+
+    def newPrimer(self):
+        """
+        Instantiate an table primer
+        """
+        # get the package
+        from ..support import primer
+        # instantiate and return it
+        return primer()
+
+
 # end of file 
