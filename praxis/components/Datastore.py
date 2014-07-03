@@ -30,6 +30,14 @@ class Datastore(pyre.db.client, family="praxis.datastore"):
         return self.server.select(query=query)
 
 
+    def sqlRenderer(self):
+        """
+        Grant access to the SQL renderer
+        """
+        # easy enough
+        return self.server.sql
+
+
     # meta methods
     def __init__(self, **kwds):
         # chain up
