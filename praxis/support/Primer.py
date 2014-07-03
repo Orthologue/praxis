@@ -13,157 +13,153 @@ class Primer:
 
 
     # interface
-    def prime(self, tokenGenerator, datastore, records=None, **kwds):
+    def prime(self, tokenGenerator, datastore, **kwds):
         """
         Main entry point that delegates table priming to the more specialized hooks
         """
-        # build the list of records we will add to the database
-        records = records if records is not None else []
-
         # get access to the schema
         schema = datastore.schema
 
         # walk through the chain of tables
-        self.primeEntityTypes(tokenGenerator, schema, records, **kwds)
-        self.primeItemTypes(tokenGenerator, schema, records, **kwds)
-        self.primeContactTypes(tokenGenerator, schema, records, **kwds)
-        self.primeLocationTypes(tokenGenerator, schema, records, **kwds)
-        self.primeEmailTypes(tokenGenerator, schema, records, **kwds)
-        self.primePhoneTypes(tokenGenerator, schema, records, **kwds)
-        self.primeURITypes(tokenGenerator, schema, records, **kwds)
-        self.primePayTypes(tokenGenerator, schema, records, **kwds)
+        yield from self.primeEntityTypes(tokenGenerator, schema, **kwds)
+        yield from self.primeItemTypes(tokenGenerator, schema, **kwds)
+        yield from self.primeContactTypes(tokenGenerator, schema, **kwds)
+        yield from self.primeLocationTypes(tokenGenerator, schema, **kwds)
+        yield from self.primeEmailTypes(tokenGenerator, schema, **kwds)
+        yield from self.primePhoneTypes(tokenGenerator, schema, **kwds)
+        yield from self.primeURITypes(tokenGenerator, schema, **kwds)
+        yield from self.primePayTypes(tokenGenerator, schema, **kwds)
 
         # all done
-        return records
+        return
 
 
     # implementation details
-    def primeEntityTypes(self, tokenGenerator, schema, records, **kwds):
+    def primeEntityTypes(self, tokenGenerator, schema, **kwds):
         """
         Create the default entity types
         """
-        # pull the entity types
-        entities = schema.entityType
-        # add to the list of records
-        records += [
-            entities.pyre_immutable(id=tokenGenerator(), description="companies"),
-            entities.pyre_immutable(id=tokenGenerator(), description="persons"),
-            ]
+        # get the entity type factory
+        factory = schema.entityType
+        # the built-in entity types
+        names = [ "companies", "persons" ]
+        # go through the names
+        for name in names:
+            # and build the records
+            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
         # all  done
         return
 
 
-    def primeItemTypes(self, tokenGenerator, schema, records, **kwds):
+    def primeItemTypes(self, tokenGenerator, schema, **kwds):
         """
         Create the default item types
         """
-        # pull the item types
-        items = schema.itemType
-        # add to the list of records
-        records += [
-            items.pyre_immutable(id=tokenGenerator(), description="products"),
-            items.pyre_immutable(id=tokenGenerator(), description="services"),
-            ]
+        # get the item type factory
+        factory = schema.itemType
+        # the built-in item types
+        names = ["products", "services"]
+        # go through the names
+        for name in names:
+            # and build the records
+            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
         # all  done
         return
 
 
-    def primeContactTypes(self, tokenGenerator, schema, records, **kwds):
+    def primeContactTypes(self, tokenGenerator, schema, **kwds):
         """
         Create the default contact types
         """
-        # pull the contact types
-        contacts = schema.contactType
-        # add to the list of records; the values are supposed to match names of tables in
-        # the current schema that contain contact information
-        records += [
-            contacts.pyre_immutable(id=tokenGenerator(), description="email"),
-            contacts.pyre_immutable(id=tokenGenerator(), description="location"),
-            contacts.pyre_immutable(id=tokenGenerator(), description="phone"),
-            contacts.pyre_immutable(id=tokenGenerator(), description="uri"),
-            ]
+        # get the contact type factory
+        factory = schema.contactType
+        # build the records; the values are supposed to match names of tables in the current
+        # schema that contain contact information
+        names = ["email", "location", "phone", "uri"]
+        # go through the names
+        for name in names:
+            # and build the records
+            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
         # all  done
         return
 
 
-    def primeLocationTypes(self, tokenGenerator, schema, records, **kwds):
+    def primeLocationTypes(self, tokenGenerator, schema, **kwds):
         """
         Create the default location types
         """
-        # pull the location types
-        locations = schema.locationType
-        # add to the list of records
-        records += [
-            locations.pyre_immutable(id=tokenGenerator(), description="home"),
-            locations.pyre_immutable(id=tokenGenerator(), description="office"),
-            locations.pyre_immutable(id=tokenGenerator(), description="shipping"),
-            locations.pyre_immutable(id=tokenGenerator(), description="billing"),
-            ]
+        # get the location type factory
+        factory = schema.locationType
+        # the built-in location types
+        names = ["home", "office", "shipping", "billing" ]
+        # go through the names
+        for name in names:
+            # and build the records
+            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
         # all  done
         return
 
 
-    def primeEmailTypes(self, tokenGenerator, schema, records, **kwds):
+    def primeEmailTypes(self, tokenGenerator, schema, **kwds):
         """
         Create the default email types
         """
-        # pull the email types
-        emails = schema.emailType
-        # add to the list of records
-        records += [
-            emails.pyre_immutable(id=tokenGenerator(), description="home"),
-            emails.pyre_immutable(id=tokenGenerator(), description="work"),
-            ]
+        # get the email type factory
+        factory = schema.emailType
+        # the built-in email types
+        names = ["home", "work" ]
+        # go through the names
+        for name in names:
+            # and build the records
+            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
         # all  done
         return
 
 
-    def primePhoneTypes(self, tokenGenerator, schema, records, **kwds):
+    def primePhoneTypes(self, tokenGenerator, schema, **kwds):
         """
         Create the default phone types
         """
-        # pull the phone types
-        phones = schema.phoneType
-        # add to the list of records
-        records += [
-            phones.pyre_immutable(id=tokenGenerator(), description="cell"),
-            phones.pyre_immutable(id=tokenGenerator(), description="fax"),
-            phones.pyre_immutable(id=tokenGenerator(), description="land line"),
-            ]
+        # get the phone type factory
+        factory = schema.phoneType
+        # the built-in phone types
+        names = ["cell", "fax", "land line" ]
+        # go through the names
+        for name in names:
+            # and build the records
+            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
         # all  done
         return
 
 
-    def primeURITypes(self, tokenGenerator, schema, records, **kwds):
+    def primeURITypes(self, tokenGenerator, schema, **kwds):
         """
         Create the default uri types
         """
-        # pull the uri types
-        uris = schema.uriType
-        # add to the list of records
-        records += [
-            uris.pyre_immutable(id=tokenGenerator(), description="web"),
-            uris.pyre_immutable(id=tokenGenerator(), description="facebook"),
-            uris.pyre_immutable(id=tokenGenerator(), description="instagram"),
-            uris.pyre_immutable(id=tokenGenerator(), description="twitter"),
-            uris.pyre_immutable(id=tokenGenerator(), description="vine"),
-            uris.pyre_immutable(id=tokenGenerator(), description="youtube"),
-            ]
+        # get the uri type factory
+        factory = schema.uriType
+        # the built-in uri types
+        names = ["web", "facebook", "instagram", "twitter", "vine", "youtube"]
+        # go through the names
+        for name in names:
+            # and build the records
+            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
         # all  done
         return
 
 
-    def primePayTypes(self, tokenGenerator, schema, records, **kwds):
+    def primePayTypes(self, tokenGenerator, schema, **kwds):
         """
         Create the default pay types
         """
-        # pull the pay types
-        pay = schema.payType
-        # add to the list of records
-        records += [
-            pay.pyre_immutable(id=tokenGenerator(), description="hourly"),
-            pay.pyre_immutable(id=tokenGenerator(), description="salary"),
-            ]
+        # get the pay type factory
+        factory = schema.payType
+        # the built-in pay types
+        names = ["hourly", "salary"]
+        # go through the names
+        for name in names:
+            # and build the records
+            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
         # all  done
         return
 
