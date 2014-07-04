@@ -67,15 +67,14 @@ class Primer(praxis.command, family='praxis.actions.db'):
         """
         Build a subset of the tables that capture my schema
         """
-        # show me
-        self.info.log('creating the schema: tables={.tables}'.format(self))
-
         # instantiate a connection to the datastore
-        datastore = plexus.newDatastoreClient()
+        datastore = plexus.datastore
         # get the set of tables to build
         tables = self.tables
         # make a builder
-        builder = plexus.newBuilder()
+        builder = plexus.builder
+        # show me
+        self.info.log('creating the schema: tables={}'.format(tables if tables else 'all'))
         # ask it to do the work
         builder.createTables(datastore=datastore, tables=tables)
 
@@ -88,16 +87,16 @@ class Primer(praxis.command, family='praxis.actions.db'):
         Insert into the tables all the default/static data
         """
         # show me
-        self.info.log('priming the schema: tables={.tables}'.format(self))
+        self.info.log('priming the schema')
 
         # instantiate a connection to the datastore
-        datastore = plexus.newDatastoreClient()
+        datastore = plexus.datastore
         # get the set of tables to build
         tables = self.tables
         # make a token generator
         idd = plexus.idd
         # make a primer
-        primer = plexus.newPrimer()
+        primer = plexus.primer
         # get it to build records
         records = primer.prime(tokenGenerator=idd, datastore=datastore)
         # store them
@@ -113,15 +112,14 @@ class Primer(praxis.command, family='praxis.actions.db'):
         """
         Drop my tables
         """
-        # show me
-        self.info.log('clearing tables: {.tables}'.format(self))
-
         # instantiate a connection to the datastore
-        datastore = plexus.newDatastoreClient()
+        datastore = plexus.datastore
         # get the set of tables to build
         tables = self.tables
         # make a builder
-        builder = plexus.newBuilder()
+        builder = plexus.builder
+        # show me
+        self.info.log('clearing tables: {}'.format(tables if tables else 'all'))
         # ask it to do the work
         builder.dropTables(datastore=datastore, tables=tables)
 

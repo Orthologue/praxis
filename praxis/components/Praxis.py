@@ -30,6 +30,72 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
     jurisdiction.doc = 'compliant calculators for the default company jurisdiction'
 
 
+    # public data
+    @property
+    def builder(self):
+        """
+        Get my schema initializer
+        """
+        # if i don't have one already
+        if self._builder is None:
+            # build one
+            self._builder = self.newBuilder()
+        # return it
+        return self._builder
+
+
+    @property
+    def datastore(self):
+        """
+        Get the connection to my data server
+        """
+        # if i don't have one already
+        if self._datastore is None:
+            # build one
+            self._datastore = self.newDatastoreClient()
+        # return it
+        return self._datastore
+
+
+    @property
+    def idd(self):
+        """
+        Get the token generator client
+        """
+        # if i don't have one already
+        if self._idd is None:
+            # build one
+            self._idd = self.newIDD()
+        # return it
+        return self._idd
+
+
+    @property
+    def primer(self):
+        """
+        Get the object that knows how to initialize the static data to the schema
+        """
+        # if i don't have one already
+        if self._primer is None:
+            # build one
+            self._primer = self.newPrimer()
+        # return it
+        return self._primer
+
+
+    @property
+    def typeRegistrar(self):
+        """
+        Get the indexer of data categories
+        """
+        # if i don't have one already
+        if self._typeRegistrar is None:
+            # build one
+            self._typeRegistrar = self.newTypeRegistrar()
+        # return it
+        return self._typeRegistrar
+
+
     # plexus obligations
     @pyre.export
     def help(self, **kwds):
@@ -42,16 +108,6 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         self.info.log(praxis._praxis_usage)
         # all done
         return 0
-
-
-    # meta-methods
-    def __init__(self, **kwds):
-        # chain up
-        super().__init__(**kwds)
-        # make my {idd} client
-        self.idd = self.newIDD()
-        # all done
-        return
 
 
     # initialization hooks
@@ -99,6 +155,18 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         return builder()
 
 
+    def newDatastoreClient(self):
+        """
+        Build a connection to the project datastore
+        """
+        # get the top level package
+        import praxis
+        # create a connection
+        datastore = praxis.datastore(name='{.layout.project}:datastore'.format(self))
+        # and return it
+        return datastore
+
+
     def newPrimer(self):
         """
         Instantiate a table primer
@@ -121,16 +189,24 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         return client
 
 
-    def newDatastoreClient(self):
+    def newTypeRegistrar(self):
         """
-        Build a connection to the project datastore
+        Instantiate the indexer of data categories
         """
-        # get the top level package
-        import praxis
-        # create a connection
-        datastore = praxis.datastore(name='{.layout.project}:datastore'.format(self))
+        # get the factory
+        from .. support import typeRegistrar
+        # build one 
+        registrar = typeRegistrar(datastore=self.datastore)
         # and return it
-        return datastore
+        return registrar
+
+
+    # private data
+    _builder = None
+    _primer = None
+    _idd = None
+    _datastore = None
+    _typeRegistrar = None
 
 
 # end of file 
