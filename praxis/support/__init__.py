@@ -8,6 +8,7 @@
 
 from .Builder import Builder as builder
 from .Primer import Primer as primer
+from .TypeRegistrar import TypeRegistrar as typeRegistrar
 
 
 # end of file 

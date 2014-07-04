@@ -14,6 +14,7 @@ PACKAGE = support
 EXPORT_PYTHON_MODULES = \
     Builder.py \
     Primer.py \
+    TypeRegistrar.py \
     __init__.py
 
 # the standard build targets

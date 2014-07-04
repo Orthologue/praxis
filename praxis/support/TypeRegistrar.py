@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+#
+# michael a.g. aïvázis
+# orthologue
+# (c) 1998-2014 all rights reserved
+#
+
+
+# declaration
+class TypeRegistrar(dict):
+    """
+    Simplify schema access by building a map that enables id lookup for the typed data
+    """
+
+
+    # meta-methods
+    def __init__(self, datastore, **kwds):
+        # chain up
+        super().__init__(**kwds)
+        # index the category tables
+        self.indexTypeTables(datastore=datastore)
+        # all done
+        return
+
+
+    # implementation details
+    def indexTypeTables(self, datastore):
+        """
+        Build a map from description to primary key for each of the typed tables
+        """
+        # get the tables
+        tables = datastore.schema.typeTables
+        # go through each one
+        for table in tables:
+            # get the contents
+            records = datastore.select(table)
+            # build the index
+            index = { description: eid for eid, description in datastore.select(table) }
+            # and attach it
+            self[table.pyre_name] = index
+        # all done
+        return
+
+
+# end of file 

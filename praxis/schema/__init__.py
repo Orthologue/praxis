@@ -45,13 +45,16 @@ from .EntityURI import EntityURI as entityURI
 from .Employment import Employment as employment
 
 
-# the table list, sorted by dependency
-tables = (
-    # contact management
+# table groups
+typeTables = (
     # attribute types
     entityType, itemType,
     contactType, emailType, locationType, phoneType, uriType,
     payType, payFrequency, 
+)
+
+# the table list, sorted by dependency
+tables = typeTables + (
     # atoms
     entity, company, item, person,
     # attributes
