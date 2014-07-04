@@ -29,6 +29,7 @@ class Primer:
         yield from self.primePhoneTypes(tokenGenerator, schema, **kwds)
         yield from self.primeURITypes(tokenGenerator, schema, **kwds)
         yield from self.primePayTypes(tokenGenerator, schema, **kwds)
+        yield from self.primePayFrequencies(tokenGenerator, schema, **kwds)
 
         # all done
         return
@@ -156,6 +157,22 @@ class Primer:
         factory = schema.payType
         # the built-in pay types
         names = ["hourly", "salary"]
+        # go through the names
+        for name in names:
+            # and build the records
+            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
+        # all  done
+        return
+
+
+    def primePayFrequencies(self, tokenGenerator, schema, **kwds):
+        """
+        Create the default pay types
+        """
+        # get the pay type factory
+        factory = schema.payFrequency
+        # the built-in pay types
+        names = ["weekly", "bi-weekly", "monthly"]
         # go through the names
         for name in names:
             # and build the records
