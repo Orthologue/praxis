@@ -13,170 +13,158 @@ class Primer:
 
 
     # interface
-    def prime(self, tokenGenerator, datastore, **kwds):
+    def primeTypes(self, plexus, **kwds):
         """
         Main entry point that delegates table priming to the more specialized hooks
         """
-        # get access to the schema
-        schema = datastore.schema
-
         # walk through the chain of tables
-        yield from self.primeEntityTypes(tokenGenerator, schema, **kwds)
-        yield from self.primeItemTypes(tokenGenerator, schema, **kwds)
-        yield from self.primeContactTypes(tokenGenerator, schema, **kwds)
-        yield from self.primeLocationTypes(tokenGenerator, schema, **kwds)
-        yield from self.primeEmailTypes(tokenGenerator, schema, **kwds)
-        yield from self.primePhoneTypes(tokenGenerator, schema, **kwds)
-        yield from self.primeURITypes(tokenGenerator, schema, **kwds)
-        yield from self.primePayTypes(tokenGenerator, schema, **kwds)
-        yield from self.primePayFrequencies(tokenGenerator, schema, **kwds)
+        yield from self.primeEntityTypes(plexus=plexus, **kwds)
+        yield from self.primeItemTypes(plexus=plexus, **kwds)
+        yield from self.primeContactTypes(plexus=plexus, **kwds)
+        yield from self.primeContactPurposes(plexus=plexus, **kwds)
+        yield from self.primePhoneTypes(plexus=plexus, **kwds)
+        yield from self.primeURITypes(plexus=plexus, **kwds)
+        yield from self.primePayTypes(plexus=plexus, **kwds)
+        yield from self.primePayFrequencies(plexus=plexus, **kwds)
 
         # all done
         return
 
 
+    def primeCompanyInformation(self, plexus, **kwds):
+        """
+        Prime the database with the basic client information
+        """
+        # don know what to do...
+        return []
+
+
     # implementation details
-    def primeEntityTypes(self, tokenGenerator, schema, **kwds):
+    def primeEntityTypes(self, plexus, **kwds):
         """
         Create the default entity types
         """
         # get the entity type factory
-        factory = schema.entityType
+        factory = plexus.datastore.schema.entityType
         # the built-in entity types
         names = [ "companies", "persons" ]
         # go through the names
         for name in names:
             # and build the records
-            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
+            yield factory.pyre_immutable(id=plexus.idd(), description=name)
         # all  done
         return
 
 
-    def primeItemTypes(self, tokenGenerator, schema, **kwds):
+    def primeItemTypes(self, plexus, **kwds):
         """
         Create the default item types
         """
         # get the item type factory
-        factory = schema.itemType
+        factory = plexus.datastore.schema.itemType
         # the built-in item types
         names = ["products", "services"]
         # go through the names
         for name in names:
             # and build the records
-            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
+            yield factory.pyre_immutable(id=plexus.idd(), description=name)
         # all  done
         return
 
 
-    def primeContactTypes(self, tokenGenerator, schema, **kwds):
+    def primeContactTypes(self, plexus, **kwds):
         """
         Create the default contact types
         """
         # get the contact type factory
-        factory = schema.contactType
+        factory = plexus.datastore.schema.contactType
         # build the records; the values are supposed to match names of tables in the current
         # schema that contain contact information
         names = ["email", "location", "phone", "uri"]
         # go through the names
         for name in names:
             # and build the records
-            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
+            yield factory.pyre_immutable(id=plexus.idd(), description=name)
         # all  done
         return
 
 
-    def primeLocationTypes(self, tokenGenerator, schema, **kwds):
+    def primeContactPurposes(self, plexus, **kwds):
         """
         Create the default location types
         """
         # get the location type factory
-        factory = schema.locationType
+        factory = plexus.datastore.schema.contactPurpose
         # the built-in location types
-        names = ["home", "office", "shipping", "billing" ]
+        names = ["personal", "office", "shipping", "billing" ]
         # go through the names
         for name in names:
             # and build the records
-            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
+            yield factory.pyre_immutable(id=plexus.idd(), description=name)
         # all  done
         return
 
 
-    def primeEmailTypes(self, tokenGenerator, schema, **kwds):
-        """
-        Create the default email types
-        """
-        # get the email type factory
-        factory = schema.emailType
-        # the built-in email types
-        names = ["home", "work" ]
-        # go through the names
-        for name in names:
-            # and build the records
-            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
-        # all  done
-        return
-
-
-    def primePhoneTypes(self, tokenGenerator, schema, **kwds):
+    def primePhoneTypes(self, plexus, **kwds):
         """
         Create the default phone types
         """
         # get the phone type factory
-        factory = schema.phoneType
+        factory = plexus.datastore.schema.phoneType
         # the built-in phone types
         names = ["cell", "fax", "land line" ]
         # go through the names
         for name in names:
             # and build the records
-            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
+            yield factory.pyre_immutable(id=plexus.idd(), description=name)
         # all  done
         return
 
 
-    def primeURITypes(self, tokenGenerator, schema, **kwds):
+    def primeURITypes(self, plexus, **kwds):
         """
         Create the default uri types
         """
         # get the uri type factory
-        factory = schema.uriType
+        factory = plexus.datastore.schema.uriType
         # the built-in uri types
         names = ["web", "facebook", "instagram", "twitter", "vine", "youtube"]
         # go through the names
         for name in names:
             # and build the records
-            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
+            yield factory.pyre_immutable(id=plexus.idd(), description=name)
         # all  done
         return
 
 
-    def primePayTypes(self, tokenGenerator, schema, **kwds):
+    def primePayTypes(self, plexus, **kwds):
         """
         Create the default pay types
         """
         # get the pay type factory
-        factory = schema.payType
+        factory = plexus.datastore.schema.payType
         # the built-in pay types
         names = ["hourly", "salary"]
         # go through the names
         for name in names:
             # and build the records
-            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
+            yield factory.pyre_immutable(id=plexus.idd(), description=name)
         # all  done
         return
 
 
-    def primePayFrequencies(self, tokenGenerator, schema, **kwds):
+    def primePayFrequencies(self, plexus, **kwds):
         """
         Create the default pay types
         """
         # get the pay type factory
-        factory = schema.payFrequency
+        factory = plexus.datastore.schema.payFrequency
         # the built-in pay types
         names = ["weekly", "bi-weekly", "monthly"]
         # go through the names
         for name in names:
             # and build the records
-            yield factory.pyre_immutable(id=tokenGenerator(), description=name)
+            yield factory.pyre_immutable(id=plexus.idd(), description=name)
         # all  done
         return
 

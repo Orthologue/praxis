@@ -16,11 +16,10 @@ default = db.default
 
 
 # types
+from .ContactPurpose import ContactPurpose as contactPurpose
 from .ContactType import ContactType as contactType
-from .EmailType import EmailType as emailType
 from .EntityType import EntityType as entityType
 from .ItemType import ItemType as itemType
-from .LocationType import LocationType as locationType
 from .PayType import PayType as payType
 from .PayFrequency import PayFrequency as payFrequency
 from .PhoneType import PhoneType as phoneType
@@ -49,7 +48,7 @@ from .Employment import Employment as employment
 typeTables = (
     # attribute types
     entityType, itemType,
-    contactType, emailType, locationType, phoneType, uriType,
+    contactPurpose, contactType, phoneType, uriType,
     payType, payFrequency, 
 )
 

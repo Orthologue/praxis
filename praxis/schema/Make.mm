@@ -13,9 +13,9 @@ PACKAGE = schema
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
     Company.py \
+    ContactPurpose.py \
     ContactType.py \
     Email.py \
-    EmailType.py \
     Employment.py \
     Entity.py \
     EntityEmail.py \
@@ -26,7 +26,6 @@ EXPORT_PYTHON_MODULES = \
     Item.py \
     ItemType.py \
     Location.py \
-    LocationType.py \
     PayType.py \
     PayFrequency.py \
     Person.py \

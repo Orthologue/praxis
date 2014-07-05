@@ -11,9 +11,9 @@ import praxis
 
 
 # table declaration
-class EmailType(praxis.db.table, id='email_types'):
+class ContactPurpose(praxis.db.table, id='contact_purposes'):
     """
-    A table of the various types of email
+    A table of the intended use of the contact information
     """
 
     # data layout

@@ -14,6 +14,7 @@ from .Temporary import Temporary
 from .Entity import Entity
 from .Phone import Phone
 from .PhoneType import PhoneType
+from .ContactPurpose import ContactPurpose
 
 
 # table declaration
@@ -28,8 +29,10 @@ class EntityPhone(Temporary, id='entity_phones'):
     # associating an entity with a phone number
     entity = praxis.db.reference(key=Entity.eid).notNull()
     phone = praxis.db.reference(key=Phone.id).notNull()
+    # of a particular type
+    kind = praxis.db.reference(key=PhoneType.id).notNull()
     # for a particular purpose
-    purpose = praxis.db.reference(key=PhoneType.id).notNull()
+    purpose = praxis.db.reference(key=ContactPurpose.id).notNull()
 
 
 # end of file 

@@ -13,7 +13,7 @@ from .Temporary import Temporary
 # and the tables i refer to
 from .Entity import Entity
 from .Location import Location
-from .LocationType import LocationType
+from .ContactPurpose import ContactPurpose
 
 
 # table declaration
@@ -29,7 +29,7 @@ class EntityLocation(Temporary, id='entity_locations'):
     entity = praxis.db.reference(key=Entity.eid).notNull()
     location = praxis.db.reference(key=Location.id).notNull()
     # for a particular purpose
-    purpose = praxis.db.reference(key=LocationType.id).notNull()
+    purpose = praxis.db.reference(key=ContactPurpose.id).notNull()
 
 
 # end of file 

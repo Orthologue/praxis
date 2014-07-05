@@ -14,6 +14,7 @@ from .Temporary import Temporary
 from .Entity import Entity
 from .URI import URI
 from .URIType import URIType
+from .ContactPurpose import ContactPurpose
 
 
 # table declaration
@@ -28,8 +29,10 @@ class EntityURI(Temporary, id='entity_uris'):
     # associating an entity with a URI
     entity = praxis.db.reference(key=Entity.eid).notNull()
     uri = praxis.db.reference(key=URI.id).notNull()
+    # of a particular kind
+    kind = praxis.db.reference(key=URIType.id).notNull()
     # for a particular purpose
-    purpose = praxis.db.reference(key=URIType.id).notNull()
+    purpose = praxis.db.reference(key=ContactPurpose.id).notNull()
 
 
 # end of file 
