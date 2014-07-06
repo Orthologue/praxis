@@ -25,6 +25,16 @@ def db():
     return Primer
 
 
+def debug():
+    """
+    Debug support
+    """
+    # get the action
+    from .Debug import Debug
+    # and return it
+    return Debug
+
+
 def idd():
     """
     Grant access to the schedule manager
