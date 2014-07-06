@@ -35,7 +35,7 @@ class Primer:
         """
         Prime the database with the basic client information
         """
-        # don know what to do...
+        # don't know what to do...
         return []
 
 
@@ -80,7 +80,7 @@ class Primer:
         factory = plexus.datastore.schema.contactType
         # build the records; the values are supposed to match names of tables in the current
         # schema that contain contact information
-        names = ["email", "location", "phone", "uri"]
+        names = ["emails", "locations", "phones", "uris"]
         # go through the names
         for name in names:
             # and build the records
@@ -96,7 +96,7 @@ class Primer:
         # get the location type factory
         factory = plexus.datastore.schema.contactPurpose
         # the built-in location types
-        names = ["personal", "office", "shipping", "billing" ]
+        names = ["personal", "info", "shipping", "billing" ]
         # go through the names
         for name in names:
             # and build the records
@@ -112,7 +112,7 @@ class Primer:
         # get the phone type factory
         factory = plexus.datastore.schema.phoneType
         # the built-in phone types
-        names = ["cell", "fax", "land line" ]
+        names = ["cell", "voice", "fax", "pager" ]
         # go through the names
         for name in names:
             # and build the records

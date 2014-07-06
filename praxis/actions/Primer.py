@@ -97,10 +97,11 @@ class Primer(praxis.command, family='praxis.actions.db'):
         idd = plexus.idd
         # make a primer
         primer = plexus.primer
-        # get it to build records
-        records = primer.prime(tokenGenerator=idd, datastore=datastore)
-        # store them
-        datastore.server.insert(*records)
+        # get it to prime the static types
+        datastore.server.insert(*primer.primeTypes(plexus=plexus))
+        # the basic client information
+        datastore.server.insert(*primer.primeCompanyInformation(plexus=plexus))
+
         # save the token generator state
         idd.save()
 
