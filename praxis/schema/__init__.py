@@ -18,6 +18,7 @@ default = db.default
 # types
 from .ContactPurpose import ContactPurpose as contactPurpose
 from .ContactType import ContactType as contactType
+from .EmploymentType import EmploymentType as employmentType
 from .EntityType import EntityType as entityType
 from .ItemType import ItemType as itemType
 from .PayType import PayType as payType
@@ -49,7 +50,7 @@ typeTables = (
     # attribute types
     entityType, itemType,
     contactPurpose, contactType, phoneType, uriType,
-    payType, payFrequency, 
+    employmentType, payType, payFrequency, 
 )
 
 # the table list, sorted by dependency

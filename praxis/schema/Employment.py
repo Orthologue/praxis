@@ -22,7 +22,7 @@ class Employment(Temporary, id='employments'):
     Establishing an employee-employer relationship between two entities
     """
 
-    id = praxis.db.str().primary()
+    id = praxis.db.str()
     employee = praxis.db.reference(key=Entity.eid).notNull()
     employer = praxis.db.reference(key=Entity.eid).notNull()
     rate = praxis.db.float()

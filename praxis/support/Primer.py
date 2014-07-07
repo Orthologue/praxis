@@ -24,6 +24,7 @@ class Primer:
         yield from self.primeContactPurposes(plexus=plexus, **kwds)
         yield from self.primePhoneTypes(plexus=plexus, **kwds)
         yield from self.primeURITypes(plexus=plexus, **kwds)
+        yield from self.primeEmploymentTypes(plexus=plexus, **kwds)
         yield from self.primePayTypes(plexus=plexus, **kwds)
         yield from self.primePayFrequencies(plexus=plexus, **kwds)
 
@@ -96,7 +97,7 @@ class Primer:
         # get the location type factory
         factory = plexus.datastore.schema.contactPurpose
         # the built-in location types
-        names = ["personal", "info", "shipping", "billing" ]
+        names = ["personal", "work", "info", "shipping", "billing" ]
         # go through the names
         for name in names:
             # and build the records
@@ -129,6 +130,22 @@ class Primer:
         factory = plexus.datastore.schema.uriType
         # the built-in uri types
         names = ["web", "facebook", "instagram", "twitter", "vine", "youtube"]
+        # go through the names
+        for name in names:
+            # and build the records
+            yield factory.pyre_immutable(id=plexus.idd(), description=name)
+        # all  done
+        return
+
+
+    def primeEmploymentTypes(self, plexus, **kwds):
+        """
+        Create the default employment types
+        """
+        # get the pay type factory
+        factory = plexus.datastore.schema.employmentType
+        # the built-in employment types
+        names = ["full time", "part time", "temporary", "contractor", "intern"]
         # go through the names
         for name in names:
             # and build the records
