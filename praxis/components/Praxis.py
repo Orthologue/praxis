@@ -31,6 +31,9 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
 
 
     # public data
+    from .. import schema
+
+
     @property
     def builder(self):
         """
@@ -159,12 +162,10 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         """
         Build a connection to the project datastore
         """
-        # get the top level package
-        import praxis
-        # create a connection
-        datastore = praxis.datastore(name='{.layout.project}:datastore'.format(self))
-        # and return it
-        return datastore
+        # get the component
+        from . import datastore
+        # create a connection and return it
+        return datastore(name='{.layout.project}:datastore'.format(self))
 
 
     def newPrimer(self):
