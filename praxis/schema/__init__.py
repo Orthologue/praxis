@@ -57,7 +57,7 @@ typeTables = (
 # the table list, sorted by dependency
 tables = typeTables + (
     # atoms
-    entity, company, item, person,
+    entity, company, item, person, employee,
     # attributes
     email, location, phone, uri,
     # connections between atoms and their attributes

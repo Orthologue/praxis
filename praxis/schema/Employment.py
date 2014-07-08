@@ -23,11 +23,24 @@ class Employment(Temporary, id='employments'):
     """
 
     id = praxis.db.str()
+    id.doc = "the employee id; meant to support external data sources"
+
+    # the parties
     employee = praxis.db.reference(key=Entity.eid).notNull()
+    employee.doc = "the employed entity"
+
     employer = praxis.db.reference(key=Entity.eid).notNull()
-    rate = praxis.db.float()
-    type = praxis.db.reference(key=PayType.id).notNull()
+    employer.doc = "the employing entity"
+
+    # payroll info
+    rate = praxis.db.decimal(precision=9, scale=2)
+    rate.doc = "the employee's pay rate for the duration of this employment"
+
     frequency = praxis.db.reference(key=PayFrequency.id).notNull()
+    frequency.doc = "the frequency with which pay check are issued; e.g.: biweekly"
+
+    type = praxis.db.reference(key=PayType.id).notNull()
+    type.doc = "the pay type; e.g. hourly or salary"
 
 
 # end of file 
