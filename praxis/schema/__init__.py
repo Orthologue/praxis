@@ -31,6 +31,7 @@ from .Entity import Entity as entity
 from .Company import Company as company
 from .Item import Item as item
 from .Person import Person as person
+from .Employee import Employee as employee
 # attributes
 from .Email import Email as email
 from .Location import Location as location
