@@ -86,9 +86,6 @@ class Primer(praxis.command, family='praxis.actions.db'):
         """
         Insert into the tables all the default/static data
         """
-        # show me
-        self.info.log('priming the schema')
-
         # instantiate a connection to the datastore
         datastore = plexus.datastore
         # get the set of tables to build
@@ -98,10 +95,15 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # make a primer
         primer = plexus.primer
         # get it to prime the static types
+        self.info.log('priming static types')
         datastore.server.insert(*primer.primeTypes(plexus=plexus))
         # the basic client information
+        self.info.log('priming company information')
         datastore.server.insert(*primer.primeCompanyInformation(plexus=plexus))
-
+        # the initial staff records
+        self.info.log('priming staff records')
+        datastore.server.insert(*primer.primeStaffRecords(plexus=plexus))
+        
         # save the token generator state
         idd.save()
 

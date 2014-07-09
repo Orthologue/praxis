@@ -40,6 +40,14 @@ class Primer:
         return []
 
 
+    def primeStaffRecords(self, plexus, **kwds):
+        """
+        Prime the database with the initial staff information
+        """
+        # don't know what to do...
+        return []
+
+
     # implementation details
     def primeEntityTypes(self, plexus, **kwds):
         """
