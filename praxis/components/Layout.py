@@ -25,4 +25,10 @@ class Layout(pyre.shells.layout, family="praxis.layout"):
     iddcfg.doc = 'the uri of the idd configuration file'
 
 
+    # the data
+    staffRecords = praxis.properties.uri(default=None)
+    staffRecords.doc = 'the location of the CSV file with the current staff records'
+    staffRecords.aliases.add('staff-records')
+
+
 # end of file 
