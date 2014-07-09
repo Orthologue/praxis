@@ -82,16 +82,16 @@ from .actions import command
 
 # and other {praxis} parts
 from . import (
-    # the database schema
-    schema,
-    # the data model
-    model,
-    # the queries
-    queries,
-    # the external file layouts
-    ingest,
     # auxiliaries
     support,
+    # the external file layouts
+    ingest,
+    # the database schema
+    schema,
+    # the queries
+    queries,
+    # the data model
+    model,
 )
 
 
