@@ -37,7 +37,7 @@ class Employment(Temporary, id='employments'):
     rate.doc = "the employee's pay rate for the duration of this employment"
 
     frequency = praxis.db.reference(key=PayFrequency.id).notNull()
-    frequency.doc = "the frequency with which pay check are issued; e.g.: biweekly"
+    frequency.doc = "the frequency with which pay checks are issued; e.g.: biweekly"
 
     type = praxis.db.reference(key=PayType.id).notNull()
     type.doc = "the pay type; e.g. hourly or salary"

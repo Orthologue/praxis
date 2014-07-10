@@ -28,7 +28,7 @@ class Employee(praxis.db.table, id='employees'):
     idn = praxis.db.str(default=praxis.db.null)
     idn.doc = "government issued id number"
 
-    dob = praxis.db.date().notNull()
+    dob = praxis.db.date(default=praxis.db.null)
     dob.doc = "the employee's birth date"
 
 
