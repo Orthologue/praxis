@@ -45,8 +45,9 @@ class Staff:
         address = pyre.records.str()
         rate = pyre.records.decimal()
         type = pyre.records.str()
+        frequency = pyre.records.str()
 
-        dob = pyre.records.str()
+        dob = pyre.records.date()
         dob.format = '%m/%d/%Y'
 
         ssn = pyre.records.str()
