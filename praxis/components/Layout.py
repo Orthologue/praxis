@@ -26,7 +26,7 @@ class Layout(pyre.shells.layout, family="praxis.layout"):
 
 
     # the data
-    staffRecords = praxis.properties.uri(default=None)
+    staffRecords = pyre.properties.uri(default=None)
     staffRecords.doc = 'the location of the CSV file with the current staff records'
     staffRecords.aliases.add('staff-records')
 
