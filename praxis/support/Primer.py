@@ -169,7 +169,7 @@ class Primer:
         # get the pay type factory
         factory = plexus.datastore.schema.payType
         # the built-in pay types
-        names = ["hourly", "salary"]
+        names = ["partner", "contractor", "hourly", "salary"]
         # go through the names
         for name in names:
             # and build the records
@@ -185,7 +185,7 @@ class Primer:
         # get the pay type factory
         factory = plexus.datastore.schema.payFrequency
         # the built-in pay types
-        names = ["weekly", "bi-weekly", "monthly"]
+        names = ["weekly", "biweekly", "monthly", "quarterly", "annually"]
         # go through the names
         for name in names:
             # and build the records
