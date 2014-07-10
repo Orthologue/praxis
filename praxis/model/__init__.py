@@ -10,4 +10,8 @@
 from .Punches import Punches as punchlist
 
 
+# persistent objects
+from .Company import Company as company
+
+
 # end of file 

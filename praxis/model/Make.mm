@@ -12,6 +12,7 @@ PACKAGE = model
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
+    Company.py \
     Punches.py \
     __init__.py
 

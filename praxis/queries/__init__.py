@@ -6,4 +6,8 @@
 #
 
 
+from .Company import Company as company
+from .Employee import Employee as employee
+
+
 # end of file 

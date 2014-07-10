@@ -12,6 +12,8 @@ PACKAGE = queries
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
+    Company.py \
+    Employee.py \
     __init__.py
 
 # the standard build targets
