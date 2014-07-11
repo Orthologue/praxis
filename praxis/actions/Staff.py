@@ -32,8 +32,8 @@ class Staff(praxis.command, family='praxis.actions.staff'):
         # here is the list of my commands
         commands = ' | '.join(['new', 'update', 'terminate'])
         # show me
-        self.info.log('maintenance of employee records')
-        self.info.line('usage: {.pyre_namespace} staff [{}]'.format(plexus, commands))
+        self.info.line('{.pyre_spec}: maintenance of employee records'.format(self))
+        self.info.line('usage: {.pyre_namespace} {.pyre_spec} [{}]'.format(plexus, self, commands))
         self.info.log()
         # all done
         return 0
@@ -103,7 +103,8 @@ class Staff(praxis.command, family='praxis.actions.staff'):
             self.error.line(error)
             self.error.line('please provide a uri for the employee records')
             self.error.line('  using:')
-            self.error.log( '    {.pyre_namespace} staff new --records=<uri>'.format(plexus))
+            self.error.log( '    {.pyre_namespace} {.pyre_spec} new --records=<uri>'.format(
+                plexus, self))
             # return with an error
             return 1
                             

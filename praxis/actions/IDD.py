@@ -35,10 +35,10 @@ class IDD(praxis.command, family='praxis.actions.idd'):
         Show a help screen
         """
         # here is the list of my commands
-        commands = ' | '.join(['decode', 'peek'])
+        commands = ' | '.join(['decode', 'encode', 'peek'])
         # show me
-        self.info.log('direct access to the token generator')
-        self.info.line('usage: {.pyre_namespace} idd [{}]'.format(plexus, commands))
+        self.info.log('{.pyre_spec}: direct access to the token generator'.format(self))
+        self.info.line('usage: {.pyre_namespace} {.pyre_spec} [{}]'.format(plexus, self, commands))
         self.info.log()
         # all done
         return 0
@@ -57,7 +57,8 @@ class IDD(praxis.command, family='praxis.actions.idd'):
             self.error.line('no token to decode')
             self.error.line('please supply a token')
             self.error.line('  using:')
-            self.error.log('    {0.pyre_namespace} idd decode --token=<str>'.format(plexus))
+            self.error.log(
+                '    {.pyre_namespace} {.pyre_spec} decode --token=<str>'.format(plexus, self))
             # indicate an error
             return 1
 
@@ -95,7 +96,8 @@ class IDD(praxis.command, family='praxis.actions.idd'):
             self.error.line('please supply a counter and a date')
             self.error.line('  using:')
             self.error.log(
-                '    {0.pyre_namespace} idd encode --counter=<int> --date=<str>'.format(plexus))
+                '    {.pyre_namespace} {.pyre_spec} encode --counter=<int> --date=<str>'.format(
+                    plexus, self))
             # indicate an error
             return 1
 

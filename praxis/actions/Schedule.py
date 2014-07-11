@@ -28,8 +28,9 @@ class Schedule(praxis.command, family='praxis.actions.schedule'):
         # here is the list of my commands
         commands = ' | '.join(['text', 'html', 'svg'])
         # show me
-        self.info.log('a family of tools for managing employee scheduling')
-        self.info.line('usage: {.pyre_namespace} schedule [{}]'.format(plexus, commands))
+        self.info.line(
+            '{.pyre_spec}: a family of tools for managing employee scheduling'.format(self))
+        self.info.line('usage: {.pyre_namespace} {.pyre_spec} [{}]'.format(plexus, self, commands))
         self.info.log()
         # all done
         return 0

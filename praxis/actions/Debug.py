@@ -29,7 +29,7 @@ class Debug(praxis.command, family='praxis.actions.debug'):
         """
         # show me
         self.info.log('debug support')
-        self.info.line('usage: {.pyre_namespace} debug <aspect>'.format(plexus))
+        self.info.line('usage: {.pyre_namespace} {.pyre_spec} <aspect>'.format(plexus, self))
         self.info.log()
         # all done
         return 0
