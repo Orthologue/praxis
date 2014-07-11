@@ -24,6 +24,11 @@ class Layout(pyre.shells.layout, family="praxis.layout"):
     iddcfg = pyre.properties.uri(default='file:idd.cfg')
     iddcfg.doc = 'the uri of the idd configuration file'
 
+    company = pyre.properties.str(default='orthologue')
+    company.doc = 'the name of the company'
+
+    domain = pyre.properties.str(default='orthologue.com')
+    domain.doc = 'the company internet domain'
 
     # the data
     staffRecords = pyre.properties.uri(default=None)
