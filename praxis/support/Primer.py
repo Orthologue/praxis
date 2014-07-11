@@ -13,43 +13,51 @@ class Primer:
 
 
     # interface
-    def primeTypes(self, plexus, **kwds):
+    def primeTypes(self, plexus):
         """
         Main entry point that delegates table priming to the more specialized hooks
         """
-        # walk through the chain of tables
-        yield from self.primeEntityTypes(plexus=plexus, **kwds)
-        yield from self.primeItemTypes(plexus=plexus, **kwds)
-        yield from self.primeContactTypes(plexus=plexus, **kwds)
-        yield from self.primeContactPurposes(plexus=plexus, **kwds)
-        yield from self.primePhoneTypes(plexus=plexus, **kwds)
-        yield from self.primeURITypes(plexus=plexus, **kwds)
-        yield from self.primeEmploymentTypes(plexus=plexus, **kwds)
-        yield from self.primePayTypes(plexus=plexus, **kwds)
-        yield from self.primePayFrequencies(plexus=plexus, **kwds)
+        # get {chain}
+        import itertools
+        # walk through the table primers and chain them together
+        records = itertools.chain(
+            self._buildEntityTypes(plexus=plexus),
+            self._buildItemTypes(plexus=plexus),
+            self._buildContactTypes(plexus=plexus),
+            self._buildContactPurposes(plexus=plexus),
+            self._buildPhoneTypes(plexus=plexus),
+            self._buildURITypes(plexus=plexus),
+            self._buildEmploymentTypes(plexus=plexus),
+            self._buildPayTypes(plexus=plexus),
+            self._buildPayFrequencies(plexus=plexus),
+            )
 
+        # get the datastore
+        datastore = plexus.datastore
+        # save
+        datastore.server.insert(*records)
         # all done
         return
 
 
-    def primeCompanyInformation(self, plexus, **kwds):
+    def primeCompanyInformation(self, plexus):
         """
         Prime the database with the basic client information
         """
         # don't know what to do...
-        return []
+        return
 
 
-    def primeStaffRecords(self, plexus, **kwds):
+    def primeStaffRecords(self, plexus):
         """
         Prime the database with the initial staff information
         """
         # don't know what to do...
-        return []
+        return
 
 
     # implementation details
-    def primeEntityTypes(self, plexus, **kwds):
+    def _buildEntityTypes(self, plexus):
         """
         Create the default entity types
         """
@@ -65,7 +73,7 @@ class Primer:
         return
 
 
-    def primeItemTypes(self, plexus, **kwds):
+    def _buildItemTypes(self, plexus):
         """
         Create the default item types
         """
@@ -81,7 +89,7 @@ class Primer:
         return
 
 
-    def primeContactTypes(self, plexus, **kwds):
+    def _buildContactTypes(self, plexus):
         """
         Create the default contact types
         """
@@ -98,7 +106,7 @@ class Primer:
         return
 
 
-    def primeContactPurposes(self, plexus, **kwds):
+    def _buildContactPurposes(self, plexus):
         """
         Create the default location types
         """
@@ -114,7 +122,7 @@ class Primer:
         return
 
 
-    def primePhoneTypes(self, plexus, **kwds):
+    def _buildPhoneTypes(self, plexus):
         """
         Create the default phone types
         """
@@ -130,7 +138,7 @@ class Primer:
         return
 
 
-    def primeURITypes(self, plexus, **kwds):
+    def _buildURITypes(self, plexus):
         """
         Create the default uri types
         """
@@ -146,7 +154,7 @@ class Primer:
         return
 
 
-    def primeEmploymentTypes(self, plexus, **kwds):
+    def _buildEmploymentTypes(self, plexus):
         """
         Create the default employment types
         """
@@ -162,7 +170,7 @@ class Primer:
         return
 
 
-    def primePayTypes(self, plexus, **kwds):
+    def _buildPayTypes(self, plexus):
         """
         Create the default pay types
         """
@@ -178,7 +186,7 @@ class Primer:
         return
 
 
-    def primePayFrequencies(self, plexus, **kwds):
+    def _buildPayFrequencies(self, plexus):
         """
         Create the default pay types
         """

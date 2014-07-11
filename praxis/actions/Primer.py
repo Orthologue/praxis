@@ -21,6 +21,11 @@ class Primer(praxis.command, family='praxis.actions.db'):
     tables = praxis.properties.set(default=None, schema=praxis.properties.str())
     tables.doc = 'restrict the tables affected to this set'
 
+    sections = praxis.properties.set(
+        schema = praxis.properties.str(),
+        default = {'types', 'company', 'staff'})
+    sections.doc = 'restrict the db sections to prime to this set'
+
 
     # command obligations
     @praxis.export
@@ -86,26 +91,31 @@ class Primer(praxis.command, family='praxis.actions.db'):
         """
         Insert into the tables all the default/static data
         """
-        # instantiate a connection to the datastore
-        datastore = plexus.datastore
-        # get the set of tables to build
-        tables = self.tables
-        # make a token generator
-        idd = plexus.idd
         # make a primer
         primer = plexus.primer
-        # get it to prime the static types
-        self.info.log('priming static types')
-        datastore.server.insert(*primer.primeTypes(plexus=plexus))
-        # the basic client information
-        self.info.log('priming company information')
-        datastore.server.insert(*primer.primeCompanyInformation(plexus=plexus))
-        # the initial staff records
-        self.info.log('priming staff records')
-        datastore.server.insert(*primer.primeStaffRecords(plexus=plexus))
+        # get the sections
+        sections = self.sections
+        
+        # if the static types section is on the pile
+        if 'types' in sections:
+            # get it to prime the static types
+            self.info.log('priming static types')
+            primer.primeTypes(plexus=plexus)
+
+        # if the company info section is on the pile
+        if 'company' in sections:
+            # the basic client information
+            self.info.log('priming company information')
+            primer.primeCompanyInformation(plexus=plexus)
+
+        # if the staff info section is on the pile
+        if 'staff' in sections:
+            # the initial staff records
+            self.info.log('priming staff records')
+            primer.primeStaffRecords(plexus=plexus)
         
         # save the token generator state
-        idd.save()
+        plexus.idd.save()
 
         # all done
         return 0
@@ -132,7 +142,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
 
     def drop(self, plexus):
         """
-        Drop the entrire database
+        Drop the entire database
         """
         # get the name of my database
         name = plexus.layout.project
