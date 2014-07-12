@@ -13,11 +13,14 @@ PACKAGE = actions
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
     Command.py \
+    Copyright.py \
     Debug.py \
     IDD.py \
+    License.py \
     Primer.py \
     Staff.py \
     Schedule.py \
+    Version.py \
     __init__.py
 
 # the standard build targets

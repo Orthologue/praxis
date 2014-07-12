@@ -22,8 +22,7 @@ def license():
     """
     Print the praxis license
     """
-    print(_praxis_license)
-    return
+    return _praxis_license
 
 def version():
     """
@@ -35,8 +34,7 @@ def credits():
     """
     Print the acknowledgments
     """
-    print(_praxis_acknowledgments)
-    return
+    return _praxis_acknowledgments
 
 
 def usage(**kwds):
@@ -146,7 +144,8 @@ _praxis_usage = _praxis_header + """
         praxis db             manage the low level datastore
 
         praxis license        terms of use
-        praxis copyright      the praxis copyright note
+        praxis version        current version of the package
+        praxis copyright      the copyright note
 
     Visit http://praxis.orthologue.com for the latest documentation
     """

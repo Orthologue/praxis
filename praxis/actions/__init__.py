@@ -65,4 +65,18 @@ def staff():
     return Staff
 
 
+# administrivia
+def copyright():
+    from .Copyright import Copyright
+    return Copyright
+
+def license():
+    from .License import License
+    return License
+
+def version():
+    from .Version import Version
+    return Version
+
+
 # end of file
