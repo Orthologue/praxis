@@ -19,7 +19,7 @@ class Employee(praxis.db.table, id='employees'):
     """
 
     employee = praxis.db.reference(key=Entity.eid).notNull()
-    employee.doc = "the person whose attributes these are"
+    employee.doc = "the entity whose attributes these are"
 
     # tax id
     tin = praxis.db.str().notNull()
