@@ -23,6 +23,7 @@ class Person(praxis.db.table, id='people'):
     first = praxis.db.str().notNull()
     middle = praxis.db.str()
     last = praxis.db.str().notNull()
+    preferred = praxis.db.str()
 
     # meta-methods
     def __str__(self):

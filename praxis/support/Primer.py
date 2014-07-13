@@ -122,7 +122,8 @@ class Primer:
                 entity = eid,
                 first = record.first,
                 middle = record.middle,
-                last = record.last)
+                last = record.last,
+                preferred = record.alias)
             # save it
             persons.append(person)
 
