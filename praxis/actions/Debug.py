@@ -23,7 +23,7 @@ class Debug(praxis.command, family='praxis.actions.debug'):
 
     # command obligations
     @praxis.export
-    def help(self, plexus, **kwds ):
+    def help(self, plexus):
         """
         Show a help screen
         """
@@ -35,7 +35,7 @@ class Debug(praxis.command, family='praxis.actions.debug'):
         return 0
 
 
-    def dbinit(self, plexus, **kwds):
+    def dbinit(self, plexus):
         """
         Show me the statements necessary to create my schema
         """
@@ -51,6 +51,19 @@ class Debug(praxis.command, family='praxis.actions.debug'):
         for table in schema.tables:
             # render
             for line in sql.createTable(table=table): print(line)
+
+        # all done
+        return 0
+
+
+    def model(self, plexus):
+        """
+        Debug the model
+        """
+        # run the query
+        companies = plexus.model.company.get(plexus=plexus, name=plexus.layout.company)
+        # show me
+        for company in companies: print(company)
 
         # all done
         return 0
