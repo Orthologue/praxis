@@ -8,6 +8,7 @@
 
 from .Company import Company as company
 from .Employee import Employee as employee
+from .EmployeeListing import EmployeeListing as employeeListing
 
 
 # end of file 

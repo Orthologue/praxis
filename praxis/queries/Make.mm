@@ -14,6 +14,7 @@ PACKAGE = queries
 EXPORT_PYTHON_MODULES = \
     Company.py \
     Employee.py \
+    EmployeeListing.py \
     __init__.py
 
 # the standard build targets
