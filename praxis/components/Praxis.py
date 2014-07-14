@@ -31,7 +31,7 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
 
 
     # public data
-    from .. import schema, queries
+    from .. import schema, queries, model
 
 
     @property
