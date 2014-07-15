@@ -13,6 +13,7 @@ import praxis
 # class declaration
 class Company(praxis.db.object, schema=praxis.schema.company):
     """
+    The company model
     """
 
 
@@ -34,7 +35,6 @@ class Company(praxis.db.object, schema=praxis.schema.company):
         """
         Retrieve companies by name
         """
-
         # my fields
         entity = company.entity
         name = company.name
@@ -43,11 +43,10 @@ class Company(praxis.db.object, schema=praxis.schema.company):
         def __init__(self, name, **kwds):
             # chain up
             super().__init__(**kwds)
-            # get my class record
-            cls = type(self)
             # make a restriction and attach it
-            self.where = praxis.db.like(field=cls.name, regex=name)
+            self.where = praxis.db.like(field=self.name, regex=name)
             # all done
             return
+
 
 # end of file 
