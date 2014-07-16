@@ -34,7 +34,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         Show a help screen
         """
         # here is the list of my commands
-        commands = ' | '.join(['create', 'init', 'prime', 'clear', 'drop'])
+        commands = ' | '.join(['create', 'init', 'prime', 'clear', 'drop', 'reset'])
         # show me
         self.info.log('provides direct access to my database')
         self.info.line('usage: {.pyre_namespace} {.pyre_spec} [{}]'.format(plexus, self, commands))
@@ -43,7 +43,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         return 0
 
 
-    # implementation details
+    # basic commands
     def create(self, plexus):
         """
         Create my database
@@ -162,6 +162,20 @@ class Primer(praxis.command, family='praxis.actions.db'):
 
         # all done
         return 0
+
+
+    # meta-commands
+    def reset(self, plexus):
+        """
+        Revert the database to a known state
+        """
+        # clear, init, prime
+        status = (
+            self.clear(plexus=plexus) or 
+            self.init(plexus=plexus) or 
+            self.prime(plexus=plexus))
+        # all done
+        return status
 
 
 # end of file
