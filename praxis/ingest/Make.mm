@@ -5,8 +5,8 @@
 # (c) 1998-2014 all rights reserved
 #
 
-# project defaults
-include praxis.def
+# the project name
+PROJECT = praxis
 # the package name
 PACKAGE = ingest
 

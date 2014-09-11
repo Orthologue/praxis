@@ -5,7 +5,7 @@
 # (c) 1998-2014 all rights reserved
 #
 
-
+# project defaults
 PROJECT = praxis
 
 RECURSE_DIRS = \
@@ -16,9 +16,7 @@ RECURSE_DIRS = \
     web \
     primer \
 
-#--------------------------------------------------------------------------
-#
-
+# the standard targets
 all:
 	BLD_ACTION="all" $(MM) recurse
 
@@ -32,7 +30,6 @@ distclean::
 	BLD_ACTION="distclean" $(MM) recurse
 
 
-#--------------------------------------------------------------------------
 #  shortcuts to building in my subdirectories
 .PHONY: bin defaults praxis primer tests web
 
@@ -55,14 +52,11 @@ build: praxis defaults bin
 
 test: build tests
 
-
-#--------------------------------------------------------------------------
-#
+# the self-contained build
 PRAXIS_ZIP = $(EXPORT_ROOT)/praxis-1.0.zip
 zip: praxis defaults
 	@-$(RM_F) $(PRAXIS_ZIP)
 	@(cd $(EXPORT_ROOT)/packages; zip -r ${PRAXIS_ZIP} * )
 	@(cd $(EXPORT_ROOT); zip -r ${PRAXIS_ZIP} defaults )
-
 
 # end of file 

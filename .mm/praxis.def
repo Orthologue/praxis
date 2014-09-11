@@ -8,9 +8,5 @@
 # global options for praxis
 PROJECT = praxis
 
-# default locations
-PROJ_TMPDIR = $(BLD_TMPDIR)/$(PACKAGE)
-PROJ_CLEAN += $(EXPORT_MODULEDIR)/$(PACKAGE)
-
 
 # end of file 

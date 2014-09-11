@@ -6,7 +6,7 @@
 #
 
 # project defaults
-include praxis.def
+PROJECT = praxis
 # the package name
 PACKAGE = compliance
 # the list of directories to visit
