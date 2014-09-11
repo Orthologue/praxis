@@ -24,7 +24,7 @@ class Action(pyre.action, family='praxis.actions'):
         """
         # build a string to uri converter
         uri = cls.uri()
-        # first mine, then the ones i inherit from praxis 
+        # first mine, then the ones i inherit from pyre 
         return [ uri.coerce(value='vfs:/praxis'), uri.coerce(value='vfs:/pyre') ]
 
 
@@ -33,7 +33,7 @@ class Action(pyre.action, family='praxis.actions'):
         """
         Return an iterable over portions of my family name
         """
-        # spells are in the 'spells' folder
+        # actions are in the 'actions' folder
         return [ 'actions' ]
 
 
