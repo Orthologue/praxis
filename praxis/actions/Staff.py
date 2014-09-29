@@ -13,33 +13,17 @@ import praxis
 # the action
 class Staff(praxis.command, family='praxis.actions.staff'):
     """
-    Direct access to the application database
+    A family of commands for maintaining employee information
     """
 
 
     # public state
     records = praxis.properties.istream(default=None)
     records.doc = 'the uri of the employee records'
-    ecords = praxis.properties.str(default=None)
-
-
-    # command obligations
-    @praxis.export
-    def help(self, plexus, **kwds):
-        """
-        Show a help screen
-        """
-        # here is the list of my commands
-        commands = ' | '.join(['new', 'update', 'terminate'])
-        # show me
-        self.info.line('{.pyre_spec}: maintenance of employee records'.format(self))
-        self.info.line('usage: {.pyre_namespace} {.pyre_spec} [{}]'.format(plexus, self, commands))
-        self.info.log()
-        # all done
-        return 0
 
 
     # implementation details
+    @praxis.export(tip='process only records pertaining to new employees')
     def new(self, plexus):
         """
         Select from the input stream the records that describe new employees only and add them to
@@ -57,6 +41,7 @@ class Staff(praxis.command, family='praxis.actions.staff'):
         return 0
 
 
+    @praxis.export(tip='update the employee records')
     def update(self, plexus):
         """
         Build a subset of the tables that capture my schema
@@ -68,6 +53,7 @@ class Staff(praxis.command, family='praxis.actions.staff'):
         return 0
 
 
+    @praxis.export(tip='terminate an employee')
     def terminate(self, plexus):
         """
         Build a subset of the tables that capture my schema

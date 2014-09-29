@@ -21,20 +21,7 @@ class Debug(praxis.command, family='praxis.actions.debug'):
     tables.doc = 'restrict the tables affected to this set'
 
 
-    # command obligations
-    @praxis.export
-    def help(self, plexus):
-        """
-        Show a help screen
-        """
-        # show me
-        self.info.log('debug support')
-        self.info.line('usage: {.pyre_namespace} {.pyre_spec} <aspect>'.format(plexus, self))
-        self.info.log()
-        # all done
-        return 0
-
-
+    @praxis.export(tip='print the steps necessary to create the db schema')
     def dbinit(self, plexus):
         """
         Show me the statements necessary to create my schema
@@ -56,6 +43,7 @@ class Debug(praxis.command, family='praxis.actions.debug'):
         return 0
 
 
+    @praxis.export(tip='debug the data model')
     def model(self, plexus):
         """
         Debug the model

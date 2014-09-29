@@ -14,6 +14,9 @@ import praxis
 class Primer(praxis.command, family='praxis.actions.db'):
     """
     Direct access to the application database
+
+    This family of commands build an initial snapshot of the datastore, including its schema,
+    static data, and any initial information available in the filesystem
     """
 
 
@@ -27,23 +30,8 @@ class Primer(praxis.command, family='praxis.actions.db'):
     sections.doc = 'restrict the db sections to prime to this set'
 
 
-    # command obligations
-    @praxis.export
-    def help(self, plexus, **kwds ):
-        """
-        Show a help screen
-        """
-        # here is the list of my commands
-        commands = ' | '.join(['create', 'init', 'prime', 'clear', 'drop', 'reset'])
-        # show me
-        self.info.log('provides direct access to my database')
-        self.info.line('usage: {.pyre_namespace} {.pyre_spec} [{}]'.format(plexus, self, commands))
-        self.info.log()
-        # all done
-        return 0
-
-
     # basic commands
+    @praxis.export(tip='create the database')
     def create(self, plexus):
         """
         Create my database
@@ -68,6 +56,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         return 0
 
 
+    @praxis.export(tip='create database tables')
     def init(self, plexus):
         """
         Build a subset of the tables that capture my schema
@@ -87,6 +76,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         return 0
 
 
+    @praxis.export(tip='fill the tables with initial data')
     def prime(self, plexus):
         """
         Insert into the tables all the default/static data
@@ -121,6 +111,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         return 0
 
 
+    @praxis.export(tip='remove tables from the database')
     def clear(self, plexus):
         """
         Drop my tables
@@ -140,6 +131,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         return 0
 
 
+    @praxis.export(tip='remove the entire database')
     def drop(self, plexus):
         """
         Drop the entire database
@@ -165,6 +157,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
 
 
     # meta-commands
+    @praxis.export(tip='recreate the database and its tables')
     def reset(self, plexus):
         """
         Revert the database to a known state

@@ -28,23 +28,8 @@ class IDD(praxis.command, family='praxis.actions.idd'):
     date.doc = 'use this date to encode a token'
 
 
-    # command obligations
-    @praxis.export
-    def help(self, plexus, **kwds):
-        """
-        Show a help screen
-        """
-        # here is the list of my commands
-        commands = ' | '.join(['decode', 'encode', 'peek'])
-        # show me
-        self.info.log('{.pyre_spec}: direct access to the token generator'.format(self))
-        self.info.line('usage: {.pyre_namespace} {.pyre_spec} [{}]'.format(plexus, self, commands))
-        self.info.log()
-        # all done
-        return 0
-
-
     # action implementations
+    @praxis.export(tip='decode a token from the command line')
     def decode(self, plexus):
         """
         Decode the given {token} on the command line
@@ -81,6 +66,7 @@ class IDD(praxis.command, family='praxis.actions.idd'):
         return
 
 
+    @praxis.export(tip='encode a token from the command line')
     def encode(self, plexus):
         """
         Decode the given {token} on the command line
@@ -121,6 +107,7 @@ class IDD(praxis.command, family='praxis.actions.idd'):
         return
 
 
+    @praxis.export(tip='show me the next token in the sequence with disturbing the generator')
     def peek(self, plexus):
         """
         Show me the next token
