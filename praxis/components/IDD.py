@@ -111,7 +111,7 @@ class IDD(praxis.component, family="praxis.idd"):
         # ask the framework
         import pyre
         # for a weaver
-        weaver = pyre.weaver.newWeaver(name='idd-weaver')
+        weaver = pyre.weaver.weaver(name='idd-weaver')
         # pick the language
         weaver.language = 'cfg'
         # open {uri}
