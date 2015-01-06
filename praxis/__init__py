@@ -58,7 +58,7 @@ def pg():
 # import and publish pyre symbols
 from pyre import (
     # protocols, components and traits
-    schemata, protocol, component, properties, constraints,
+    schemata, protocol, component, foundry, properties, constraints,
     # decorators
     export, provides,
     # the runtime manager

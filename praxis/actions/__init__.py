@@ -6,6 +6,8 @@
 #
 
 
+# get the action markers
+from .. import action, foundry
 # convenient access to the command base class
 from .Command import Command as command
 
@@ -15,6 +17,7 @@ from pyre.shells.VFS import VFS as vfs
 
 
 # the list of actions
+@foundry(implements=action)
 def db():
     """
     Grant access to the raw database primer
@@ -25,6 +28,7 @@ def db():
     return Primer
 
 
+@foundry(implements=action)
 def debug():
     """
     Debug support
@@ -35,6 +39,7 @@ def debug():
     return Debug
 
 
+@foundry(implements=action)
 def idd():
     """
     Grant access to the schedule manager
@@ -45,6 +50,7 @@ def idd():
     return IDD
 
 
+@foundry(implements=action)
 def schedule():
     """
     Grant access to the schedule manager
@@ -55,6 +61,7 @@ def schedule():
     return Schedule
 
 
+@foundry(implements=action)
 def staff():
     """
     Grant access to the employee record manager
@@ -66,14 +73,17 @@ def staff():
 
 
 # administrivia
+@foundry(implements=action)
 def copyright():
     from .Copyright import Copyright
     return Copyright
 
+@foundry(implements=action)
 def license():
     from .License import License
     return License
 
+@foundry(implements=action)
 def version():
     from .Version import Version
     return Version
