@@ -10,20 +10,20 @@
 import os
 # access the pyre framework
 import pyre
-# my action protocol
-from .Action import Action
 # my protocols
 from .. import compliance
 
 
 # class declaration
-class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
+class Praxis(pyre.plexus, family='praxis.components.plexus'):
     """
     The main {praxis} action dispatcher
     """
 
     # constants
     pyre_namespace = 'praxis'
+    # types
+    from .Action import Action as pyre_action
 
     # public state
     jurisdiction = compliance.jurisdiction(default='us.california')
@@ -105,6 +105,7 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         """
         Hook for the application help system
         """
+        return super().help(**kwds)
         # get the package
         import praxis
         # show me
@@ -196,7 +197,7 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
         """
         # get the factory
         from .. support import typeRegistrar
-        # build one 
+        # build one
         registrar = typeRegistrar(datastore=self.datastore)
         # and return it
         return registrar
@@ -210,4 +211,4 @@ class Praxis(pyre.plexus, family='praxis.components.plexus', action=Action):
     _typeRegistrar = None
 
 
-# end of file 
+# end of file
