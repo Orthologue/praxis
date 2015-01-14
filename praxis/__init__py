@@ -80,6 +80,8 @@ from .actions import command
 
 # and other {praxis} parts
 from . import (
+    # my exceptions
+    exceptions,
     # auxiliaries
     support,
     # the external file layouts
@@ -98,11 +100,11 @@ _praxis_version = (1, 0, BZR_REVNO)
 
 _praxis_tag = "praxis {}.{} revision {}".format(*_praxis_version)
 
-_praxis_copyright = "{}: Copyright (c) 1998-2014 Michael A.G. Aïvázis".format(_praxis_tag)
+_praxis_copyright = "{}: Copyright (c) 1998-2015 Michael A.G. Aïvázis".format(_praxis_tag)
 
 _praxis_header = """
     {}
-    Copyright (c) 1998-2014 Michael A.G. Aïvázis
+    Copyright (c) 1998-2015 Michael A.G. Aïvázis
     All Rights Reserved
     """.format(_praxis_tag)
 
