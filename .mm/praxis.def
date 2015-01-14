@@ -8,5 +8,13 @@
 # global options for praxis
 PROJECT = praxis
 
+# deployment settings for web servers
+APACHE_HOST = $(PROJECT).orthologue.com
+APACHE_USER = www-data
+APACHE_SUPERUSER = root
+APACHE_USERURL = $(APACHE_SUPERUSER)@$(APACHE_HOST)
+APACHE_CONFIGDIR = /etc/apache2/sites-available
+APACHE_CONFIGURL = $(APACHE_USERURL):$(APACHE_CONFIGDIR)
 
-# end of file 
+
+# end of file
