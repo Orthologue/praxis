@@ -13,6 +13,7 @@ PACKAGE = ecrs
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
     PunchParser.py \
+    exceptions.py \
     __init__.py
 
 # the standard build targets

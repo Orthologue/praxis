@@ -16,6 +16,10 @@ class PunchParser:
     """
 
 
+    # exceptions
+    from .exceptions import ParsingError
+
+
     # interface
     def parse(self, stream, **kwds):
         """
@@ -45,7 +49,38 @@ class PunchParser:
             clockin = text[self.OFFSET_CLOCKIN].strip()
             clockout = text[self.OFFSET_CLOCKOUT].strip()
 
-            # check
+            # if we couldn't extract all the information we need
+            if not (info and clockin and clockout):
+                # reset the pile of complaints
+                complaints = []
+                # if we don't know the employee
+                if not info: complaints.append('no employee info')
+                # no clock in
+                if not clockin: complaints.append('no clock in')
+                # no clock out
+                if not clockout: complaints.append('no clock out')
+
+                # if we have employee info
+                if info:
+                    # get the name of the employee
+                    _, name = info.split(None, 1)
+                    # normalize
+                    name = " ".join(reversed(name.split(',  '))) + ': '
+                # otherwise
+                else:
+                    # no name info
+                    name = ''
+
+                # build the description
+                msg = "{}{}".format(name, ", ".join(complaints))
+
+                # get the package
+                import praxis
+                # build a locator
+                here = praxis.tracking.file(source=stream.name, line=line+1)
+
+                # complain
+                raise self.ParsingError(description=msg, locator=here)
 
             # type conversions
             # first the employee id and name
@@ -54,8 +89,8 @@ class PunchParser:
             eid = ''.join(rawid.split(',')) # the raw ids have thousands separators...
             name = tuple(rawname.split(',  ')) # the name portion is {last,  first}
             # now the clock punches
-            clockin = datetime.datetime.strptime(clockin, self.TIME_FORMAT) if clockin else None
-            clockout = datetime.datetime.strptime(clockout, self.TIME_FORMAT) if clockout else None
+            clockin = datetime.datetime.strptime(clockin, self.TIME_FORMAT)
+            clockout = datetime.datetime.strptime(clockout, self.TIME_FORMAT)
 
             # build the date key
             date = None if clockin is None else clockin.date()
