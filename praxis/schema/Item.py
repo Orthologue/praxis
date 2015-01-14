@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -22,10 +22,10 @@ class Item(praxis.db.table, id='items'):
     eid = praxis.db.str().primary()
     kind = praxis.db.reference(key=ItemType.id).notNull()
     name = praxis.db.str().notNull()
-    
+
     # meta-methods
     def __str__(self):
         return "{0.id}: {0.name}".format(self)
 
 
-# end of file 
+# end of file

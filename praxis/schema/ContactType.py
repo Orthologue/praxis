@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -30,4 +30,4 @@ class ContactType(praxis.db.table, id='contact_types'):
         return "{0.id}: {0.description}".format(self)
 
 
-# end of file 
+# end of file

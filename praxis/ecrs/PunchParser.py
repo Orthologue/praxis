@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -39,11 +39,13 @@ class PunchParser:
         reader = csv.reader(stream, **kwds)
 
         # start reading
-        for line in reader:
+        for line, text in enumerate(reader):
             # pull in the punch info
-            info = line[self.OFFSET_EMPLOYEE]
-            clockin = line[self.OFFSET_CLOCKIN]
-            clockout = line[self.OFFSET_CLOCKOUT]
+            info = text[self.OFFSET_EMPLOYEE].strip()
+            clockin = text[self.OFFSET_CLOCKIN].strip()
+            clockout = text[self.OFFSET_CLOCKOUT].strip()
+
+            # check
 
             # type conversions
             # first the employee id and name
@@ -57,7 +59,7 @@ class PunchParser:
 
             # build the date key
             date = None if clockin is None else clockin.date()
-            
+
             # store
             names[eid] = name
             punches[eid][date].append(('in', clockin, clockout))

@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 # project defaults
@@ -15,6 +15,8 @@ RECURSE_DIRS = \
     tests \
     web \
     primer \
+
+PRAXIS_ZIP = $(EXPORT_ROOT)/praxis-1.0.zip
 
 # the standard targets
 all:
@@ -30,33 +32,21 @@ distclean::
 	BLD_ACTION="distclean" $(MM) recurse
 
 
-#  shortcuts to building in my subdirectories
-.PHONY: bin defaults praxis primer tests web
-
-bin:
-	(cd bin; $(MM))
-
-defaults:
-	(cd defaults; $(MM))
-
-praxis:
-	(cd praxis; $(MM))
-
-tests:
-	(cd tests; $(MM))
-
-web:
-	(cd web; $(MM))
-
+# convenoence
 build: praxis defaults bin
 
 test: build tests
 
 # the self-contained build
-PRAXIS_ZIP = $(EXPORT_ROOT)/praxis-1.0.zip
 zip: praxis defaults
 	@-$(RM_F) $(PRAXIS_ZIP)
 	@(cd $(EXPORT_ROOT)/packages; zip -r ${PRAXIS_ZIP} * )
 	@(cd $(EXPORT_ROOT); zip -r ${PRAXIS_ZIP} defaults )
 
-# end of file 
+#  shortcuts to building in my subdirectories
+.PHONY: $(RECURSE_DIRS)
+
+$(RECURSE_DIRS):
+	(cd $@; $(MM))
+
+# end of file

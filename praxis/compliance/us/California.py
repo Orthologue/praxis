@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -47,7 +47,7 @@ class California(pyre.component,
         return
 
 
-    # public data 
+    # public data
     # multipliers for the three overtime tiers to be used to price out the labor; in California
     # there are three tiers
     overtimeTiers = (1.0, 1.5, 2.0)
@@ -97,9 +97,9 @@ class California(pyre.component,
 
         # consistency check
         assert (total - regular - sesqui - double) < (1/3600) # expect second accuracy
-        
+
         # all done
         return regular, sesqui, double
 
 
-# end of file 
+# end of file

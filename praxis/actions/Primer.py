@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -85,7 +85,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         primer = plexus.primer
         # get the sections
         sections = self.sections
-        
+
         # if the static types section is on the pile
         if 'types' in sections:
             # get it to prime the static types
@@ -103,7 +103,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
             # the initial staff records
             self.info.log('priming staff records')
             primer.primeStaffRecords(plexus=plexus)
-        
+
         # save the token generator state
         plexus.idd.save()
 
@@ -164,8 +164,8 @@ class Primer(praxis.command, family='praxis.actions.db'):
         """
         # clear, init, prime
         status = (
-            self.clear(plexus=plexus) or 
-            self.init(plexus=plexus) or 
+            self.clear(plexus=plexus) or
+            self.init(plexus=plexus) or
             self.prime(plexus=plexus))
         # all done
         return status

@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -51,7 +51,7 @@ typeTables = (
     # attribute types
     entityType, itemType,
     contactPurpose, contactType, phoneType, uriType,
-    employmentType, payType, payFrequency, 
+    employmentType, payType, payFrequency,
 )
 
 # the table list, sorted by dependency
@@ -67,4 +67,4 @@ tables = typeTables + (
 )
 
 
-# end of file 
+# end of file

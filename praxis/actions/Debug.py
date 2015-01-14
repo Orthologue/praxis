@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -30,7 +30,7 @@ class Debug(praxis.command, family='praxis.actions.debug'):
         schema = plexus.schema
         # and the sql renderer
         sql = praxis.db.sql()
-        
+
         # if the caller didn't specify which tables to build, build them all
         tables = self.tables or {table.pyre_name for table in schema.tables}
 
@@ -57,4 +57,4 @@ class Debug(praxis.command, family='praxis.actions.debug'):
         return 0
 
 
-# end of file 
+# end of file

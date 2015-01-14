@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -43,4 +43,4 @@ class Employment(Temporary, id='employments'):
     type.doc = "the pay type; e.g. hourly or salary"
 
 
-# end of file 
+# end of file

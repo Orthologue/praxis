@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -131,7 +131,7 @@ class IDD(praxis.component, family="praxis.idd"):
         # currently, all tokens are upper case letters
         return token.upper()
 
-        
+
     # meta-methods
     def __init__(self, cfg, **kwds):
         # chain up
@@ -226,7 +226,7 @@ class IDD(praxis.component, family="praxis.idd"):
         yield renderer.trait(name='alphabet', value=self.alphabet)
         # all done
         return
-            
+
 
     # data
     base = 0
@@ -234,4 +234,4 @@ class IDD(praxis.component, family="praxis.idd"):
     sequence = None
 
 
-# end of file 
+# end of file

@@ -3,7 +3,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -29,7 +29,7 @@ class ScheduleScanner(pyre.parsing.scanner):
         pattern = '(?P<station>[a-z-_.]+)\s@\s(?P<time>\d{1,2}:\d{2}(a|p)m)')
 
     comment = pyre.parsing.token(head=';', pattern=r'.*', tail='$')
-    
+
 
     # interface
     def pyre_tokenize(self, uri, stream, client):
@@ -42,4 +42,4 @@ class ScheduleScanner(pyre.parsing.scanner):
         return super().pyre_tokenize(uri=uri, stream=stream, client=filtered)
 
 
-# end of file 
+# end of file

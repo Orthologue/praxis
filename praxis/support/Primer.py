@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -143,7 +143,7 @@ class Primer:
                 employer = company.entity,
                 rate = record.rate,
                 frequency = registrar["pay_frequencies"][record.frequency],
-                type = registrar["pay_types"][record.type], 
+                type = registrar["pay_types"][record.type],
                 effective = record.hired if record.hired else schema.null,
                 until = record.terminated if record.terminated else schema.null)
             # save it
@@ -160,7 +160,7 @@ class Primer:
                 until = record.terminated if record.terminated else schema.null)
             # save it
             homes.append(home)
-                
+
             # get a token for the email address
             emailId = emails[record.email]
             # build an email address
@@ -380,7 +380,7 @@ class Primer:
         cid = idd()
         # get my entity type
         ctype = registrar['entity_types']['companies']
-        
+
         # build a new entity
         yield schema.entity.pyre_immutable(eid=cid, kind=ctype)
         # build the company record
@@ -430,7 +430,7 @@ class Primer:
                     purpose = registrar['contact_purposes'][purpose],
                     effective = '1998-02-01'
                     )
-                    
+
         # make an id for the URI
         uri = idd()
         # the website
@@ -463,7 +463,7 @@ class Primer:
                 purpose = registrar['contact_purposes'][email],
                 effective = '1998-02-01'
                 )
-            
+
         # all done
         return
 

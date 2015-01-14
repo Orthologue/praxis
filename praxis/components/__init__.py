@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -13,4 +13,4 @@ from .Praxis import Praxis as plexus
 from .Datastore import Datastore as datastore
 
 
-# end of file 
+# end of file

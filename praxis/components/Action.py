@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -24,7 +24,7 @@ class Action(pyre.action, family='praxis.actions'):
         """
         # build a string to uri converter
         uri = cls.uri()
-        # first mine, then the ones i inherit from pyre 
+        # first mine, then the ones i inherit from pyre
         return [ uri.coerce(value='vfs:/praxis'), uri.coerce(value='vfs:/pyre') ]
 
 
@@ -37,4 +37,4 @@ class Action(pyre.action, family='praxis.actions'):
         return [ 'actions' ]
 
 
-# end of file 
+# end of file

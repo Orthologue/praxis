@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -93,7 +93,7 @@ class Staff(praxis.command, family='praxis.actions.staff'):
                 plexus, self))
             # return with an error
             return 1
-                            
+
         # otherwise, show me
         self.info.log('reading from {.records.name!r}'.format(self))
         # make a parser
@@ -107,6 +107,6 @@ class Staff(praxis.command, family='praxis.actions.staff'):
 
     # constants
     URI_STAFF = 'vfs:/{0.pyre_namespace}/etc/staff.csv'
-        
+
 
 # end of file

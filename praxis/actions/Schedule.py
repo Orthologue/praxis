@@ -3,8 +3,8 @@
 # -*- coding: utf-8 -*-
 #
 # michael a.g. aïvázis
-# urban radish
-# (c) 2011-2014 all rights reserved
+# orthologue
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -41,4 +41,4 @@ class Schedule(praxis.command, family='praxis.actions.schedule'):
         """
 
 
-# end of file 
+# end of file

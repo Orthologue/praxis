@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2015 all rights reserved
 #
 
 
@@ -28,7 +28,7 @@ class Staff:
         csv = pyre.records.csv()
         # build a reader and return it
         return csv.immutable(layout=self.staff, stream=stream, uri=uri, **kwds)
-        
+
 
     # implementation details
     # the layout of the file
@@ -58,16 +58,16 @@ class Staff:
 
         terminated = pyre.records.date()
         terminated.format = '%m/%d/%Y'
-        
+
         @pyre.records.converter(traits=[rate])
         def money(value, stripper=re.compile('[^\d.]')):
-            value = ''.join(stripper.split(value))        
+            value = ''.join(stripper.split(value))
             if not value: return 0
             return value
 
         @pyre.records.converter(traits=[cell])
         def phone(value, stripper=re.compile('[^\d+]')):
-            value = ''.join(stripper.split(value))        
+            value = ''.join(stripper.split(value))
             if len(value) == 10:
                 value = '+1' + value
             return value
@@ -76,5 +76,5 @@ class Staff:
         def ssnstrip(value, stripper=re.compile('[^\d]')):
             return ''.join(stripper.split(value))
 
-    
-# end of file 
+
+# end of file
