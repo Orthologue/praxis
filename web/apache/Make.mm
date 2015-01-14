@@ -6,23 +6,32 @@
 #
 
 
-PROJECT = praxis
-PACKAGE = /etc/apache2/sites-available
+include praxis.def
+# the package name
+PACKAGE = apache
+# the stuff in this directory goes to {etc/praxis/apache}
+EXPORT_ETCDIR = $(EXPORT_ROOT)/etc/$(PROJECT)
+# the apache configuration files
+APACHE_CONF = \
+    $(PROJECT).conf \
+# the list of files
+EXPORT_ETC = $(APACHE_CONF)
 
-#--------------------------------------------------------------------------
-#
-all: tidy
+# the standard build targets
+all: export
 
-#--------------------------------------------------------------------------
-#
+# make sure we scope the files correctly
+export:: export-package-etc
 
-RSYNC = /usr/bin/rsync -ruavz --progress --stats
-FILES = praxis
-WEB_USER = root@praxis.orthologue.com
-WEB_LOCATION = $(PACKAGE)
+# install
+install: tidy
+	$(RSYNC) $(RSYNCFLAGS) $(APACHE_CONF) $(APACHE_CONFIGURL)
+	ssh $(APACHE_USERURL) 'addgroup $(APACHE_USER) {project.name}'
+	ssh $(APACHE_USERURL) 'a2ensite {project.name}'
 
-deploy: tidy
-	$(RSYNC) $(FILES) $(WEB_USER):$(WEB_LOCATION)
+# deploy
+deploy:
+	ssh $(APACHE_USERURL) 'service apache2 restart'
 
 
 # end of file
