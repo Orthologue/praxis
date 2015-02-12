@@ -38,7 +38,7 @@ def test():
         names, punches = parser.parse(stream)
         # compute the hours: it is a double sum over the hours worked in a given day and over
         # the days in the data set
-        total = sum(sum(card.hours()) for card in punches[eid].values())
+        total = sum(card.hours for card in punches[eid].values())
         # verify the payload is correct
         assert total == 8
 

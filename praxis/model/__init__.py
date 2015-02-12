@@ -7,6 +7,7 @@
 
 
 # the low level objects
+from .Task import Task as task
 from .Punches import Punches as punchlist
 
 

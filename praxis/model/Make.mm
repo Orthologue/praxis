@@ -14,6 +14,7 @@ PACKAGE = model
 EXPORT_PYTHON_MODULES = \
     Company.py \
     Punches.py \
+    Task.py \
     __init__.py
 
 # the standard build targets

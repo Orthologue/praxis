@@ -97,7 +97,7 @@ class PunchParser:
 
             # store
             names[eid] = name
-            punches[eid][date].append(('in', clockin, clockout))
+            punches[eid][date].newTask(name='in', start=clockin, finish=clockout)
 
         # all done
         return names, punches

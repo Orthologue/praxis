@@ -19,9 +19,16 @@ class Jurisdiction(pyre.protocol, family="praxis.compliance"):
 
     # interface
     @pyre.provides
-    def overtime(self, timecard):
+    def overtime(self, start, workweeks, timecard):
         """
         Classify the hours worked by an employee a given an employee's time card
+        """
+
+
+    @pyre.provides
+    def breaks(self, timecard):
+        """
+        Same as {overtime} except the calculator enforces the legally mandated breaks
         """
 
 

@@ -10,6 +10,7 @@
 import pyre
 # externals
 import datetime
+import itertools
 # and my protocol
 from .. import jurisdiction
 
@@ -37,14 +38,54 @@ class California(pyre.component,
         for workweek in range(workweeks):
             # compute the dates in this work week
             days = tuple(start + (n + 7*workweek)*day for n in range(7))
-            # the number of hours worked for each day in this work week
-            hours = tuple(sum(timecard[current].hours()) for current in days)
-
+            # compute the number of hours worked for each day in this work week
+            hours = tuple(timecard[today].hours for today in days)
             # classify into the three tiers and return the stats for this work week
             yield self._overtime(hours=hours)
 
         # all done
         return
+
+
+    @pyre.export
+    def breaks(self, start, workweeks, timecard) :
+        """
+        Same as {overtime} except the calculator enforces the legally mandated breaks
+        """
+        # in California, the work period is broken into blocks no longer than 6 hours separated
+        # by 30 minute breaks
+
+        # the counter increment
+        day = datetime.timedelta(days=1)
+        # go through the right number of work weeks
+        for workweek in range(workweeks):
+            # compute the dates in this work week
+            days = tuple(start + (n + 7*workweek)*day for n in range(7))
+            # initialize the hour container
+            hours = []
+            # go through each day
+            for today in days:
+                # get the punch list
+                punches = timecard[today]
+                # compute the hours worked
+                worked = punches.hours
+                # compute the breaks taken
+                taken = punches.breaks
+                # compute the mandated breaks
+                mandated = .5 * int(worked/6)
+                # compute the deficit
+                deficit = mandated - taken
+                # if the deficit is more than ten percent of what's required
+                if deficit > .1 * mandated:
+                    # adjust the hours worked
+                    hours.append(worked - deficit)
+                # otherwise
+                else:
+                    # use teh actual hours worked
+                    hours.append(worked)
+
+            # classify into the three tiers and return the stats for this work week
+            yield self._overtime(hours=hours)
 
 
     # public data
