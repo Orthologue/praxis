@@ -21,7 +21,7 @@ class PunchParser:
 
 
     # interface
-    def parse(self, stream, **kwds):
+    def parse(self, stream, errorlog, **kwds):
         """
         Extract clock-in/clock-out punches from the given {stream}
 
@@ -41,6 +41,9 @@ class PunchParser:
         punches = pyre.patterns.vivify(levels=2, atom=model.punchlist)
         # create a reader
         reader = csv.reader(stream, **kwds)
+
+        # reset the pile of errors
+        errors = []
 
         # start reading
         for line, text in enumerate(reader):
@@ -71,8 +74,18 @@ class PunchParser:
                     # no name info
                     name = ''
 
+                # if we have clock in info
+                if clockin:
+                    # we have a date
+                    stamp = "on {}: ".format(
+                        datetime.datetime.strptime(clockin, self.TIME_FORMAT).date())
+                # otherwise
+                else:
+                    # we don't
+                    stamp = ''
+
                 # build the description
-                msg = "{}{}".format(name, ", ".join(complaints))
+                msg = "{}{}{}".format(name, stamp, ", ".join(complaints))
 
                 # get the package
                 import praxis
@@ -80,7 +93,9 @@ class PunchParser:
                 here = praxis.tracking.file(source=stream.name, line=line+1)
 
                 # complain
-                raise self.ParsingError(description=msg, locator=here)
+                errors.append(self.ParsingError(description=msg, locator=here))
+                # and move
+                continue
 
             # type conversions
             # first the employee id and name
@@ -98,6 +113,19 @@ class PunchParser:
             # store
             names[eid] = name
             punches[eid][date].newTask(name='in', start=clockin, finish=clockout)
+
+        # if there were any errors
+        if errors:
+            # check in
+            errorlog.line('while parsing the clock punches:')
+            # go through them
+            for error in errors:
+                # and print them out
+                errorlog.line(str(error))
+            # get the count
+            count = len(errors)
+            # flush
+            errorlog.log('{} error{} total'.format(count, '' if count == 1 else 's'))
 
         # all done
         return names, punches
