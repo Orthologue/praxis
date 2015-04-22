@@ -17,6 +17,10 @@ def test():
     """
     Run the various tests
     """
+    # journal
+    import journal
+    error = journal.error("praxis.ecrs")
+    warning = journal.warning("praxis.ecrs")
     # get the package
     import praxis.ecrs
     # make a punch parser
@@ -25,7 +29,7 @@ def test():
     # the empty file
     with open("punches-empty.csv") as stream:
         # and parse it
-        names, punches = parser.parse(stream)
+        names, punches = parser.parse(stream=stream, errorlog=error, warninglog=warning)
         # verify the payload is empty
         assert not names
         assert not punches
@@ -35,7 +39,7 @@ def test():
         # an employee id that is know to exist in this file
         eid = '1000'
         # parse it
-        names, punches = parser.parse(stream)
+        names, punches = parser.parse(stream=stream, errorlog=error, warninglog=warning)
         # compute the hours: it is a double sum over the hours worked in a given day and over
         # the days in the data set
         total = sum(card.hours for card in punches[eid].values())
