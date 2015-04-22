@@ -21,7 +21,7 @@ class PunchParser:
 
 
     # interface
-    def parse(self, stream, errorlog, **kwds):
+    def parse(self, stream, errorlog, warninglog, **kwds):
         """
         Extract clock-in/clock-out punches from the given {stream}
 
@@ -42,8 +42,9 @@ class PunchParser:
         # create a reader
         reader = csv.reader(stream, **kwds)
 
-        # reset the pile of errors
+        # reset the pile of errors and warnings
         errors = []
+        warnings = []
 
         # start reading
         for line, text in enumerate(reader):
@@ -110,6 +111,17 @@ class PunchParser:
             # build the date key
             date = None if clockin is None else clockin.date()
 
+            # check that clock in and clock out happened in the same day
+            if date != clockout.date():
+                msg = "{}: date mismatch: in: {}, out: {}".format(
+                    " ".join(reversed(name)), date, clockout.date())
+                # get the package
+                import praxis
+                # build a locator
+                here = praxis.tracking.file(source=stream.name, line=line+1)
+                # it's rare but perhaps ok, so it's a warning
+                warnings.append(self.ParsingError(description=msg, locator=here))
+
             # store
             names[eid] = name
             punches[eid][date].newTask(name='in', start=clockin, finish=clockout)
@@ -126,6 +138,19 @@ class PunchParser:
             count = len(errors)
             # flush
             errorlog.log('{} error{} total'.format(count, '' if count == 1 else 's'))
+
+        # if there were any warnings
+        if warnings:
+            # check in
+            warninglog.line('while parsing the clock punches:')
+            # go through them
+            for warning in warnings:
+                # and print them out
+                warninglog.line(str(warning))
+            # get the count
+            count = len(warnings)
+            # flush
+            warninglog.log('{} warning{} total'.format(count, '' if count == 1 else 's'))
 
         # all done
         return names, punches
