@@ -33,6 +33,8 @@ class PunchParser:
         import datetime
         # for {pyre.patterns.vivify}
         import pyre
+        # for my services
+        import praxis
         # and the clock payload object
         from .. import model
 
@@ -88,8 +90,6 @@ class PunchParser:
                 # build the description
                 msg = "{}{}{}".format(name, stamp, ", ".join(complaints))
 
-                # get the package
-                import praxis
                 # build a locator
                 here = praxis.tracking.file(source=stream.name, line=line+1)
 
@@ -104,9 +104,17 @@ class PunchParser:
             # normalize
             eid = ''.join(rawid.split(',')) # the raw ids have thousands separators...
             name = tuple(rawname.split(',  ')) # the name portion is {last,  first}
-            # now the clock punches
-            clockin = datetime.datetime.strptime(clockin, self.TIME_FORMAT)
-            clockout = datetime.datetime.strptime(clockout, self.TIME_FORMAT)
+            # now, attempt to
+            try:
+                # parse the clock punches
+                clockin = datetime.datetime.strptime(clockin, self.TIME_FORMAT)
+                clockout = datetime.datetime.strptime(clockout, self.TIME_FORMAT)
+            # if something goes wrong
+            except ValueError as error:
+                # build a locator
+                here = praxis.tracking.file(source=stream.name, line=line+1)
+                # tell me where the problem is
+                raise self.ParsingError(description=str(error), locator=here) from None
 
             # build the date key
             date = None if clockin is None else clockin.date()
@@ -115,8 +123,6 @@ class PunchParser:
             if date != clockout.date():
                 msg = "{}: date mismatch: in: {}, out: {}".format(
                     " ".join(reversed(name)), date, clockout.date())
-                # get the package
-                import praxis
                 # build a locator
                 here = praxis.tracking.file(source=stream.name, line=line+1)
                 # it's rare but perhaps ok, so it's a warning
