@@ -92,6 +92,8 @@ from . import (
     queries,
     # the data model
     model,
+    # vendors
+    ecrs
 )
 
 
