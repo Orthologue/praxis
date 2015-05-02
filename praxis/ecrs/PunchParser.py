@@ -21,7 +21,7 @@ class PunchParser:
 
 
     # interface
-    def parse(self, stream, errorlog, warninglog, **kwds):
+    def parse(self, stream, errorlog, warninglog, names=None, punches=None, **kwds):
         """
         Extract clock-in/clock-out punches from the given {stream}
 
@@ -35,12 +35,11 @@ class PunchParser:
         import pyre
         # for my services
         import praxis
-        # and the clock payload object
-        from .. import model
 
         # build the payload
-        names = {}
-        punches = pyre.patterns.vivify(levels=2, atom=model.punchlist)
+        names = {} if names is None else names
+        punches = pyre.patterns.vivify(
+            levels=2, atom=praxis.model.punchlist) if punches is None else punches
         # create a reader
         reader = csv.reader(stream, **kwds)
 
