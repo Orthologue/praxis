@@ -61,31 +61,30 @@ class California(pyre.component,
         for workweek in range(workweeks):
             # compute the dates in this work week
             days = tuple(start + (n + 7*workweek)*day for n in range(7))
-            # initialize the hour container
-            hours = []
-            # go through each day
-            for today in days:
-                # get the punch list
-                punches = timecard[today]
-                # compute the hours worked
-                worked = punches.hours
-                # compute the breaks taken
-                taken = punches.breaks
-                # compute the mandated breaks
-                mandated = .5 * int(worked/6)
-                # compute the deficit
-                deficit = mandated - taken
-                # if the deficit is more than ten percent of what's required
-                if deficit > .1 * mandated:
-                    # adjust the hours worked
-                    hours.append(worked - deficit)
-                # otherwise
-                else:
-                    # use teh actual hours worked
-                    hours.append(worked)
-
+            # adjust the hours
+            hours = list(self.enforceBreaks(punches=timecard[today]) for today in days)
             # classify into the three tiers and return the stats for this work week
             yield self._overtime(hours=hours)
+
+
+    def enforceBreaks(self, punches):
+        """
+        Adjust the hours in the {punches} of a given shift to enforce the legally mandated breaks
+        """
+        # compute the hours worked
+        worked = punches.hours
+        # compute the breaks taken
+        taken = punches.breaks
+        # compute the mandated breaks
+        mandated = .5 * int(worked/6)
+        # compute the deficit
+        deficit = mandated - taken
+        # if the deficit is more than ten percent of what's required
+        if deficit > .1 * mandated:
+            # adjust the hours worked
+            return worked - deficit
+        # otherwise, return the actual value
+        return worked
 
 
     # public data
