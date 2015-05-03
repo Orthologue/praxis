@@ -16,9 +16,7 @@ from .. import jurisdiction
 
 
 # class declaration
-class California(pyre.component,
-                 implements = jurisdiction,
-                 family = "praxis.compliance.us.california"):
+class California(pyre.component, implements=jurisdiction, family="praxis.compliance.us.california"):
     """
     Encapsulation of calculators compliant with California law
     """
@@ -65,6 +63,9 @@ class California(pyre.component,
             hours = list(self.enforceBreaks(punches=timecard[today]) for today in days)
             # classify into the three tiers and return the stats for this work week
             yield self._overtime(hours=hours)
+
+        # all done
+        return
 
 
     def enforceBreaks(self, punches):
