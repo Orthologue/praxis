@@ -7,7 +7,7 @@
 
 
 # the base class
-from ..exceptions import PraxisError
+from ...exceptions import PraxisError
 
 
 # my exceptions

@@ -8,12 +8,10 @@
 # project defaults
 PROJECT = praxis
 # the package name
-PACKAGE = ecrs
+PACKAGE = vendors/adp
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
-    PunchParser.py \
-    exceptions.py \
     __init__.py
 
 # the standard build targets

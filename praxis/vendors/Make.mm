@@ -8,25 +8,14 @@
 # project defaults
 PROJECT = praxis
 # the package name
-PACKAGE = praxis
-# clean up
-PROJ_CLEAN += $(EXPORT_MODULEDIR)
-
+PACKAGE = vendors
 # the list of directories to visit
 RECURSE_DIRS = \
-    actions \
-    components \
-    compliance \
-    ingest \
-    model \
-    queries \
-    schema \
-    support \
-    vendors \
+    adp \
+    ecrs \
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
-    exceptions.py \
     __init__.py
 
 # the standard build targets
@@ -41,13 +30,7 @@ clean::
 distclean::
 	BLD_ACTION="distclean" $(MM) recurse
 
-export:: __init__.py export-python-modules
+export:: export-package-python-modules
 	BLD_ACTION="export" $(MM) recurse
-	@$(RM) __init__.py
-
-# construct my {__init__.py}
-__init__.py: __init__py
-	@sed -e "s:BZR_REVNO:$$(bzr revno):g" __init__py > __init__.py
-
 
 # end of file
