@@ -22,9 +22,9 @@ def test():
     error = journal.error("praxis.ecrs")
     warning = journal.warning("praxis.ecrs")
     # get the package
-    import praxis.ecrs
+    import praxis.vendors.ecrs
     # make a punch parser
-    parser = praxis.ecrs.punchParser()
+    parser = praxis.vendors.ecrs.punchParser()
 
     # the empty file
     with open("punches-empty.csv") as stream:

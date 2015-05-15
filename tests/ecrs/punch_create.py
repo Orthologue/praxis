@@ -14,9 +14,9 @@ Sanity check: verify that the package is accessible
 
 def test():
     # get the package
-    import praxis.ecrs
+    import praxis.vendors.ecrs
     # make a punch parser
-    parser = praxis.ecrs.punchParser()
+    parser = praxis.vendors.ecrs.punchParser()
     # all done
     return
 
