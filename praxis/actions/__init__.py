@@ -8,16 +8,10 @@
 
 # get the action markers
 from .. import action, foundry
-# convenient access to the command base class
-from .Command import Command as command
-
-
-# pull in the actions supplied by the framework
-from pyre.shells.VFS import VFS as vfs
 
 
 # the list of actions
-@foundry(implements=action)
+@foundry(implements=action, tip="access the raw database primer")
 def db():
     """
     Grant access to the raw database primer
@@ -28,8 +22,7 @@ def db():
     return Primer
 
 
-@foundry(implements=action)
-def debug():
+def debug(implements=action, tip="debugging/development support"):
     """
     Debug support
     """
@@ -39,10 +32,10 @@ def debug():
     return Debug
 
 
-@foundry(implements=action)
+@foundry(implements=action, tip="access the token generator")
 def idd():
     """
-    Grant access to the schedule manager
+    Grant access to the token generator
     """
     # get the action
     from .IDD import IDD
@@ -50,7 +43,7 @@ def idd():
     return IDD
 
 
-@foundry(implements=action)
+@foundry(implements=action, tip="access the schedule manager")
 def schedule():
     """
     Grant access to the schedule manager
@@ -61,7 +54,7 @@ def schedule():
     return Schedule
 
 
-@foundry(implements=action)
+@foundry(implements=action, tip="access the employee record manager")
 def staff():
     """
     Grant access to the employee record manager
@@ -73,20 +66,13 @@ def staff():
 
 
 # administrivia
-@foundry(implements=action)
-def copyright():
-    from .Copyright import Copyright
-    return Copyright
-
-@foundry(implements=action)
-def license():
-    from .License import License
-    return License
-
-@foundry(implements=action)
-def version():
-    from .Version import Version
-    return Version
+@foundry(implements=action, tip="display information about this application")
+def about():
+    """
+    Display information about this application
+    """
+    from .About import About
+    return About
 
 
 # end of file

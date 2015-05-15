@@ -75,8 +75,7 @@ package = executive.registerPackage(name='praxis', file=__file__)
 home, prefix, defaults = package.layout()
 
 # access to components
-from .components import idd, layout, action, datastore, plexus
-from .actions import command
+from .components import idd, layout, datastore, plexus, action, command
 
 # and other {praxis} parts
 from . import (
@@ -93,7 +92,9 @@ from . import (
     # the data model
     model,
     # vendors
-    vendors
+    vendors,
+    # my actions
+    actions
 )
 
 

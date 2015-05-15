@@ -105,12 +105,39 @@ class Praxis(pyre.plexus, family='praxis.components.plexus'):
         """
         Hook for the application help system
         """
-        return super().help(**kwds)
         # get the package
         import praxis
-        # show me
-        self.info.log(praxis._praxis_usage)
-        # all done
+        # set the indentation
+        indent = ' '*4
+        # make some space
+        self.info.line()
+        # get the help header
+        for line in praxis._praxis_header.splitlines():
+            # and display it
+            self.info.line(line)
+
+        # reset the pile of actions
+        actions = []
+        # get the documented commands
+        for uri, name, action, tip in self.pyre_action.pyre_documentedActions():
+            # and put them on the pile
+            actions.append((name, tip))
+        # if there were any
+        if actions:
+            # figure out how much space we need
+            width = max(len(name) for name, _ in actions)
+            # introduce this section
+            self.info.line('commands:')
+            # for each documented action
+            for name, tip in actions:
+                # show the details
+                self.info.line('{}{:>{}}: {}'.format(indent, name, width, tip))
+            # some space
+            self.info.line()
+
+        # flush
+        self.info.log()
+        # and indicate success
         return 0
 
 
