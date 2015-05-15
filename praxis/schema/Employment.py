@@ -19,7 +19,7 @@ from .PayFrequency import PayFrequency
 # table declaration
 class Employment(Temporary, id='employments'):
     """
-    Establishing an employee-employer relationship between two entities
+    Establish an employee-employer relationship between two entities
     """
 
     id = praxis.db.str()
