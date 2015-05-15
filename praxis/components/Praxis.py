@@ -193,7 +193,7 @@ class Praxis(pyre.plexus, family='praxis.components.plexus'):
         # get the component
         from . import datastore
         # create a connection and return it
-        return datastore(name='{.layout.project}:datastore'.format(self))
+        return datastore(name='{.layout.project}_datastore'.format(self))
 
 
     def newPrimer(self):

@@ -49,7 +49,7 @@ def pg():
     # build an application layout
     cfg = layout()
     # build a db component
-    dbc = db.postgres(name="{.project}:db".format(cfg))
+    dbc = db.postgres(name="{.project}_db".format(cfg))
     # establish the connection
     dbc.attach()
     # and return the component
