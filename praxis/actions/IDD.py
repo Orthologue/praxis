@@ -56,11 +56,11 @@ class IDD(praxis.command, family='praxis.actions.idd'):
         date, counter = idd.decode(token)
 
         # show me
-        self.info.line('decoding token: {}'.format(token))
-        self.info.line('    counter: {}'.format(counter))
-        self.info.line('    date: {}'.format(date))
-        self.info.line('    alphabet: {.alphabet}'.format(idd))
-        self.info.log()
+        plexus.info.line('decoding token: {}'.format(token))
+        plexus.info.line('    counter: {}'.format(counter))
+        plexus.info.line('    date: {}'.format(date))
+        plexus.info.line('    alphabet: {.alphabet}'.format(idd))
+        plexus.info.log()
 
         # all done
         return
@@ -97,11 +97,11 @@ class IDD(praxis.command, family='praxis.actions.idd'):
         # ask it to decode the token
         token = idd.encode(tid=counter, date=date)
         # show me
-        self.info.line('encoded token: {}'.format(token))
-        self.info.line('    counter: {}'.format(counter))
-        self.info.line('    date: {}'.format(date))
-        self.info.line('    alphabet: {.alphabet}'.format(idd))
-        self.info.log()
+        plexus.info.line('encoded token: {}'.format(token))
+        plexus.info.line('    counter: {}'.format(counter))
+        plexus.info.line('    date: {}'.format(date))
+        plexus.info.line('    alphabet: {.alphabet}'.format(idd))
+        plexus.info.log()
 
         # all done
         return
@@ -115,17 +115,17 @@ class IDD(praxis.command, family='praxis.actions.idd'):
         # access the {idd} client
         idd = plexus.idd
         # show me
-        self.info.line('peeking into the token generation sequence')
+        plexus.info.line('peeking into the token generation sequence')
         # for now, interrogate the {idd} client state; this will not work when the client is
         # batching tokens received from a server, since the local client state may be in need
         # of a sync step with the server
         token = idd.encode(tid=idd.seed, date=idd.date)
         # show me
-        self.info.line('next idd token: {}'.format(token))
-        self.info.line('    seed: {.seed}'.format(idd))
-        self.info.line('    date: {.date}'.format(idd))
-        self.info.line('    alphabet: {.alphabet}'.format(idd))
-        self.info.log()
+        plexus.info.line('next idd token: {}'.format(token))
+        plexus.info.line('    seed: {.seed}'.format(idd))
+        plexus.info.line('    date: {.date}'.format(idd))
+        plexus.info.line('    alphabet: {.alphabet}'.format(idd))
+        plexus.info.log()
         # all done
         return 0
 

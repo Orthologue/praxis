@@ -30,7 +30,7 @@ class Staff(praxis.command, family='praxis.actions.staff'):
         the database
         """
         # show me
-        self.info.log('creating new employee records')
+        plexus.info.log('creating new employee records')
 
         # load the records
         for employee in self.readStaffRecords(plexus=plexus):
@@ -47,7 +47,7 @@ class Staff(praxis.command, family='praxis.actions.staff'):
         Build a subset of the tables that capture my schema
         """
         # show me
-        self.info.log('updating employee records')
+        plexus.info.log('updating employee records')
 
         # all done
         return 0
@@ -59,7 +59,7 @@ class Staff(praxis.command, family='praxis.actions.staff'):
         Build a subset of the tables that capture my schema
         """
         # show me
-        self.info.log('terminating an employee')
+        plexus.info.log('terminating an employee')
 
         # all done
         return 0
@@ -95,7 +95,7 @@ class Staff(praxis.command, family='praxis.actions.staff'):
             return 1
 
         # otherwise, show me
-        self.info.log('reading from {.records.name!r}'.format(self))
+        plexus.info.log('reading from {.records.name!r}'.format(self))
         # make a parser
         p = praxis.ingest.staff()
         # get the records

@@ -39,7 +39,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # get the name of my database
         name = plexus.layout.project
         # tell me
-        self.info.log('creating database {!r}'.format(name))
+        plexus.info.log('creating database {!r}'.format(name))
 
         # get the low level package
         import pyre.db
@@ -68,7 +68,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # make a builder
         builder = plexus.builder
         # show me
-        self.info.log('creating the schema: tables={}'.format(tables if tables else 'all'))
+        plexus.info.log('creating the schema: tables={}'.format(tables if tables else 'all'))
         # ask it to do the work
         builder.createTables(datastore=datastore, tables=tables)
 
@@ -89,19 +89,19 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # if the static types section is on the pile
         if 'types' in sections:
             # get it to prime the static types
-            self.info.log('priming static types')
+            plexus.info.log('priming static types')
             primer.primeTypes(plexus=plexus)
 
         # if the company info section is on the pile
         if 'company' in sections:
             # the basic client information
-            self.info.log('priming company information')
+            plexus.info.log('priming company information')
             primer.primeCompanyInformation(plexus=plexus)
 
         # if the staff info section is on the pile
         if 'staff' in sections:
             # the initial staff records
-            self.info.log('priming staff records')
+            plexus.info.log('priming staff records')
             primer.primeStaffRecords(plexus=plexus)
 
         # save the token generator state
@@ -123,7 +123,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # make a builder
         builder = plexus.builder
         # show me
-        self.info.log('clearing tables: {}'.format(tables if tables else 'all'))
+        plexus.info.log('clearing tables: {}'.format(tables if tables else 'all'))
         # ask it to do the work
         builder.dropTables(datastore=datastore, tables=tables)
 
@@ -139,7 +139,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
         # get the name of my database
         name = plexus.layout.project
         # show me
-        self.info.log('dropping database {!r}'.format(name))
+        plexus.info.log('dropping database {!r}'.format(name))
 
         # access the low level package
         import pyre.db
