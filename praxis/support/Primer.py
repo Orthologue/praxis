@@ -222,13 +222,10 @@ class Primer:
         Create the default entity types
         """
         # get the entity type factory
-        factory = plexus.datastore.schema.entityType
+        factory = plexus.datastore.schema.entityType.pyre_immutable
         # the built-in entity types
-        names = [ "companies", "persons" ]
-        # go through the names
-        for name in names:
-            # and build the records
-            yield factory.pyre_immutable(id=plexus.idd(), description=name)
+        yield factory(id='companies', description='entities that are incorporated')
+        yield factory(id='persons', description='entities that are physical persons')
         # all  done
         return
 
@@ -238,13 +235,10 @@ class Primer:
         Create the default item types
         """
         # get the item type factory
-        factory = plexus.datastore.schema.itemType
+        factory = plexus.datastore.schema.itemType.pyre_immutable
         # the built-in item types
-        names = ["products", "services"]
-        # go through the names
-        for name in names:
-            # and build the records
-            yield factory.pyre_immutable(id=plexus.idd(), description=name)
+        yield factory(id='products', description='items that are products for sale')
+        yield factory(id='services', description='items that are services provided to customers')
         # all  done
         return
 
@@ -254,14 +248,13 @@ class Primer:
         Create the default contact types
         """
         # get the contact type factory
-        factory = plexus.datastore.schema.contactType
+        factory = plexus.datastore.schema.contactType.pyre_immutable
         # build the records; the values are supposed to match names of tables in the current
         # schema that contain contact information
-        names = ["emails", "locations", "phones", "uris"]
-        # go through the names
-        for name in names:
-            # and build the records
-            yield factory.pyre_immutable(id=plexus.idd(), description=name)
+        yield factory(id='emails', description='email information for an entity')
+        yield factory(id='locations', description='the physical address of an entity')
+        yield factory(id='phones', description='the telephone number of an entity')
+        yield factory(id='uris', description='the web home page of an entity')
         # all  done
         return
 
@@ -271,13 +264,18 @@ class Primer:
         Create the default location types
         """
         # get the location type factory
-        factory = plexus.datastore.schema.contactPurpose
-        # the built-in location types
-        names = ["personal", "work", "info", "shipping", "billing" ]
-        # go through the names
-        for name in names:
-            # and build the records
-            yield factory.pyre_immutable(id=plexus.idd(), description=name)
+        factory = plexus.datastore.schema.contactPurpose.pyre_immutable
+        # build the records
+        yield factory(id='personal',
+                      description="an entity's personal information")
+        yield factory(id='work',
+                      description="an entity's work information")
+        yield factory(id='info',
+                      description="general information about an entity")
+        yield factory(id='shipping',
+                      description="information about shipping to and from an entity")
+        yield factory(id='billing',
+                       description="information for financial exchanges with an entity")
         # all  done
         return
 
@@ -287,13 +285,12 @@ class Primer:
         Create the default phone types
         """
         # get the phone type factory
-        factory = plexus.datastore.schema.phoneType
-        # the built-in phone types
-        names = ["cell", "voice", "fax", "pager" ]
-        # go through the names
-        for name in names:
-            # and build the records
-            yield factory.pyre_immutable(id=plexus.idd(), description=name)
+        factory = plexus.datastore.schema.phoneType.pyre_immutable
+        # build the records
+        yield factory(id='cell', description='the phone number is a mobile phone')
+        yield factory(id='voice', description='the phone number is a land line')
+        yield factory(id='fax', description='the phone number is a fax')
+        yield factory(id='pager', description='the phone number is a pager')
         # all  done
         return
 
@@ -303,13 +300,14 @@ class Primer:
         Create the default uri types
         """
         # get the uri type factory
-        factory = plexus.datastore.schema.uriType
-        # the built-in uri types
-        names = ["web", "facebook", "instagram", "twitter", "vine", "youtube"]
-        # go through the names
-        for name in names:
-            # and build the records
-            yield factory.pyre_immutable(id=plexus.idd(), description=name)
+        factory = plexus.datastore.schema.uriType.pyre_immutable
+        # build the records
+        yield factory(id='web', descrption='uris that are web pages')
+        yield factory(id='facebook', descrption='uris that are facebook pages')
+        yield factory(id='instagram', descrption='uris that are instagram pages')
+        yield factory(id='twitter', descrption='uris that are twitter handles')
+        yield factory(id='vine', descrption='uris that are vine pages')
+        yield factory(id='youtube', descrption='uris that are youtube channels or pages')
         # all  done
         return
 
@@ -319,13 +317,13 @@ class Primer:
         Create the default employment types
         """
         # get the pay type factory
-        factory = plexus.datastore.schema.employmentType
-        # the built-in employment types
-        names = ["full time", "part time", "temporary", "contractor", "intern"]
-        # go through the names
-        for name in names:
-            # and build the records
-            yield factory.pyre_immutable(id=plexus.idd(), description=name)
+        factory = plexus.datastore.schema.employmentType.pyre_immutable
+        # build the records
+        yield factory(id='full time', description='full time employements')
+        yield factory(id='part time', description='part time employements')
+        yield factory(id='temporary', description='temporary employements')
+        yield factory(id='contractor', description='employees that are contractors')
+        yield factory(id='intern', description='employees that are interns')
         # all  done
         return
 
@@ -335,13 +333,12 @@ class Primer:
         Create the default pay types
         """
         # get the pay type factory
-        factory = plexus.datastore.schema.payType
-        # the built-in pay types
-        names = ["partner", "contractor", "hourly", "salary"]
-        # go through the names
-        for name in names:
-            # and build the records
-            yield factory.pyre_immutable(id=plexus.idd(), description=name)
+        factory = plexus.datastore.schema.payType.pyre_immutable
+        # build the records
+        yield factory(id='partner', description='partner compensation rules')
+        yield factory(id='contractor', description='contractor compensation rules')
+        yield factory(id='hourly', description='compensation for hourly employees')
+        yield factory(id='salary', description='compensation for salaried employees')
         # all  done
         return
 
@@ -351,13 +348,13 @@ class Primer:
         Create the default pay types
         """
         # get the pay type factory
-        factory = plexus.datastore.schema.payFrequency
-        # the built-in pay types
-        names = ["weekly", "biweekly", "monthly", "quarterly", "annually"]
-        # go through the names
-        for name in names:
-            # and build the records
-            yield factory.pyre_immutable(id=plexus.idd(), description=name)
+        factory = plexus.datastore.schema.payFrequency.pyre_immutable
+        # build the records
+        yield factory(id='weekly', description='weekly compensation')
+        yield factory(id='biweekly', description='compensation every two weeks')
+        yield factory(id='monthly', description='monthly compensation')
+        yield factory(id='quarterly', description='quarterly compensation')
+        yield factory(id='annually', description='annual compensation')
         # all  done
         return
 
@@ -385,13 +382,13 @@ class Primer:
         yield schema.entity.pyre_immutable(eid=cid, kind=ctype)
         # build the company record
         yield schema.company.pyre_immutable(entity=cid, name=plexus.layout.company)
-
-
+        # put some address in the table
         addresses = [
             ('1500 MORADA PL, ALTADENA, CA 91001-3232', '1998-02-01', '2001-10-30'),
             ('1335 LA SOLANA DR, ALTADENA, CA 91001-2624', '2001-10-31', '2007-06-22'),
             ('624 6TH STR, MANHATTAN BCH, CA 90266-5817', '2007-06-23', '2013-04-30'),
-            ('1855 INDUSTRIAL STR STE 601, LOS ANGELES, CA, 90021-1260', '2013-05-01', schema.null)
+            ('1855 INDUSTRIAL STR STE 601, LOS ANGELES, CA 90021-1260', '2013-05-01', '2015-04-30'),
+            ('2135 E 7TH PL STE 9, LOS ANGELES, CA, 90021-1766', '2015-05-01', schema.null)
             ]
 
         # now go through them

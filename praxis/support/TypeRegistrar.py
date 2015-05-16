@@ -26,7 +26,10 @@ class TypeRegistrar(dict):
     # implementation details
     def indexTypeTables(self, datastore):
         """
-        Build a map from description to primary key for each of the typed tables
+        Build an identity map from primary keys to themselves for each of the typed tables
+
+        This map, though trivial, is useful in detecting inconsistencies during data priming,
+        and providing the set of legal choices for type fields
         """
         # get the tables
         tables = datastore.schema.typeTables
@@ -35,7 +38,7 @@ class TypeRegistrar(dict):
             # get the contents
             records = datastore.select(table)
             # build the index
-            index = { description: eid for eid, description in datastore.select(table) }
+            index = { eid: eid for eid, _ in datastore.select(table) }
             # and attach it
             self[table.pyre_name] = index
         # all done
