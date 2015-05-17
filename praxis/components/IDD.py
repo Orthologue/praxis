@@ -43,7 +43,7 @@ class IDD(praxis.component, family="praxis.idd"):
         # load the configuration file
         cls.pyre_executive.loadConfiguration(state, locator=praxis.tracking.here())
         # build one
-        idd = cls(name='{}:idd'.format(project), cfg=state)
+        idd = cls(name='{}_idd'.format(project), cfg=state)
         # ask it to save its state
         idd.save()
         # and return it
