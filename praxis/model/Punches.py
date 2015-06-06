@@ -7,7 +7,7 @@
 
 
 # externals
-import itertools
+import itertools, operator
 
 
 # declaration
@@ -65,6 +65,8 @@ class Punches(list):
         task = self.task(name=name, start=start, finish=finish)
         # store it
         self.append(task)
+        # sort me
+        self.sort(key=operator.attrgetter('start'))
         # and return it
         return task
 
