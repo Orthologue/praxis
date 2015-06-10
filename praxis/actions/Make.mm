@@ -15,6 +15,7 @@ EXPORT_PYTHON_MODULES = \
     About.py \
     Debug.py \
     IDD.py \
+    Payroll.py \
     Primer.py \
     Staff.py \
     Schedule.py \

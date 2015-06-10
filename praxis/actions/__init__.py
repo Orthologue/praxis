@@ -43,6 +43,17 @@ def idd():
     return IDD
 
 
+@foundry(implements=action, tip="access the payroll manager")
+def payroll():
+    """
+    Grant access to the payroll manager
+    """
+    # get the action
+    from .Payroll import Payroll
+    # and return it
+    return Payroll
+
+
 @foundry(implements=action, tip="access the schedule manager")
 def schedule():
     """
