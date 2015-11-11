@@ -6,32 +6,19 @@
 #
 
 
-include praxis.def
+# project defaults
+PROJECT = praxis
 # the package name
 PACKAGE = apache
-# the stuff in this directory goes to {etc/praxis/apache}
-EXPORT_ETCDIR = $(EXPORT_ROOT)/etc/$(PROJECT)
-# the apache configuration files
-APACHE_CONF = \
-    $(PROJECT).conf \
-# the list of files
-EXPORT_ETC = $(APACHE_CONF)
 
 # the standard build targets
-all: export
+all: tidy
 
-# make sure we scope the files correctly
-export:: export-etc
+live: live-apache-conf live-apache-restart
 
-# install
-install: tidy
-	$(RSYNC) $(RSYNCFLAGS) $(APACHE_CONF) $(APACHE_CONFIGURL)
-	ssh $(APACHE_USERURL) 'addgroup $(APACHE_USER) {project.name}'
-	ssh $(APACHE_USERURL) 'a2ensite {project.name}'
-
-# deploy
-deploy:
-	ssh $(APACHE_USERURL) 'service apache2 restart'
-
+# there is another target that might be useful:
+#
+#    live-apache-conf: make a link to the configuration file in the apache {sites-available}
+#                      directory, followed by enabling the site
 
 # end of file
