@@ -11,6 +11,7 @@ PROJECT = praxis
 PACKAGE = tests
 
 RECURSE_DIRS = \
+    model \
     compliance \
     ecrs \
 
