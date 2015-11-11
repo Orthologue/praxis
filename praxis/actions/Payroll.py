@@ -7,7 +7,7 @@
 
 
 # externals
-import re
+import re, operator, datetime
 # get the package
 import praxis
 
@@ -20,8 +20,11 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
 
 
     # public state
-    payday = praxis.properties.date(default='20150531', format='%Y%m%d')
+    payday = praxis.properties.date(default=None, format='%Y%m%d')
     payday.doc = 'the pay period to process'
+
+    month = praxis.properties.date(default='201505', format='%Y%m')
+    month.doc = 'show hours worked during this month'
 
     name = praxis.properties.strings(default='.*')
     name.doc = 'show only information relevant for employees whose names match this regex'
@@ -40,33 +43,54 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
 
 
     # behaviors
-    @praxis.export(tip='parse an ECRS timecard to get hours worked')
+    @praxis.export(tip='classify the hours worked in a given pay period')
     def hours(self, plexus):
         """
-        Run payroll for a given pay period
+        Parse ECRS timecards for the pay period specified by the given payday
         """
         # get the end of the pay period
         payday = self.payday
+        # get the folder with the timecards
+        folder = plexus.pfs["/etc/timecards"]
+
+        # if the user didn't specify a payday
+        if payday is None:
+            # collect entries that look like timecards
+            timecards = list(folder.find(pattern=r"\d{8}-time.csv"))
+            # sort them
+            timecards.sort(key=operator.itemgetter(1), reverse=True)
+            # grab the node/path pair that corresponds to the latest one
+            node, path = timecards[0]
+            # now, extract the date info from the filename
+            year =  int(path[0:4])
+            month =  int(path[4:6])
+            day =  int(path[6:8])
+            # build a date object to represent the pay day
+            payday = datetime.date(year=year, month=month, day=day)
+        # otherwise
+        else:
+            # form the path of the timecard based on the payday
+            path = "{0.year:04}{0.month:02}{0.day:02}-time.csv".format(payday)
+            # and get the corresponding node
+            node = folder[path]
+
+        # let the user know what we are doing
+        plexus.info.log('parsing clock punches from {!r}'.format(path))
+
         # build the employee index
         employees = {}
         # build the punch table
         punches = praxis.patterns.vivify(levels=2, atom=praxis.model.punchlist)
         # make a punch parser
         parser = praxis.vendors.ecrs.punchParser()
-        # form the name of the timecard based on the payday
-        timecard = "/etc/timecards/{0.year:04}{0.month:02}{0.day:02}-time.csv".format(payday)
-        # let the user know what we are doing
-        plexus.info.log('parsing clock punches from {!r}'.format(timecard))
         # open the timecards
-        with plexus.pfs[timecard].open() as stream:
+        with node.open() as stream:
             # parse the input stream
             parser.parse(
                 stream=stream, errorlog=plexus.error, warninglog=plexus.warning,
                 names=employees, punches=punches
         )
 
-        # get the {datetime} package
-        import datetime
         # setup a counter increment
         day = datetime.timedelta(days=1)
 
@@ -86,8 +110,6 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         # set up the employee name regex
         regex = re.compile("|".join(name.lower() for name in self.name))
 
-        # get {operator} so we can sort the employees by name
-        import operator
         # for each employee
         for eid, name in sorted(employees.items(), key=operator.itemgetter(1)):
             # build the employee's full name
