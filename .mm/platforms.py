@@ -49,7 +49,7 @@ def platform(builder):
         systemincdir = os.path.join(systemdir, 'include')
 
         # set up {python}
-        pythonVersion = '3.3'
+        pythonVersion = '3.5'
         python = 'python' + pythonVersion
         builder.requirements['python'].environ = {
             'PYTHON': python,
