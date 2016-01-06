@@ -13,7 +13,7 @@ from .Action import Action
 
 
 # class declaration
-class Command(pyre.panel, implements=Action):
+class Command(pyre.panel(), implements=Action):
     """
     Base class for {praxis} commands
     """
