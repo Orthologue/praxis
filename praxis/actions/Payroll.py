@@ -56,11 +56,13 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         # if the user didn't specify a payday
         if payday is None:
             # collect entries that look like timecards
-            timecards = list(folder.find(pattern=r"\d{8}-time.csv"))
+            timecards = list(
+                (match.group(), node)
+                for node,match in folder.find(pattern=r"\d{8}-time.csv"))
             # sort them
-            timecards.sort(key=operator.itemgetter(1), reverse=True)
+            timecards.sort(reverse=True)
             # grab the node/path pair that corresponds to the latest one
-            node, path = timecards[0]
+            path, node = timecards[0]
             # now, extract the date info from the filename
             year =  int(path[0:4])
             month =  int(path[4:6])
