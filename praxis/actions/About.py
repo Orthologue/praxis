@@ -110,8 +110,12 @@ class About(praxis.command, family='praxis.actions.about'):
         """
         # get the prefix
         prefix = self.prefix or '/praxis'
-        # show me
-        plexus.vfs[prefix].dump()
+        # build the report
+        report = '\n'.join(plexus.vfs[prefix].dump())
+        # sign in
+        plexus.line('vfs: prefix={!r}'.format(prefix))
+        # dump
+        plexus.log(report)
         # all done
         return
 
