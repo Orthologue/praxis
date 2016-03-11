@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2015 all rights reserved
+# (c) 1998-2016 all rights reserved
 #
 
 # project defaults
@@ -13,6 +13,7 @@ PACKAGE = vendors/ecrs
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
     PunchParser.py \
+    TransactionParser.py \
     exceptions.py \
     __init__.py
 

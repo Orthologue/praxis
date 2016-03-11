@@ -3,7 +3,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2015 all rights reserved
+# (c) 1998-2016 all rights reserved
 #
 
 
@@ -103,11 +103,11 @@ _praxis_version = (1, 0, BZR_REVNO)
 
 _praxis_tag = "praxis {}.{} revision {}".format(*_praxis_version)
 
-_praxis_copyright = "{}: Copyright (c) 1998-2015 Michael A.G. Aïvázis".format(_praxis_tag)
+_praxis_copyright = "{}: Copyright (c) 1998-2016 Michael A.G. Aïvázis".format(_praxis_tag)
 
 _praxis_header = """
     {}
-    Copyright (c) 1998-2015 Michael A.G. Aïvázis
+    Copyright (c) 1998-2016 Michael A.G. Aïvázis
     All Rights Reserved
     """.format(_praxis_tag)
 
