@@ -88,10 +88,32 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         # open the timecards
         with node.open() as stream:
             # parse the input stream
-            parser.parse(
-                stream=stream, errorlog=plexus.error, warninglog=plexus.warning,
-                names=employees, punches=punches
-        )
+            _, _, warnings, errors = parser.parse(stream=stream, names=employees, punches=punches)
+            # if there were any errors
+            if errors:
+                # check in
+                plexus.error.line('while parsing the clock punches:')
+                # go through them
+                for error in errors:
+                    # and print them out
+                    plexus.error.line(str(error))
+                # get the count
+                count = len(errors)
+                # flush
+                plexus.error.log('{} error{} total'.format(count, '' if count == 1 else 's'))
+
+        # if there were any warnings
+        if warnings:
+            # check in
+            plexus.warning.line('while parsing the clock punches:')
+            # go through them
+            for warning in warnings:
+                # and print them out
+                plexus.warning.line(str(warning))
+            # get the count
+            count = len(warnings)
+            # flush
+            plexus.warning.log('{} warning{} total'.format(count, '' if count == 1 else 's'))
 
         # setup a counter increment
         day = datetime.timedelta(days=1)

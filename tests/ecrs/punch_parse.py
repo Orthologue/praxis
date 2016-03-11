@@ -29,17 +29,17 @@ def test():
     # the empty file
     with open("punches-empty.csv") as stream:
         # and parse it
-        names, punches = parser.parse(stream=stream, errorlog=error, warninglog=warning)
+        names, punches, _, _ = parser.parse(stream=stream)
         # verify the payload is empty
         assert not names
         assert not punches
 
     # a complete cycle
     with open("punches-inout.csv") as stream:
-        # an employee id that is know to exist in this file
+        # an employee id that is known to exist in this file
         eid = '1000'
         # parse it
-        names, punches = parser.parse(stream=stream, errorlog=error, warninglog=warning)
+        names, punches, _, _ = parser.parse(stream=stream)
         # compute the hours: it is a double sum over the hours worked in a given day and over
         # the days in the data set
         total = sum(card.hours for card in punches[eid].values())

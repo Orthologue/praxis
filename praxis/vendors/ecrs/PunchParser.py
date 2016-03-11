@@ -21,7 +21,7 @@ class PunchParser:
 
 
     # interface
-    def parse(self, stream, errorlog, warninglog, names=None, punches=None, **kwds):
+    def parse(self, stream, names=None, punches=None, **kwds):
         """
         Extract clock-in/clock-out punches from the given {stream}
 
@@ -31,28 +31,27 @@ class PunchParser:
         import csv
         # the datetime package so we can parse timestamps
         import datetime
-        # for {pyre.patterns.vivify}
-        import pyre
         # for my services
         import praxis
 
-        # build the payload
+        # build the payload: the name
         names = {} if names is None else names
-        punches = pyre.patterns.vivify(
+        # and the time punches
+        punches = praxis.patterns.vivify(
             levels=2, atom=praxis.model.punchlist) if punches is None else punches
-        # create a reader
-        reader = csv.reader(stream, **kwds)
 
         # reset the pile of errors and warnings
         errors = []
         warnings = []
+        # create a reader
+        reader = csv.reader(stream, **kwds)
 
         # start reading
-        for line, text in enumerate(reader):
+        for line, record in enumerate(reader):
             # pull in the punch info
-            info = text[self.OFFSET_EMPLOYEE].strip()
-            clockin = text[self.OFFSET_CLOCKIN].strip()
-            clockout = text[self.OFFSET_CLOCKOUT].strip()
+            info = record[self.OFFSET_EMPLOYEE].strip()
+            clockin = record[self.OFFSET_CLOCKIN].strip()
+            clockout = record[self.OFFSET_CLOCKOUT].strip()
 
             # if we couldn't extract all the information we need
             if not (info and clockin and clockout):
@@ -131,34 +130,8 @@ class PunchParser:
             names[eid] = name
             punches[eid][date].newTask(name='in', start=clockin, finish=clockout)
 
-        # if there were any errors
-        if errors:
-            # check in
-            errorlog.line('while parsing the clock punches:')
-            # go through them
-            for error in errors:
-                # and print them out
-                errorlog.line(str(error))
-            # get the count
-            count = len(errors)
-            # flush
-            errorlog.log('{} error{} total'.format(count, '' if count == 1 else 's'))
-
-        # if there were any warnings
-        if warnings:
-            # check in
-            warninglog.line('while parsing the clock punches:')
-            # go through them
-            for warning in warnings:
-                # and print them out
-                warninglog.line(str(warning))
-            # get the count
-            count = len(warnings)
-            # flush
-            warninglog.log('{} warning{} total'.format(count, '' if count == 1 else 's'))
-
         # all done
-        return names, punches
+        return names, punches, errors, warnings
 
 
     # constants -- for version 3.2.02 of the CATAPULT report
