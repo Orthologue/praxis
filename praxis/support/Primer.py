@@ -36,6 +36,7 @@ class Primer:
             self._buildEmploymentTypes(plexus=plexus),
             self._buildPayTypes(plexus=plexus),
             self._buildPayFrequencies(plexus=plexus),
+            self._buildTenderTypes(plexus=plexus),
             )
 
         # get the datastore
@@ -217,6 +218,7 @@ class Primer:
 
 
     # implementation details
+    # types
     def _buildEntityTypes(self, plexus):
         """
         Create the default entity types
@@ -359,7 +361,23 @@ class Primer:
         return
 
 
-    # implementation details
+    def _buildTenderTypes(self, plexus):
+        """
+        Create the default phone types
+        """
+        # get the phone type factory
+        factory = plexus.datastore.schema.tenderType.pyre_immutable
+        # build the records
+        yield factory(id='cash', description='credit card')
+        yield factory(id='credit', description='credit card')
+        yield factory(id='debit', description='debit card')
+        yield factory(id='gift', description='gift card')
+        yield factory(id='discount', description='discount')
+        # all  done
+        return
+
+
+    # contact information
     def _buildCompanyInformation(self, plexus):
         """
         Add the company information to the database table

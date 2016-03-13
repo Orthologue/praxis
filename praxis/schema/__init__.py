@@ -24,6 +24,7 @@ from .ItemType import ItemType as itemType
 from .PayType import PayType as payType
 from .PayFrequency import PayFrequency as payFrequency
 from .PhoneType import PhoneType as phoneType
+from .TenderType import TenderType as tenderType
 from .URIType import URIType as uriType
 
 # atoms
@@ -50,7 +51,7 @@ from .Employment import Employment as employment
 typeTables = (
     # attribute types
     entityType, itemType,
-    contactPurpose, contactType, phoneType, uriType,
+    contactPurpose, contactType, phoneType, tenderType, uriType,
     employmentType, payType, payFrequency,
 )
 
