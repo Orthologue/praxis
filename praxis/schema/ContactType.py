@@ -6,12 +6,12 @@
 #
 
 
-# access to the framework
-import praxis
+# superclass
+from .Type import Type
 
 
 # table declaration
-class ContactType(praxis.db.table, id='contact_types'):
+class ContactType(Type, id='contact_types'):
     """
     A table of the various types of contact information
 
@@ -20,14 +20,6 @@ class ContactType(praxis.db.table, id='contact_types'):
     populated with the information provided. Hence, the contact types are tied to the contact
     schema and must be updated as the schema evolves.
     """
-
-    # data layout
-    id = praxis.db.str().primary()
-    description = praxis.db.str().notNull()
-
-    # meta-methods
-    def __str__(self):
-        return "{0.id}: {0.description}".format(self)
 
 
 # end of file

@@ -36,6 +36,8 @@ EXPORT_PYTHON_MODULES = \
     URI.py \
     URIType.py \
     Temporary.py \
+    TenderType.py \
+    Type.py \
     __init__.py
 
 # the standard build targets
