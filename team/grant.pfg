@@ -1,0 +1,12 @@
+;
+; michael a.g. aïvázis
+; orthologue
+; (c) 1998-2016 all rights reserved
+;
+
+grant:
+  repository = /home/projects/praxis/repository
+  readers = 
+  writers = alec.aivazis, michael.aivazis
+
+; end of file
