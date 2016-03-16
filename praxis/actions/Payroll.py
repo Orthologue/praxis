@@ -83,24 +83,28 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         employees = {}
         # build the punch table
         punches = praxis.patterns.vivify(levels=2, atom=praxis.model.punchlist)
+        # initialize the event piles
+        errors = [] # parsing errors
+        warnings = [] # parsing warnings
         # make a punch parser
         parser = praxis.vendors.ecrs.punchParser()
         # open the timecards
         with node.open() as stream:
             # parse the input stream
-            _, _, warnings, errors = parser.parse(stream=stream, names=employees, punches=punches)
-            # if there were any errors
-            if errors:
-                # check in
-                plexus.error.line('while parsing the clock punches:')
-                # go through them
-                for error in errors:
-                    # and print them out
-                    plexus.error.line(str(error))
-                # get the count
-                count = len(errors)
-                # flush
-                plexus.error.log('{} error{} total'.format(count, '' if count == 1 else 's'))
+            parser.parse(stream=stream, names=employees, punches=punches,
+                         warnings=warnings, errors=errors)
+        # if there were any errors
+        if errors:
+            # check in
+            plexus.error.line('while parsing the clock punches:')
+            # go through them
+            for error in errors:
+                # and print them out
+                plexus.error.line(str(error))
+            # get the count
+            count = len(errors)
+            # flush
+            plexus.error.log('{} error{} total'.format(count, '' if count == 1 else 's'))
 
         # if there were any warnings
         if warnings:

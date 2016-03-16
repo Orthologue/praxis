@@ -21,7 +21,7 @@ class PunchParser:
 
 
     # interface
-    def parse(self, stream, names=None, punches=None, **kwds):
+    def parse(self, stream, names=None, punches=None, warnings=None, errors=None, **kwds):
         """
         Extract clock-in/clock-out punches from the given {stream}
 
@@ -41,8 +41,8 @@ class PunchParser:
             levels=2, atom=praxis.model.punchlist) if punches is None else punches
 
         # reset the pile of errors and warnings
-        errors = []
-        warnings = []
+        errors = [] if errors is None else errors
+        warnings = [] if warnings is None else warnings
         # create a reader
         reader = csv.reader(stream, **kwds)
 
@@ -131,7 +131,7 @@ class PunchParser:
             punches[eid][date].newTask(name='in', start=clockin, finish=clockout)
 
         # all done
-        return names, punches, errors, warnings
+        return names, punches, warnings, errors
 
 
     # constants -- for version 3.2.02 of the CATAPULT report
