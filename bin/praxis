@@ -12,7 +12,9 @@ import praxis
 
 # build an instance of the plexus
 app = praxis.plexus(name='praxis.plexus')
-# and run it
-app.run()
+# run it
+status = app.run()
+# and share the return code with the shell
+raise SystemExit(status)
 
 # end of file
