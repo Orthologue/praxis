@@ -14,6 +14,9 @@ from .Type import Type
 class PhoneType(Type, id='phone_types'):
     """
     A table of the various types of phone numbers
+
+    The current primer fills this table with the following values:
+        cell, voice, fax, pager
     """
 
 

@@ -18,12 +18,15 @@ class Person(praxis.db.table, id='people'):
     Basic people information
     """
 
-    entity = praxis.db.reference(key=Entity.eid).primary()
+    # people are entities
+    entity = praxis.db.reference(key=Entity.entity).primary()
 
+    # data layout
     first = praxis.db.str().notNull()
     middle = praxis.db.str()
     last = praxis.db.str().notNull()
     preferred = praxis.db.str()
+
 
     # meta-methods
     def __str__(self):

@@ -18,9 +18,12 @@ class Company(praxis.db.table, id='companies'):
     Company information
     """
 
+
+    # companies are entities
+    entity = praxis.db.reference(key=Entity.entity).primary()
     # data layout
-    entity = praxis.db.reference(key=Entity.eid).primary()
     name = praxis.db.str().notNull()
+
 
     # meta-methods
     def __str__(self):

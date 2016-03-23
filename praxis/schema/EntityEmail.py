@@ -26,10 +26,10 @@ class EntityEmail(Temporary, id='entity_emails'):
     # with a potentially finite duration
 
     # associating an entity with an email address
-    entity = praxis.db.reference(key=Entity.eid).notNull()
-    email = praxis.db.reference(key=Email.id).notNull()
+    entity = praxis.db.reference(key=Entity.entity).notNull()
+    email = praxis.db.reference(key=Email.email).notNull()
     # for a particular purpose
-    purpose = praxis.db.reference(key=ContactPurpose.id).notNull()
+    purpose = praxis.db.reference(key=ContactPurpose.purpose).notNull()
 
 
 # end of file

@@ -19,13 +19,13 @@ class Item(praxis.db.table, id='items'):
     """
 
     # data layout
-    eid = praxis.db.str().primary()
-    kind = praxis.db.reference(key=ItemType.id).notNull()
+    item = praxis.db.str().primary()
+    type = praxis.db.reference(key=ItemType.type).notNull()
     name = praxis.db.str().notNull()
 
     # meta-methods
     def __str__(self):
-        return "{0.id}: {0.name}".format(self)
+        return "{0.item}: {0.name}".format(self)
 
 
 # end of file

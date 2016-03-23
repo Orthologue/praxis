@@ -26,13 +26,14 @@ class EntityURI(Temporary, id='entity_uris'):
     # don't forget that this table derives from {Temporary}, hence it describes a relationship
     # with a potentially finite duration
 
-    # associating an entity with a URI
-    entity = praxis.db.reference(key=Entity.eid).notNull()
-    uri = praxis.db.reference(key=URI.id).notNull()
+    # associating an entity
+    entity = praxis.db.reference(key=Entity.entity).notNull()
+    # with a URI
+    uri = praxis.db.reference(key=URI.uri).notNull()
     # of a particular kind
-    kind = praxis.db.reference(key=URIType.id).notNull()
+    type = praxis.db.reference(key=URIType.type).notNull()
     # for a particular purpose
-    purpose = praxis.db.reference(key=ContactPurpose.id).notNull()
+    purpose = praxis.db.reference(key=ContactPurpose.purpose).notNull()
 
 
 # end of file

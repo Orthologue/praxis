@@ -8,8 +8,8 @@
 
 # access to the framework
 import praxis
-# access to the table of entities
-from .Entity import Entity
+# access to the table of people
+from .Person import Person
 
 
 # table declaration
@@ -18,18 +18,18 @@ class Employee(praxis.db.table, id='employees'):
     Personal information about employees
     """
 
-    employee = praxis.db.reference(key=Entity.eid).notNull()
+    employee = praxis.db.reference(key=Person.entity).primary()
     employee.doc = "the entity whose attributes these are"
 
     # tax id
     tin = praxis.db.str().notNull()
     tin.doc = "the employee's tax id"
 
-    idn = praxis.db.str(default=praxis.db.null)
-    idn.doc = "government issued id number"
+    identification = praxis.db.str(default=praxis.db.null)
+    identification.doc = "government issued id number"
 
-    dob = praxis.db.date(default=praxis.db.null)
-    dob.doc = "the employee's birth date"
+    birthday = praxis.db.date(default=praxis.db.null)
+    birthday.doc = "the employee's date of birth"
 
 
 # end of file

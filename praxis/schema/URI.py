@@ -16,10 +16,8 @@ class URI(praxis.db.table, id="uris"):
     Universal resource identifiers
     """
 
-    # data layout
-    id = praxis.db.str().primary()
     # uri
-    uri = praxis.db.str().notNull()
+    uri = praxis.db.str().primary()
 
 
 # end of file

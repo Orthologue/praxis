@@ -26,13 +26,14 @@ class EntityPhone(Temporary, id='entity_phones'):
     # don't forget that this table derives from {Temporary}, hence it describes a relationship
     # with a potentially finite duration
 
-    # associating an entity with a phone number
-    entity = praxis.db.reference(key=Entity.eid).notNull()
-    phone = praxis.db.reference(key=Phone.id).notNull()
+    # associating an entity
+    entity = praxis.db.reference(key=Entity.entity).notNull()
+    # with a phone number
+    phone = praxis.db.reference(key=Phone.number).notNull()
     # of a particular type
-    kind = praxis.db.reference(key=PhoneType.id).notNull()
+    type = praxis.db.reference(key=PhoneType.type).notNull()
     # for a particular purpose
-    purpose = praxis.db.reference(key=ContactPurpose.id).notNull()
+    purpose = praxis.db.reference(key=ContactPurpose.purpose).notNull()
 
 
 # end of file

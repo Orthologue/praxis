@@ -14,6 +14,9 @@ from .Type import Type
 class PayType(Type, id='pay_types'):
     """
     A table of the various compensation types
+
+    The current primer fills this table with the following values:
+        partner, contractor, hourly, salary
     """
 
 

@@ -18,12 +18,13 @@ class Type(praxis.db.table):
 
 
     # data layout
-    id = praxis.db.str().primary()
+    type = praxis.db.str().primary()
     description = praxis.db.str().notNull()
+
 
     # meta-methods
     def __str__(self):
-        return "{0.id}: {0.description}".format(self)
+        return "{0.type}: {0.description}".format(self)
 
 
 # end of file

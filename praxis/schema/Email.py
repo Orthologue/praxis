@@ -16,10 +16,8 @@ class Email(praxis.db.table, id="emails"):
     Email addresses
     """
 
-    # data layout
-    id = praxis.db.str().primary()
     # email
-    email = praxis.db.str().notNull()
+    email = praxis.db.str().primary()
 
 
 # end of file

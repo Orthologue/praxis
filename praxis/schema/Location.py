@@ -17,7 +17,7 @@ class Location(praxis.db.table, id="locations"):
     """
 
     # data layout
-    id = praxis.db.str().primary()
+    location = praxis.db.str().primary()
     # postal
     address = praxis.db.str().notNull()
     country = praxis.db.str(default="USA")

@@ -17,6 +17,9 @@ class EntityType(Type, id='entity_types'):
 
     The {description} is interpreted as the name of the table that contains the reference to
     this entity. Currently, entities are either {people} or {companies}.
+
+    The current primer fills this table with the following values:
+        companies, people
     """
 
 

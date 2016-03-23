@@ -26,10 +26,10 @@ class EntityLocation(Temporary, id='entity_locations'):
     # with a potentially finite duration
 
     # associating an entity with a location
-    entity = praxis.db.reference(key=Entity.eid).notNull()
-    location = praxis.db.reference(key=Location.id).notNull()
+    entity = praxis.db.reference(key=Entity.entity).notNull()
+    location = praxis.db.reference(key=Location.location).notNull()
     # for a particular purpose
-    purpose = praxis.db.reference(key=ContactPurpose.id).notNull()
+    purpose = praxis.db.reference(key=ContactPurpose.purpose).notNull()
 
 
 # end of file

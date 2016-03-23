@@ -16,11 +16,8 @@ class Phone(praxis.db.table, id="phones"):
     Phone numbers
     """
 
-    # data layout
-    id = praxis.db.str().primary()
-    # phone number parts
-    number = praxis.db.str().notNull()
-    extension = praxis.db.str(default=praxis.db.null)
+    # phone number
+    number = praxis.db.str().primary()
 
 
 # end of file

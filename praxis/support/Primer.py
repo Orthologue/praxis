@@ -53,8 +53,10 @@ class Primer:
         """
         # get the datastore
         datastore = plexus.datastore
+        # build the records
+        records = self._buildCompanyInformation(plexus=plexus)
         # save
-        datastore.server.insert(*self._buildCompanyInformation(plexus=plexus))
+        datastore.server.insert(*records)
         # all done
         return
 
@@ -94,8 +96,8 @@ class Primer:
         company = list(datastore.select(companyQ))[0]
 
         # the indices
-        emails = collections.defaultdict(idd)
-        phones = collections.defaultdict(idd)
+        emails = set()
+        phones = set()
         addresses = collections.defaultdict(idd)
         # and the record workload
         entities = []
@@ -113,8 +115,8 @@ class Primer:
 
             # build the entity
             entity = schema.entity.pyre_immutable(
-                eid = eid,
-                kind = registrar['entity_types']['persons'])
+                entity = eid,
+                type = registrar['entity_types']['people'])
             # save it
             entities.append(entity)
 
@@ -132,14 +134,13 @@ class Primer:
             employee = schema.employee.pyre_immutable(
                 employee = eid,
                 tin = record.ssn,
-                idn = record.dl,
-                dob = record.dob if record.dob else schema.null)
+                identification = record.dl,
+                birthdate = record.dob if record.dob else schema.null)
             # save it
             employees.append(employee)
 
             # build the employment records
             employment = schema.employment.pyre_immutable(
-                id = record.id,
                 employee = eid,
                 employer = company.entity,
                 rate = record.rate,
@@ -162,25 +163,25 @@ class Primer:
             # save it
             homes.append(home)
 
-            # get a token for the email address
-            emailId = emails[record.email]
+            # make an email
+            emails.add(record.email)
             # build an email address
             email = schema.entityEmail.pyre_immutable(
                 entity = eid,
-                email = emailId,
+                email = record.email,
                 purpose = registrar["contact_purposes"]["work"],
                 effective = record.hired if record.hired else schema.null,
                 until = record.terminated if record.terminated else schema.null)
             # save it
             mailto.append(email)
 
-            # get a token for the cell
-            cellId = phones[record.cell]
+            # make a phone number
+            phones.add(record.cell)
             # attach it to this employee
             cell = schema.entityPhone.pyre_immutable(
                 entity = eid,
-                phone = cellId,
-                kind = registrar["phone_types"]["cell"],
+                phone = record.cell,
+                type = registrar["phone_types"]["cell"],
                 purpose = registrar["contact_purposes"]["work"],
                 effective = record.hired if record.hired else schema.null,
                 until = record.terminated if record.terminated else schema.null)
@@ -197,16 +198,16 @@ class Primer:
 
         # make the location records
         locations = (
-            schema.location.pyre_immutable(id=key, address=address)
+            schema.location.pyre_immutable(location=key, address=address)
             for address, key in addresses.items())
         # make the phone records
         numbers = (
-            schema.phone.pyre_immutable(id=key, number=number)
-            for number, key in phones.items())
+            schema.phone.pyre_immutable(number=number)
+            for number in phones)
         # make the email records
         uris = (
-            schema.email.pyre_immutable(id=key, email=email)
-            for email, key in emails.items())
+            schema.email.pyre_immutable(email=email)
+            for email in emails)
         # and store them
         server.insert(*itertools.chain(locations, numbers, uris))
 
@@ -226,8 +227,8 @@ class Primer:
         # get the entity type factory
         factory = plexus.datastore.schema.entityType.pyre_immutable
         # the built-in entity types
-        yield factory(id='companies', description='entities that are incorporated')
-        yield factory(id='persons', description='entities that are physical persons')
+        yield factory(type='companies', description='entities that are incorporated')
+        yield factory(type='people', description='entities that are physical persons')
         # all  done
         return
 
@@ -239,8 +240,8 @@ class Primer:
         # get the item type factory
         factory = plexus.datastore.schema.itemType.pyre_immutable
         # the built-in item types
-        yield factory(id='products', description='items that are products for sale')
-        yield factory(id='services', description='items that are services provided to customers')
+        yield factory(type='products', description='items that are products for sale')
+        yield factory(type='services', description='items that are services provided to customers')
         # all  done
         return
 
@@ -253,10 +254,10 @@ class Primer:
         factory = plexus.datastore.schema.contactType.pyre_immutable
         # build the records; the values are supposed to match names of tables in the current
         # schema that contain contact information
-        yield factory(id='emails', description='email information for an entity')
-        yield factory(id='locations', description='the physical address of an entity')
-        yield factory(id='phones', description='the telephone number of an entity')
-        yield factory(id='uris', description='the web home page of an entity')
+        yield factory(type='emails', description='email information for an entity')
+        yield factory(type='locations', description='the physical address of an entity')
+        yield factory(type='phones', description='the telephone number of an entity')
+        yield factory(type='uris', description='the web home page of an entity')
         # all  done
         return
 
@@ -268,15 +269,15 @@ class Primer:
         # get the location type factory
         factory = plexus.datastore.schema.contactPurpose.pyre_immutable
         # build the records
-        yield factory(id='personal',
+        yield factory(purpose='personal',
                       description="an entity's personal information")
-        yield factory(id='work',
+        yield factory(purpose='work',
                       description="an entity's work information")
-        yield factory(id='info',
+        yield factory(purpose='info',
                       description="general information about an entity")
-        yield factory(id='shipping',
+        yield factory(purpose='shipping',
                       description="information about shipping to and from an entity")
-        yield factory(id='billing',
+        yield factory(purpose='billing',
                        description="information for financial exchanges with an entity")
         # all  done
         return
@@ -289,10 +290,10 @@ class Primer:
         # get the phone type factory
         factory = plexus.datastore.schema.phoneType.pyre_immutable
         # build the records
-        yield factory(id='cell', description='the phone number is a mobile phone')
-        yield factory(id='voice', description='the phone number is a land line')
-        yield factory(id='fax', description='the phone number is a fax')
-        yield factory(id='pager', description='the phone number is a pager')
+        yield factory(type='cell', description='the phone number is a mobile phone')
+        yield factory(type='voice', description='the phone number is a land line')
+        yield factory(type='fax', description='the phone number is a fax')
+        yield factory(type='pager', description='the phone number is a pager')
         # all  done
         return
 
@@ -304,12 +305,12 @@ class Primer:
         # get the uri type factory
         factory = plexus.datastore.schema.uriType.pyre_immutable
         # build the records
-        yield factory(id='web', descrption='uris that are web pages')
-        yield factory(id='facebook', descrption='uris that are facebook pages')
-        yield factory(id='instagram', descrption='uris that are instagram pages')
-        yield factory(id='twitter', descrption='uris that are twitter handles')
-        yield factory(id='vine', descrption='uris that are vine pages')
-        yield factory(id='youtube', descrption='uris that are youtube channels or pages')
+        yield factory(type='web', descrption='uris that are web pages')
+        yield factory(type='facebook', descrption='uris that are facebook pages')
+        yield factory(type='instagram', descrption='uris that are instagram pages')
+        yield factory(type='twitter', descrption='uris that are twitter handles')
+        yield factory(type='vine', descrption='uris that are vine pages')
+        yield factory(type='youtube', descrption='uris that are youtube channels or pages')
         # all  done
         return
 
@@ -321,11 +322,11 @@ class Primer:
         # get the pay type factory
         factory = plexus.datastore.schema.employmentType.pyre_immutable
         # build the records
-        yield factory(id='full time', description='full time employements')
-        yield factory(id='part time', description='part time employements')
-        yield factory(id='temporary', description='temporary employements')
-        yield factory(id='contractor', description='employees that are contractors')
-        yield factory(id='intern', description='employees that are interns')
+        yield factory(type='full time', description='full time employements')
+        yield factory(type='part time', description='part time employements')
+        yield factory(type='temporary', description='temporary employements')
+        yield factory(type='contractor', description='employees that are contractors')
+        yield factory(type='intern', description='employees that are interns')
         # all  done
         return
 
@@ -337,10 +338,10 @@ class Primer:
         # get the pay type factory
         factory = plexus.datastore.schema.payType.pyre_immutable
         # build the records
-        yield factory(id='partner', description='partner compensation rules')
-        yield factory(id='contractor', description='contractor compensation rules')
-        yield factory(id='hourly', description='compensation for hourly employees')
-        yield factory(id='salary', description='compensation for salaried employees')
+        yield factory(type='partner', description='partner compensation rules')
+        yield factory(type='contractor', description='contractor compensation rules')
+        yield factory(type='hourly', description='compensation for hourly employees')
+        yield factory(type='salary', description='compensation for salaried employees')
         # all  done
         return
 
@@ -352,11 +353,11 @@ class Primer:
         # get the pay type factory
         factory = plexus.datastore.schema.payFrequency.pyre_immutable
         # build the records
-        yield factory(id='weekly', description='weekly compensation')
-        yield factory(id='biweekly', description='compensation every two weeks')
-        yield factory(id='monthly', description='monthly compensation')
-        yield factory(id='quarterly', description='quarterly compensation')
-        yield factory(id='annually', description='annual compensation')
+        yield factory(frequency='weekly', description='weekly compensation')
+        yield factory(frequency='biweekly', description='compensation every two weeks')
+        yield factory(frequency='monthly', description='monthly compensation')
+        yield factory(frequency='quarterly', description='quarterly compensation')
+        yield factory(frequency='annually', description='annual compensation')
         # all  done
         return
 
@@ -368,11 +369,11 @@ class Primer:
         # get the phone type factory
         factory = plexus.datastore.schema.tenderType.pyre_immutable
         # build the records
-        yield factory(id='cash', description='credit card')
-        yield factory(id='credit', description='credit card')
-        yield factory(id='debit', description='debit card')
-        yield factory(id='gift', description='gift card')
-        yield factory(id='discount', description='discount')
+        yield factory(type='cash', description='credit card')
+        yield factory(type='credit', description='credit card')
+        yield factory(type='debit', description='debit card')
+        yield factory(type='gift', description='gift card')
+        yield factory(type='discount', description='discount')
         # all  done
         return
 
@@ -397,7 +398,7 @@ class Primer:
         ctype = registrar['entity_types']['companies']
 
         # build a new entity
-        yield schema.entity.pyre_immutable(eid=cid, kind=ctype)
+        yield schema.entity.pyre_immutable(entity=cid, type=ctype)
         # build the company record
         yield schema.company.pyre_immutable(entity=cid, name=plexus.layout.company)
         # put some address in the table
@@ -414,7 +415,7 @@ class Primer:
             # make an id for the HQ location
             hqId = idd()
             # the physical address
-            yield schema.location.pyre_immutable(id = hqId, address = hq)
+            yield schema.location.pyre_immutable(location = hqId, address = hq)
             # gets used for the following purposes
             for purpose in ['info', 'shipping', 'billing']:
                 # make it so
@@ -426,13 +427,12 @@ class Primer:
                     until = until
                 )
 
-        # make an id for the landline
-        phone = idd()
-        # the phone number
-        yield schema.phone.pyre_immutable(
-            id = phone,
+        # make a new phone number
+        phone = schema.phone.pyre_immutable(
             number = '+1 626 394 1114'
             )
+        # send it off
+        yield phone
         # is
         for kind in [ 'cell', 'voice', 'fax' ]:
             # and is used for
@@ -440,42 +440,40 @@ class Primer:
                 # make it so
                 yield schema.entityPhone.pyre_immutable(
                     entity = cid,
-                    phone = phone,
-                    kind = registrar['phone_types'][kind],
+                    phone = phone.number,
+                    type = registrar['phone_types'][kind],
                     purpose = registrar['contact_purposes'][purpose],
                     effective = '1998-02-01'
                     )
 
-        # make an id for the URI
-        uri = idd()
         # the website
-        yield schema.uri.pyre_immutable(
-            id = uri,
+        uri = schema.uri.pyre_immutable(
             uri = 'http://www.{.layout.domain}'.format(plexus)
             )
+        # send it off
+        yield uri
         # is used by
         yield schema.entityURI.pyre_immutable(
             entity = cid,
-            uri = uri,
-            kind = registrar['uri_types']['web'],
+            uri = uri.uri,
+            type = registrar['uri_types']['web'],
             purpose = registrar['contact_purposes']['info'],
             effective = '1998-02-01'
             )
 
         # the email addresses
-        for email in ('info', 'billing', 'shipping'):
-            # make an id
-            eid = idd()
+        for purpose in ('info', 'billing', 'shipping'):
             # make the email record
-            yield schema.email.pyre_immutable(
-                id = eid,
-                email = '{}@{.layout.domain}'.format(email, plexus)
+            email = schema.email.pyre_immutable(
+                email = '{}@{.layout.domain}'.format(purpose, plexus)
                 )
+            # send it off
+            yield email
             # and a use
             yield schema.entityEmail.pyre_immutable(
                 entity = cid,
-                email = eid,
-                purpose = registrar['contact_purposes'][email],
+                email = email.email,
+                purpose = registrar['contact_purposes'][purpose],
                 effective = '1998-02-01'
                 )
 

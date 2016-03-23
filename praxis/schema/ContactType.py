@@ -19,6 +19,9 @@ class ContactType(Type, id='contact_types'):
     from flat files at the same time. The idea is to provide a hint as to which table must be
     populated with the information provided. Hence, the contact types are tied to the contact
     schema and must be updated as the schema evolves.
+
+    The current primer fills this table with the following values:
+        emails, locations, phones, uris
     """
 
 
