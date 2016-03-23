@@ -135,7 +135,7 @@ class Primer:
                 employee = eid,
                 tin = record.ssn,
                 identification = record.dl,
-                birthdate = record.dob if record.dob else schema.null)
+                birthday = record.dob if record.dob else schema.null)
             # save it
             employees.append(employee)
 
