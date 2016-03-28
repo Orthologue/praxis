@@ -6,11 +6,8 @@
 #
 
 
-# the data model
-from . import model
-
-# the report parsers
-from .reports import punchParser, transactionParser
+# the punch parser
+from .PunchParser import PunchParser as punchParser
 
 
 # end of file

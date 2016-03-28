@@ -82,7 +82,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         # build the employee index
         employees = {}
         # build the punch table
-        punches = praxis.patterns.vivify(levels=2, atom=praxis.model.punchlist)
+        punches = praxis.patterns.vivify(levels=2, atom=praxis.vendors.ecrs.model.punchlist)
         # initialize the event piles
         errors = [] # parsing errors
         warnings = [] # parsing warnings

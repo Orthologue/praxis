@@ -8,11 +8,11 @@
 # project defaults
 PROJECT = praxis
 # the package name
-PACKAGE = model
+PACKAGE = vendors/ecrs/reports
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
-    Company.py \
+    PunchParser.py \
     __init__.py
 
 # the standard build targets

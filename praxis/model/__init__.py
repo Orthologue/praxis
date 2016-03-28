@@ -6,12 +6,7 @@
 #
 
 
-# the low level objects
-from .Task import Task as task
-from .Punches import Punches as punchlist
-
-
-# persistent objects
+# the orm
 from .Company import Company as company
 
 
