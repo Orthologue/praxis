@@ -44,7 +44,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
 
     # behaviors
     @praxis.export(tip='classify the hours worked in a given pay period')
-    def hours(self, plexus):
+    def hours(self, plexus, **kwds):
         """
         Parse ECRS timecards for the pay period specified by the given payday
         """

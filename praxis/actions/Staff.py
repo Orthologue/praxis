@@ -24,7 +24,7 @@ class Staff(praxis.command, family='praxis.actions.staff'):
 
     # implementation details
     @praxis.export(tip='process only records pertaining to new employees')
-    def new(self, plexus):
+    def new(self, plexus, **kwds):
         """
         Select from the input stream the records that describe new employees only and add them to
         the database
@@ -42,7 +42,7 @@ class Staff(praxis.command, family='praxis.actions.staff'):
 
 
     @praxis.export(tip='update the employee records')
-    def update(self, plexus):
+    def update(self, plexus, **kwds):
         """
         Build a subset of the tables that capture my schema
         """
@@ -54,7 +54,7 @@ class Staff(praxis.command, family='praxis.actions.staff'):
 
 
     @praxis.export(tip='terminate an employee')
-    def terminate(self, plexus):
+    def terminate(self, plexus, **kwds):
         """
         Build a subset of the tables that capture my schema
         """

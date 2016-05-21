@@ -22,7 +22,7 @@ class Debug(praxis.command, family='praxis.actions.debug'):
 
 
     @praxis.export(tip='print the names of the tables in the db schema')
-    def schema(self, plexus):
+    def schema(self, plexus, **kwds):
         """
         Show me a list of the tables in my schema
         """
@@ -48,7 +48,7 @@ class Debug(praxis.command, family='praxis.actions.debug'):
 
 
     @praxis.export(tip='print the SQL statements necessary to create the db schema')
-    def init(self, plexus):
+    def init(self, plexus, **kwds):
         """
         Show me the statements necessary to create my schema
         """
@@ -74,7 +74,7 @@ class Debug(praxis.command, family='praxis.actions.debug'):
 
 
     @praxis.export(tip='debug the data model')
-    def model(self, plexus):
+    def model(self, plexus, **kwds):
         """
         Debug the model
         """

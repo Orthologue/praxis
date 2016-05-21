@@ -23,7 +23,7 @@ class About(praxis.command, family='praxis.actions.about'):
 
     # class interface
     @praxis.export(tip="print the copyright note")
-    def copyright(self, plexus):
+    def copyright(self, plexus, **kwds):
         """
         Print the copyright note of the praxis package
         """
@@ -38,7 +38,7 @@ class About(praxis.command, family='praxis.actions.about'):
 
 
     @praxis.export(tip="print out the acknowledgments")
-    def credits(self, plexus):
+    def credits(self, plexus, **kwds):
         """
         Print out the license and terms of use of the praxis package
         """
@@ -55,7 +55,7 @@ class About(praxis.command, family='praxis.actions.about'):
 
 
     @praxis.export(tip="print out the license and terms of use")
-    def license(self, plexus):
+    def license(self, plexus, **kwds):
         """
         Print out the license and terms of use of the praxis package
         """
@@ -72,7 +72,7 @@ class About(praxis.command, family='praxis.actions.about'):
 
 
     @praxis.export(tip='dump the application configuration namespace')
-    def nfs(self, plexus):
+    def nfs(self, plexus, **kwds):
         """
         Dump the application configuration namespace
         """
@@ -85,7 +85,7 @@ class About(praxis.command, family='praxis.actions.about'):
 
 
     @praxis.export(tip="print the version number")
-    def version(self, plexus):
+    def version(self, plexus, **kwds):
         """
         Print the version of the praxis package
         """
@@ -104,7 +104,7 @@ class About(praxis.command, family='praxis.actions.about'):
 
 
     @praxis.export(tip='dump the application virtual filesystem')
-    def vfs(self, plexus):
+    def vfs(self, plexus, **kwds):
         """
         Dump the application virtual filesystem
         """

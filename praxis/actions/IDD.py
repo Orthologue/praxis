@@ -30,7 +30,7 @@ class IDD(praxis.command, family='praxis.actions.idd'):
 
     # action implementations
     @praxis.export(tip='decode a token from the command line')
-    def decode(self, plexus):
+    def decode(self, plexus, **kwds):
         """
         Decode the given {token} on the command line
         """
@@ -67,7 +67,7 @@ class IDD(praxis.command, family='praxis.actions.idd'):
 
 
     @praxis.export(tip='encode a token from the command line')
-    def encode(self, plexus):
+    def encode(self, plexus, **kwds):
         """
         Decode the given {token} on the command line
         """
@@ -108,7 +108,7 @@ class IDD(praxis.command, family='praxis.actions.idd'):
 
 
     @praxis.export(tip='show me the next token in the sequence with disturbing the generator')
-    def peek(self, plexus):
+    def peek(self, plexus, **kwds):
         """
         Show me the next token
         """

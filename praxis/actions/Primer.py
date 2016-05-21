@@ -32,7 +32,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
 
     # basic commands
     @praxis.export(tip='create the database')
-    def create(self, plexus):
+    def create(self, plexus, **kwds):
         """
         Create my database
         """
@@ -57,7 +57,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
 
 
     @praxis.export(tip='create database tables')
-    def init(self, plexus):
+    def init(self, plexus, **kwds):
         """
         Build a subset of the tables that capture my schema
         """
@@ -77,7 +77,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
 
 
     @praxis.export(tip='fill the tables with initial data')
-    def prime(self, plexus):
+    def prime(self, plexus, **kwds):
         """
         Insert into the tables all the default/static data
         """
@@ -112,7 +112,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
 
 
     @praxis.export(tip='remove tables from the database')
-    def clear(self, plexus):
+    def clear(self, plexus, **kwds):
         """
         Drop my tables
         """
@@ -132,7 +132,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
 
 
     @praxis.export(tip='remove the entire database')
-    def drop(self, plexus):
+    def drop(self, plexus, **kwds):
         """
         Drop the entire database
         """
@@ -158,7 +158,7 @@ class Primer(praxis.command, family='praxis.actions.db'):
 
     # meta-commands
     @praxis.export(tip='recreate the database and its tables')
-    def reset(self, plexus):
+    def reset(self, plexus, **kwds):
         """
         Revert the database to a known state
         """
