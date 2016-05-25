@@ -65,8 +65,10 @@ class Primer:
         """
         Prime the database with the initial staff information
         """
+        # warn about deficiencies in the data source
+        plexus.warning.log('please update the staff records to indicate the employment type')
+        # grab the staff records
         uri = plexus.layout.staffRecords
-
         # attempt to
         try:
             # get the location of the CSV file and open it
@@ -141,13 +143,16 @@ class Primer:
 
             # build the employment records
             employment = schema.employment.pyre_immutable(
+                id = record.id,
                 employee = eid,
                 employer = company.entity,
                 rate = record.rate,
                 frequency = registrar["pay_frequencies"][record.frequency],
-                type = registrar["pay_types"][record.type],
+                pay = registrar["pay_types"][record.type],
                 effective = record.hired if record.hired else schema.null,
-                until = record.terminated if record.terminated else schema.null)
+                until = record.terminated if record.terminated else schema.null,
+                # and, until the staff table has this information
+                type = registrar["employment_types"]["unknown"])
             # save it
             employments.append(employment)
 
@@ -322,6 +327,8 @@ class Primer:
         # get the pay type factory
         factory = plexus.datastore.schema.employmentType.pyre_immutable
         # build the records
+        yield factory(type='unknown', description='missing or not specified')
+        yield factory(type='partner', description='partners')
         yield factory(type='full time', description='full time employements')
         yield factory(type='part time', description='part time employements')
         yield factory(type='temporary', description='temporary employements')

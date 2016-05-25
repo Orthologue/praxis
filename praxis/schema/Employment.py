@@ -12,6 +12,7 @@ import praxis
 from .Temporary import Temporary
 # and the tables i refer to
 from .Entity import Entity
+from .EmploymentType import EmploymentType
 from .PayType import PayType
 from .PayFrequency import PayFrequency
 
@@ -33,14 +34,17 @@ class Employment(Temporary, id='employments'):
     employer.doc = "the employing entity"
 
     # payroll info
+    type = praxis.db.reference(key=EmploymentType.type).notNull()
+    type.doc = "the employment type; e.g. full time or part time"
+
+    pay = praxis.db.reference(key=PayType.type).notNull()
+    pay.doc = "the pay type; e.g. hourly or salary"
+
     rate = praxis.db.decimal(precision=9, scale=2)
     rate.doc = "the employee's pay rate for the duration of this employment"
 
     frequency = praxis.db.reference(key=PayFrequency.frequency).notNull()
     frequency.doc = "the frequency with which pay checks are issued; e.g.: biweekly"
-
-    type = praxis.db.reference(key=PayType.type).notNull()
-    type.doc = "the pay type; e.g. hourly or salary"
 
 
 # end of file
