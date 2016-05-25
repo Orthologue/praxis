@@ -50,8 +50,13 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         """
         # get the end of the pay period
         payday = self.payday
+        # grab the folder with my data store; it's guaranteed to be there by the application
+        # boot process
+        etc = plexus.pfs["etc"]
+        # grab the level below
+        etc.discover(levels=1)
         # get the folder with the timecards
-        folder = plexus.pfs["/etc/timecards"]
+        folder = etc["timecards"].discover()
 
         # if the user didn't specify a payday
         if payday is None:
