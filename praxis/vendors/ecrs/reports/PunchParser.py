@@ -40,7 +40,7 @@ class PunchParser:
         names = {} if names is None else names
         # and the time punches
         punches = praxis.patterns.vivify(
-            levels=2, atom=model.punchlist) if punches is None else punches
+            levels=2, atom=self.model.punchlist) if punches is None else punches
 
         # reset the pile of errors and warnings
         errors = [] if errors is None else errors
