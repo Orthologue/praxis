@@ -35,9 +35,6 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
     daily = praxis.properties.bool(default=False)
     daily.doc = 'controls whether to show daily summary'
 
-    breaks = praxis.properties.bool(default=True)
-    breaks.doc = 'enforce the legally mandated breaks'
-
     jurisdiction = praxis.compliance.jurisdiction(default='us.california')
     jurisdiction.doc = 'compliant calculators for the company jurisdiction'
 
@@ -140,6 +137,8 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         # backup to the Monday of the earliest week
         start = paystart
 
+        # the output format
+        fmt = " {:6.2f}"*3 + "   | " + " {:6.2f}"*3
         # set up the employee name regex
         regex = re.compile("|".join(name.lower() for name in self.name))
 
@@ -152,20 +151,21 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             # get the punches
             timecard = punches[eid]
 
+            # classify the hours worked
+            hours = self.jurisdiction.overtime(start=start, workweeks=2, timecard=timecard)
+            # tally them
+            rawRegular, rawSesqui, rawDouble = map(sum, zip(*hours))
+
             # adjust for legally mandated breaks
             breaks = self.jurisdiction.breaks(start=start, workweeks=2, timecard=timecard)
             # tally them
-            regular, sesqui, double = map(sum, zip(*breaks))
+            brkRegular, brkSesqui, brkDouble = map(sum, zip(*breaks))
+
+            # put the report together
+            line = fmt.format(rawRegular, rawSesqui, rawDouble, brkRegular, brkSesqui, brkDouble)
+
             # show me
-            print("{:25}: {:6.2f} {:6.2f} {:6.2f}".format(fullname, regular, sesqui, double))
-            # if we are not enforcing the legally mandated breaks
-            if not self.breaks:
-                # classify the hours worked
-                hours = self.jurisdiction.overtime(start=start, workweeks=2, timecard=timecard)
-                # tally them
-                regular, sesqui, double = map(sum, zip(*hours))
-                # show me
-                print("{:25}: {:6.2f} {:6.2f} {:6.2f}".format('', regular, sesqui, double))
+            print("{:25}: {}".format(fullname, line))
 
             # if we are not going to show details
             if not self.daily and not self.details:
