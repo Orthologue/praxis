@@ -60,7 +60,7 @@ class California(pyre.component, implements=jurisdiction, family="praxis.complia
             # compute the dates in this work week
             days = tuple(start + (n + 7*workweek)*day for n in range(7))
             # adjust the hours
-            hours = list(self.enforceBreaks(punches=timecard[today]) for today in days)
+            hours = [ self.enforceBreaks(date=today, punches=timecard[today]) for today in days ]
             # classify into the three tiers and return the stats for this work week
             yield self._overtime(hours=hours)
 
@@ -68,7 +68,7 @@ class California(pyre.component, implements=jurisdiction, family="praxis.complia
         return
 
 
-    def enforceBreaks(self, punches):
+    def enforceBreaks(self, date, punches):
         """
         Adjust the hours in the {punches} of a given shift to enforce the legally mandated breaks
         """
