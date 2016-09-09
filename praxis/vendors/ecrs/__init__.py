@@ -10,7 +10,7 @@
 from . import model
 
 # the report parsers
-from .reports import punchParser, transactionParser
+from .reports import punchParser
 
 
 # end of file
