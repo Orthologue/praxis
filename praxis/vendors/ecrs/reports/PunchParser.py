@@ -128,6 +128,15 @@ class PunchParser:
                 # it's rare but perhaps ok, so it's a warning
                 warnings.append(self.ParsingError(description=msg, locator=here))
 
+            # check that the clock out is later than the clock in
+            if clockin >= clockout:
+                msg = "{}: clock out before clock in: in: {}, out: {}".format(
+                    " ".join(reversed(name)), clockin, clockout)
+                # build a locator
+                here = praxis.tracking.file(source=stream.name, line=line+1)
+                # complain
+                errors.append(self.ParsingError(description=msg, locator=here))
+
             # store
             names[eid] = name
             punches[eid][date].newTask(name='in', start=clockin, finish=clockout)
