@@ -144,7 +144,8 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         start = paystart
 
         # the output format
-        fmt = " {:6.2f}"*3 + "   | " + " {:6.2f}"*3
+        hfmt = "{:5.2f}"
+        fmt = " | ".join(["{:5} "*3]*2)
         # set up the employee name regex
         regex = re.compile("|".join(name.lower() for name in self.name))
 
@@ -167,11 +168,24 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             # tally them
             brkRegular, brkSesqui, brkDouble = map(sum, zip(*breaks))
 
+            # compute the discrepancy
+            dRegular  = rawRegular - brkRegular
+            dSesqui  = rawSesqui - brkSesqui
+            dDouble  = rawDouble - brkDouble
+
             # put the report together
-            line = fmt.format(rawRegular, rawSesqui, rawDouble, brkRegular, brkSesqui, brkDouble)
+            line = fmt.format(
+                hfmt.format(rawRegular) if rawRegular else "  -  ",
+                hfmt.format(rawSesqui) if rawSesqui else "  -  ",
+                hfmt.format(rawDouble) if rawDouble else "  -  ",
+                # brkRegular, brkSesqui, brkDouble,
+                hfmt.format(dRegular) if dRegular else "  -  ",
+                hfmt.format(dSesqui) if dSesqui else "  -  ",
+                hfmt.format(dDouble) if dDouble else "  -  ",
+            )
 
             # show me
-            print("{:25}: {}".format(fullname, line))
+            print("{:>25} :  {}".format(fullname, line))
 
             # if we are not going to show details
             if not self.daily and not self.details:
