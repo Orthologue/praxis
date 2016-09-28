@@ -237,6 +237,8 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
 
         # for each employee in the target group
         for eid in eids:
+            # initialize the instance count
+            instances = 0
             # get the name of the employee
             last, first = employees[eid]
             # assemble the name of the output file
@@ -284,16 +286,25 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
                 brkSesqui += sesquiB
                 brkDouble += doubleB
 
+                # compute the deltas
+                regularD = regularR - regularB
+                sesquiD = sesquiR - sesquiB
+                doubleD = doubleR - doubleB
+
                 # save the difference
-                record += ["{:.2f}".format(regularR-regularB), "{:.2f}".format(sesquiR-sesquiB)]
+                record += ["{:.2f}".format(regularD), "{:.2f}".format(sesquiD)]
+
+                # update the instance count
+                if regularD > 0.1 or sesquiD > 0.1: instances += 1
 
                 # and record
                 writer.writerow(record)
 
             # show me
             print(
-                "{name:25}: {reg:6.2f} {ovr:6.2f} {dbl:6.2f}".format(
+                "{name:25}: {instances:3d}: {reg:6.2f} {ovr:6.2f} {dbl:6.2f}".format(
                     name = ', '.join(employees[eid]),
+                    instances = instances,
                     reg = rawRegular - brkRegular,
                     ovr = rawSesqui - brkSesqui,
                     dbl = rawDouble - brkDouble))
