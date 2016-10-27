@@ -14,6 +14,7 @@ PACKAGE = vendors/ecrs/reports
 EXPORT_PYTHON_MODULES = \
     Punches.py \
     Staff.py \
+    Transactions.py \
     __init__.py
 
 # the standard build targets

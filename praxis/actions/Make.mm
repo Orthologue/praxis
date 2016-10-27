@@ -19,6 +19,7 @@ EXPORT_PYTHON_MODULES = \
     Primer.py \
     Staff.py \
     Schedule.py \
+    Transactions.py \
     __init__.py
 
 # the standard build targets

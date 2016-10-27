@@ -12,8 +12,20 @@ PACKAGE = vendors/ecrs/model
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
+    Cash.py \
+    ChargeAccount.py \
+    Coupon.py \
+    CreditCard.py \
+    DebitCard.py \
+    Discount.py \
+    GiftCard.py \
+    Invoice.py \
     Punches.py \
+    Refund.py \
     Task.py \
+    Tax.py \
+    Tender.py \
+    Transaction.py \
     __init__.py
 
 # the standard build targets

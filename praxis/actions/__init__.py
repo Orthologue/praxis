@@ -54,6 +54,17 @@ def payroll():
     return Payroll
 
 
+@foundry(implements=action, tip="access to the ECRS transaction journal")
+def tj():
+    """
+    Analyze the transaction journal
+    """
+    # get the action
+    from .Transactions import Transactions
+    # and return it
+    return Transactions
+
+
 @foundry(implements=action, tip="access the schedule manager")
 def schedule():
     """
