@@ -13,6 +13,7 @@ PACKAGE = vendors/ecrs/reports
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
     Punches.py \
+    Staff.py \
     __init__.py
 
 # the standard build targets

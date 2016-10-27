@@ -12,7 +12,7 @@ PACKAGE = tests
 
 all: test
 
-test: sanity punches
+test: sanity punches staff
 
 sanity:
 	${PYTHON} ./sanity.py
@@ -20,5 +20,8 @@ sanity:
 punches:
 	${PYTHON} ./punch_create.py
 	${PYTHON} ./punch_parse.py
+
+staff:
+	${PYTHON} ./staff.py
 
 # end of file

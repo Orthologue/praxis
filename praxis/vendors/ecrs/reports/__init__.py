@@ -8,6 +8,7 @@
 
 # the punch parser
 from .Punches import Punches as punches
+from .Staff import Staff as staff
 
 
 # end of file
