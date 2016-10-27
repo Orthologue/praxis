@@ -95,7 +95,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         errors = [] # parsing errors
         warnings = [] # parsing warnings
         # make a punch parser
-        parser = praxis.vendors.ecrs.punchParser()
+        parser = praxis.vendors.ecrs.reports.punches()
         # open the timecards
         with node.open() as stream:
             # parse the input stream
@@ -453,7 +453,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         errors = [] # parsing errors
         warnings = [] # parsing warnings
         # make a punch parser
-        parser = praxis.vendors.ecrs.punchParser()
+        parser = praxis.vendors.ecrs.reports.punches()
 
         # go through the timecard specs
         for payperiod, node in dataset:

@@ -24,7 +24,7 @@ def test():
     # get the package
     import praxis.vendors.ecrs
     # make a punch parser
-    parser = praxis.vendors.ecrs.punchParser()
+    parser = praxis.vendors.ecrs.reports.punches()
 
     # the empty file
     with open("punches-empty.csv") as stream:
@@ -53,31 +53,6 @@ def test():
 
     # all done
     return
-
-
-# the workhorse
-def computeHours(data):
-    # build the table of hours
-    table = {}
-    # check
-    for id in sorted(data):
-        # pull the activity for this employee
-        punches = data[id]
-        # zero out the number of hours worked
-        hours = 0
-        # go through all the punches
-        for clockin, clockout in punches:
-            # if there is no clockin or clockout, there's nothing to do
-            if not (clockin and clockout): continue
-            # otherwise, subtract the two timestamps
-            delta = clockout - clockin
-            # adjust the hours worked
-            hours += 24*delta.days + delta.seconds/3600
-        # save the calculated hours
-        table[id] = hours
-
-    # all done
-    return table
 
 
 # main

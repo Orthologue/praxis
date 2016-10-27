@@ -7,7 +7,7 @@
 
 
 # declaration
-class PunchParser:
+class Punches:
     """
     Extracts employee clock punches from the CATAPULT time report
 

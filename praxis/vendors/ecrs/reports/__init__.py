@@ -7,7 +7,7 @@
 
 
 # the punch parser
-from .PunchParser import PunchParser as punchParser
+from .Punches import Punches as punches
 
 
 # end of file

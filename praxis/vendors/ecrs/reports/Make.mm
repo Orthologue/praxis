@@ -12,7 +12,7 @@ PACKAGE = vendors/ecrs/reports
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
-    PunchParser.py \
+    Punches.py \
     __init__.py
 
 # the standard build targets

@@ -16,7 +16,7 @@ def test():
     # get the package
     import praxis.vendors.ecrs
     # make a punch parser
-    parser = praxis.vendors.ecrs.punchParser()
+    parser = praxis.vendors.ecrs.reports.punches()
     # all done
     return
 
