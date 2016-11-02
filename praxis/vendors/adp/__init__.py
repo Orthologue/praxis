@@ -9,8 +9,8 @@
 def earnings():
     # get the class
     from .EarningsRecord import EarningsRecord
-    # and return it
-    return EarningsRecord
+    # instantiate and return
+    return EarningsRecord()
 
 
 # end of file
