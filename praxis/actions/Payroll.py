@@ -339,7 +339,222 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
                         writer.writerow((date, task.start, task.finish, "{:.2f}".format(delta)))
 
         # all done
-        return
+        return 0
+
+
+    @praxis.export(tip='generate a document with punch clock detail for a given pay period')
+    def detail(self, plexus, **kwds):
+        """
+        Generate a LaTeX document with the punch clock details for a given pay period
+        """
+        # grab the folder with my data store; it's guaranteed to be there by the application
+        # boot process
+        etc = plexus.pfs["etc"]
+        # grab the level below
+        etc.discover(levels=1)
+        # get the folder with the timecards
+        tex = etc["tex"].discover()
+        # get the include and graphics folders
+        include = str(tex["include"].uri)
+        graphics = str(tex["graphics"].uri)
+
+        # find the data set for the requested pay period
+        payday, node = self.select(plexus=plexus)
+        # let the user know what we are doing
+        plexus.info.log('parsing clock punches from {!r}'.format(str(node.uri)))
+
+        # build the employee index
+        employees = {}
+        # build the punch table
+        punches = praxis.patterns.vivify(levels=2, atom=praxis.vendors.ecrs.model.punchlist)
+        # make a punch parser
+        parser = praxis.vendors.ecrs.reports.punches()
+        # open the timecards
+        with node.open() as stream:
+            # parse the input stream
+            parser.parse(stream=stream, names=employees, punches=punches)
+
+        # setup a counter increment
+        day = datetime.timedelta(days=1)
+        # compute the pay period assuming it's the fourteen days that end on {payday}
+        payend = payday
+        paystart = payend - 13*day
+
+        # create the file
+        doc = open("{:%Y%m%d}-detail.tex".format(payend), "w")
+
+        # the preamble
+        preamble = [
+            "% -*- LaTeX -*-",
+            "% -*- coding: utf-8 -*-",
+            "%",
+            "% michael a.g. aïvázis",
+            "% urban radish",
+            "% (c) 1998-2016 all rights reserved",
+            "%",
+            "% adjust the include path",
+            "\makeatletter",
+            "\providecommand*{\input@path}{}",
+            "\edef\input@path{{{{{include}/}}\input@path}}".format(include=include),
+            "\makeatother",
+            "",
+            "% document support",
+            "\\documentclass{praxis}",
+            "",
+            "% adjust the graphics path",
+            "\graphicspath{{{{{graphics}/}}}}".format(graphics=graphics),
+            "",
+            "% setup",
+            "\\meta{",
+              "% pay period",
+              "payperiodStart = {{{:%B %d, %Y}}},".format(paystart),
+              "payperiodEnd = {{{:%B %d, %Y}}},".format(payend),
+              "}",
+            "",
+            "% the document",
+            "\\begin{document}",
+            "",
+        ]
+        print('\n'.join(preamble), file=doc)
+
+        # go through the employees
+        # set up the employee name regex
+        regex = re.compile("|".join(name.lower() for name in self.name))
+        # for each employee
+        for eid, name in sorted(employees.items(), key=operator.itemgetter(1)):
+            # build the employee's full name
+            fullname = ', '.join(name)
+            # should we skip this employee?
+            if not regex.search(fullname.lower()): continue
+
+            # the attendance header
+            header = [
+                "",
+                "% attendance for {1} {0}".format(*name),
+                "\\begin{{attendance}}{{{1} {0}}}".format(*name)
+                ]
+            # inject it
+            print('\n'.join(header), file=doc)
+
+            # get the punches
+            timecard = punches[eid]
+
+            # go through each day in the pay period
+            for idx in range(14):
+                # form the date
+                date = paystart + idx*day
+                # build date args
+                datearg = "{{{0.day}}}{{{0.month}}}{{{0.year}}}".format(date)
+
+                # prime the line
+                line = [
+                    "  % punches",
+                    "  \\simpledate\\formatdate{} &".format(datearg),
+                    "  \\shortdayofweekname{} &".format(datearg),
+                    ]
+
+                # get the tasks
+                tasks = timecard[date]
+
+                # if there are no tasks
+                if not tasks:
+                    # wrap up this day
+                    line += [
+                        "\\\\"
+                    ]
+                    # inject
+                    print('\n'.join(line), file=doc)
+                    # and move on
+                    continue
+
+                # if there are two tasks
+                if len(tasks) == 2:
+                    # unpack
+                    ein = "{{{0.hour}}}{{{0.minute}}}{{{0.second}}}".format(tasks[0].start)
+                    lin = "{{{0.hour}}}{{{0.minute}}}{{{0.second}}}".format(tasks[0].finish)
+                    lout = "{{{0.hour}}}{{{0.minute}}}{{{0.second}}}".format(tasks[1].start)
+                    eout = "{{{0.hour}}}{{{0.minute}}}{{{0.second}}}".format(tasks[1].finish)
+
+                    # adjust
+                    line += [
+                        "\\formattime{} &".format(ein),
+                        "\\formattime{} &".format(lin),
+                        "\\formattime{} &".format(lout),
+                        "\\formattime{} &".format(eout),
+                        ]
+                # if there is only one task
+                elif len(tasks) == 1:
+                    # unpack
+                    ein = "{{{0.hour}}}{{{0.minute}}}{{{0.second}}}".format(tasks[0].start)
+                    eout = "{{{0.hour}}}{{{0.minute}}}{{{0.second}}}".format(tasks[0].finish)
+
+                    # adjust
+                    line += [
+                        "\\formattime{} &".format(ein),
+                        "&",
+                        "&",
+                        "\\formattime{} &".format(eout),
+                        ]
+                # if there are more than 2
+                if len(tasks) > 2:
+                    # raise a firewall
+                    plexus.firewall.log(
+                        "{2} {1} has more than two tasks on {0}".format(date, *name))
+
+                # compute the hours worked
+                hours = tasks.hours
+                # quick and dirty overtime check
+                if hours > 8:
+                    reg = "{:.2f}".format(8)
+                    ovr = "{:.2f}".format(hours - 8)
+                else:
+                    reg = "{:.2f}".format(hours)
+                    ovr = ""
+                # render
+                line += [
+                    "{} & {}".format(reg, ovr)
+                    ]
+
+                # wrap up this day
+                line += [
+                    "\\\\"
+                    ]
+                # inject
+                print('\n'.join(line), file=doc)
+
+            # classify the hours worked
+            hours = self.jurisdiction.overtime(start=paystart, workweeks=2, timecard=timecard)
+            # and add them up
+            reg, ovr, dbl = map(sum, zip(*hours))
+
+            # create the summary
+            summary = [
+                "\\hline \\\\ [-1.7ex]",
+                "\\multicolumn{{6}}{{r}}{{Total:}} & {:.2f} & {:.2f}".format(reg, ovr)
+                ]
+            # inject it
+            print('\n'.join(summary), file=doc)
+
+            # the attendance footer
+            footer = [
+                "\\end{attendance}",
+                "",
+                ]
+            # inject it
+            print('\n'.join(footer), file=doc)
+
+
+        # wrap up
+        postamble = [
+            "% all done",
+            "\\end {document}",
+            "",
+            "% end of file",
+            ]
+        print('\n'.join(postamble), file=doc)
+
+        # all done
+        return 0
 
 
     # implementation details
