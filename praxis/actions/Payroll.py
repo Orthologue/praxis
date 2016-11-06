@@ -146,8 +146,9 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             # repeat the calculation with the new streaming method used by the attendance
             # detail generator
             new = self.jurisdiction.overtime2(start=start, workweeks=2, timecard=timecard)
-            # tally them
-            newRegular, newSesqui, newDouble = map(sum, zip(*new))
+            # tally them; this looks different from the reduction above because {overtime2}
+            # injects the work day in the stream as well, so we have to peel that off
+            newRegular, newSesqui, newDouble = map(sum, zip(*(r[1] for r in new)))
 
             # compare the two to make sure we have no bugs
             assert (rawRegular - newRegular) < 1/3600

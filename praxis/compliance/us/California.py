@@ -76,7 +76,7 @@ class California(pyre.component, implements=jurisdiction, family="praxis.complia
                 # if there were no work hours today
                 if worked == 0:
                     # yield a null result
-                    yield 0, 0, 0
+                    yield today, (0, 0, 0)
                     # and move on
                     continue
 
@@ -116,7 +116,7 @@ class California(pyre.component, implements=jurisdiction, family="praxis.complia
                 assert (worked - regular - sesqui - double) < (1/3600)
 
                 # yield the partial calculation
-                yield regular, sesqui, double
+                yield today, (regular, sesqui, double)
 
         # all done
         return
