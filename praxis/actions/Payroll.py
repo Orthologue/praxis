@@ -443,18 +443,21 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             header = [
                 "",
                 "% attendance for {1} {0}".format(*name),
-                "\\begin{{attendance}}{{{1} {0}}}".format(*name)
+                "\\begin{{attendance}}{{{1} {0}}}".format(*name),
                 ]
             # inject it
             print('\n'.join(header), file=doc)
 
             # get the punches
             timecard = punches[eid]
-
-            # go through each day in the pay period
-            for idx in range(14):
-                # form the date
-                date = paystart + idx*day
+            # prime the streaming overtime calculator
+            overtime = self.jurisdiction.overtime2(start=paystart, workweeks=2, timecard=timecard)
+            # initialize the counter of work days
+            workdays = 0
+            # go through them
+            for date, (reg, ovr, dbl) in overtime:
+                # increment the workday counter
+                workdays += 1
                 # build date args
                 datearg = "{{{0.day}}}{{{0.month}}}{{{0.year}}}".format(date)
 
@@ -472,7 +475,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
                 if not tasks:
                     # wrap up this day
                     line += [
-                        "\\\\"
+                        "\\\\" # + ("\\hline \\\\ [-1.5ex]" if workdays % 7 == 0 else "")
                     ]
                     # inject
                     print('\n'.join(line), file=doc)
@@ -513,23 +516,18 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
                     plexus.firewall.log(
                         "{2} {1} has more than two tasks on {0}".format(date, *name))
 
-                # compute the hours worked
-                hours = tasks.hours
-                # quick and dirty overtime check
-                if hours > 8:
-                    reg = "{:.2f}".format(8)
-                    ovr = "{:.2f}".format(hours - 8)
-                else:
-                    reg = "{:.2f}".format(hours)
-                    ovr = ""
-                # render
+                # format the hours
+                reg = "{:.2f}".format(reg) if reg else ''
+                ovr = "{:.2f}".format(ovr) if ovr else ''
+                dbl = "{:.2f}".format(dbl) if dbl else ''
+                # render the hour classifications
                 line += [
-                    "{} & {}".format(reg, ovr)
+                    "{} & {} & {}".format(reg, ovr, dbl)
                     ]
 
                 # wrap up this day
                 line += [
-                    "\\\\"
+                    "\\\\" # + ("\\hline \\\\ [-1.5ex]" if workdays % 7 == 0 else "")
                     ]
                 # inject
                 print('\n'.join(line), file=doc)
@@ -541,8 +539,8 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
 
             # create the summary
             summary = [
-                "\\hline \\\\ [-1.7ex]",
-                "\\multicolumn{{6}}{{r}}{{Total:}} & {:.2f} & {:.2f}".format(reg, ovr)
+                "\\hline \hline\\\\ [-1.7ex]",
+                "\\multicolumn{{6}}{{r}}{{Total:}} & {:.2f} & {:.2f} & {:.2f}".format(reg, ovr, dbl)
                 ]
             # inject it
             print('\n'.join(summary), file=doc)
