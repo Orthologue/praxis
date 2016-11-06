@@ -22,6 +22,12 @@ class California(pyre.component, implements=jurisdiction, family="praxis.complia
     """
 
 
+    # public data
+    # multipliers for the overtime tiers to be used to price out the labor
+    # in California, there are three tiers
+    overtimeTiers = (1.0, 1.5, 2.0)
+
+
     # interface
     @pyre.export
     def overtime(self, start, workweeks, timecard):
@@ -40,6 +46,77 @@ class California(pyre.component, implements=jurisdiction, family="praxis.complia
             hours = tuple(timecard[today].hours for today in days)
             # classify into the three tiers and return the stats for this work week
             yield self._overtime(hours=hours)
+
+        # all done
+        return
+
+
+    @pyre.export
+    def overtime2(self, start, workweeks, timecard):
+        """
+        Classify the hours worked by an employee a given an employee's {timecard}. This calculator
+        assumes that the work week starts on {start}, a {datetime.date} object, and will clip
+        the calculation to {workweeks} consecutive work weeks.
+        """
+        # units
+        day = datetime.timedelta(days=1)
+        # go through the requested number of work weeks
+        for week in range(workweeks):
+            # reset my regular hours counter
+            reg = 0
+            # reset the work days in this work week
+            workdays = 0
+            # go through the days in each work week
+            for dow in range(7):
+                # compute the date
+                today = start + (week*7 + dow)*day
+                # get the hours worked today
+                worked = timecard[today].hours
+
+                # if there were no work hours today
+                if worked == 0:
+                    # yield a null result
+                    yield 0, 0, 0
+                    # and move on
+                    continue
+
+                # otherwise, increment the number of work days this week
+                workdays += 1
+
+                # classify:
+                # every hour above 12 goes into double pay
+                double = max(0, worked - 12)
+
+                # get the number of hours below 12 but above 8
+                excess = min(max(0, worked - 8), 4)
+                # if this is the seventh consecutive workday this week
+                if workdays == 7 :
+                    # all overtime hours are double pay
+                    double += excess
+                    # and we have, as yet, no time-and-a-half
+                    sesqui = 0
+                # otherwise
+                else:
+                    # they are time-and-a-half
+                    sesqui = excess
+
+                # hours below 8 are candidates for regular pay
+                unclassified = min(worked, 8)
+                # the regular hours in any given work week are capped at 40
+                available = 40 - reg
+                # the regular hours are the smaller of these two
+                regular = min(available, unclassified)
+                # the rest are time-and-a-half
+                sesqui += max(0, unclassified - available)
+
+                # up the regular hour counter
+                reg += regular
+
+                # check the consistency to within a second
+                assert (worked - regular - sesqui - double) < (1/3600)
+
+                # yield the partial calculation
+                yield regular, sesqui, double
 
         # all done
         return
@@ -86,12 +163,6 @@ class California(pyre.component, implements=jurisdiction, family="praxis.complia
             return worked - deficit
         # otherwise, return the actual value
         return worked
-
-
-    # public data
-    # multipliers for the three overtime tiers to be used to price out the labor; in California
-    # there are three tiers
-    overtimeTiers = (1.0, 1.5, 2.0)
 
 
     # implementation details

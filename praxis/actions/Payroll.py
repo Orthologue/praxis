@@ -143,12 +143,23 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             # tally them
             rawRegular, rawSesqui, rawDouble = map(sum, zip(*hours))
 
-            # adjust for legally mandated breaks
+            # repeat the calculation with the new streaming method used by the attendance
+            # detail generator
+            new = self.jurisdiction.overtime2(start=start, workweeks=2, timecard=timecard)
+            # tally them
+            newRegular, newSesqui, newDouble = map(sum, zip(*new))
+
+            # compare the two to make sure we have no bugs
+            assert (rawRegular - newRegular) < 1/3600
+            assert (rawSesqui - newSesqui) < 1/3600
+            assert (rawDouble - newDouble) < 1/3600
+
+            # repeat while enforcing the legally mandated breaks
             breaks = self.jurisdiction.breaks(start=start, workweeks=2, timecard=timecard)
             # tally them
             brkRegular, brkSesqui, brkDouble = map(sum, zip(*breaks))
 
-            # compute the discrepancy
+            # compute the discrepancy to get a feel for the cost of missing breaks
             dRegular  = rawRegular - brkRegular
             dSesqui  = rawSesqui - brkSesqui
             dDouble  = rawDouble - brkDouble
