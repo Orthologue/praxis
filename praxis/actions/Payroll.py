@@ -536,11 +536,16 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             hours = self.jurisdiction.overtime(start=paystart, workweeks=2, timecard=timecard)
             # and add them up
             reg, ovr, dbl = map(sum, zip(*hours))
+            # format them
+            reg = "{:.2f}".format(reg) if reg else ""
+            ovr = "{:.2f}".format(ovr) if ovr else ""
+            dbl = "{:.2f}".format(dbl) if dbl else ""
 
             # create the summary
             summary = [
-                "\\hline \hline\\\\ [-1.7ex]",
-                "\\multicolumn{{6}}{{r}}{{Total:}} & {:.2f} & {:.2f} & {:.2f}".format(reg, ovr, dbl)
+                "\\midrule",
+                "\\multicolumn{5}{c}{} & ",
+                "\\bfseries{{Total}}: & {} & {} & {}".format(reg, ovr, dbl)
                 ]
             # inject it
             print('\n'.join(summary), file=doc)
