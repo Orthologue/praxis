@@ -467,7 +467,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
                 if workdays % 2 == 0:
                     line += [
                         "% colorize",
-                        "\\rowcolor[gray]{.98}",
+                        "\\rowcolor[gray]{.95}",
                         ]
 
                 # prime the line
