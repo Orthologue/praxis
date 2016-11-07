@@ -460,9 +460,18 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
                 workdays += 1
                 # build date args
                 datearg = "{{{0.day}}}{{{0.month}}}{{{0.year}}}".format(date)
+                # initialize the content
+                line = []
+
+                # colorize even rows
+                if workdays % 2 == 0:
+                    line += [
+                        "% colorize",
+                        "\\rowcolor[gray]{.98}",
+                        ]
 
                 # prime the line
-                line = [
+                line += [
                     "  % punches",
                     "  \\simpledate\\formatdate{} &".format(datearg),
                     "  \\shortdayofweekname{} &".format(datearg),
@@ -475,7 +484,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
                 if not tasks:
                     # wrap up this day
                     line += [
-                        "\\\\" # + ("\\hline \\\\ [-1.5ex]" if workdays % 7 == 0 else "")
+                        " & & & & & & \\\\" + ("\\midrule " if workdays % 7 == 0 else "")
                     ]
                     # inject
                     print('\n'.join(line), file=doc)
@@ -527,7 +536,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
 
                 # wrap up this day
                 line += [
-                    "\\\\" # + ("\\hline \\\\ [-1.5ex]" if workdays % 7 == 0 else "")
+                    "\\\\" + ("\\midrule " if workdays % 7 == 0 else "")
                     ]
                 # inject
                 print('\n'.join(line), file=doc)
@@ -543,7 +552,6 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
 
             # create the summary
             summary = [
-                "\\midrule",
                 "\\multicolumn{5}{c}{} & ",
                 "\\bfseries{{Total}}: & {} & {} & {}".format(reg, ovr, dbl)
                 ]
