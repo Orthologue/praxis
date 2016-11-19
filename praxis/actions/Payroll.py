@@ -248,7 +248,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             rawRegular, rawSesqui, rawDouble = 0,0,0
             brkRegular, brkSesqui, brkDouble = 0,0,0
             # and for each available time card
-            for payday in reversed(sorted(punches[eid])):
+            for payday in sorted(punches[eid], reverse=True):
                 # get the tasks
                 tasks = punches[eid][payday]
                 # compute the start of the pay period
@@ -338,11 +338,11 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             # focus on the paydays that are relevant for this employee
             paydays = punches[eid]
             # go through them
-            for payday in reversed(sorted(paydays)):
+            for payday in sorted(paydays, reverse=True):
                 # get the days worked during this pay period
                 entries = paydays[payday]
                 # and go through them in order
-                for date in reversed(sorted(entries)):
+                for date in sorted(entries, reverse=True):
                     # go through each task
                     for task in entries[date]:
                         # compute the difference and convert into hours
