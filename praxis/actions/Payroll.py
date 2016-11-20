@@ -522,6 +522,93 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         return 0
 
 
+    @praxis.export(tip='perform an EDD benefits audit')
+    def edd(self, plexus, **kwds):
+        """
+        Perform an EDD benefits audit for the named employee
+        """
+        # units
+        day = datetime.timedelta(1)
+        # get the time cards
+        timecards = self.timecards(plexus=plexus)
+        # resolve the time period
+        start, end = self.resolveInterval(plexus=plexus, timecards=timecards, latest=False)
+        # get the data set
+        dataset = self.punches(plexus=plexus, timecards=timecards, latest=False)
+        # figure out how many overtime tiers in this jurisdiction, hence the size of the tuple
+        # returned by the overtime calculator
+        tiers = self.jurisdiction.overtimeTiers
+        # build a zero-hour tuple for the missing days
+        zero = (0,)*len(tiers)
+
+        # check that we were given correct EDD weeks
+        assert end > start
+        assert start.weekday() == 6
+        assert end.weekday() == 5
+
+        # go through the requested employees
+        for eid, (last, first), punches in dataset:
+            # show me
+            plexus.info.log('employee: {first} {last}'.format(first=first, last=last))
+            plexus.info.log('date range: {start} to {end}'.format(start=start, end=end))
+
+            # initialize the record
+            attendance = {}
+
+            # go through the timecards
+            for payday in sorted(punches):
+                # back up to the first day of the period
+                paystart = payday - 13*day
+                # prime the hour classifier
+                worked = self.jurisdiction.overtime2(start=paystart,
+                                                   workweeks=2,
+                                                   timecard=punches[payday])
+                # go through the record
+                for date, (reg, ovr, dbl) in worked:
+                    # and save it
+                    attendance[date] = (reg, ovr, dbl)
+            # the headers for the CSV file
+            headers = [
+                "week start", "week end",
+                "reg", "ovr", "dbl", "effective",
+                "pay rate", "gross"
+            ]
+            # initialize the audit record for this employee
+            audit = [headers]
+            # go through the period of interest
+            while start < end:
+                # mark the beginning of the week
+                wkstart = start
+                # and the end
+                wkend = start + 6*day
+                # accumulate the hours worked this week
+                worked = (attendance.get(start+dt*day, zero) for dt in range(7))
+                # add them up
+                total = tuple(map(sum, zip(*worked)))
+                # project onto the overtime tiers to get the total effective hours worked
+                effective = sum(hours*tier for hours, tier in zip(total, tiers))
+                # build a record
+                record = (
+                    (wkstart, wkend)
+                    + tuple('{:.2f}'.format(category) for category in total)
+                    + ('{:.2f}'.format(effective),)
+                    )
+                # and add it to the audit
+                audit.append(record)
+                # move on to the next week in range
+                start += 7*day
+
+            # smoosh the name of the employee
+            name = '{}{}'.format(''.join(first.split()), ''.join(last.split()))
+            # make a csv writer
+            out = csv.writer(open(name + '-edd.csv', 'w'))
+            # dump the record
+            out.writerows(audit)
+
+        # all done
+        return 0
+
+
     # implementation details
     def payperiod(self, data):
         """
