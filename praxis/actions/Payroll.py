@@ -52,7 +52,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         Parse ECRS timecards for the pay period specified by the given payday
         """
         # find the data set for the requested pay period
-        payday, node = self.select(plexus=plexus)
+        payday, node = self.selectPayday(plexus=plexus)
         # check
         if node is None:
             # we were unable to locate a matching pay date
@@ -205,41 +205,24 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         """
         Compute the impact of missing/short half hour breaks
         """
-        # for date arithmetic
+        # units
         day = datetime.timedelta(1)
         # get the jurisdiction
         js = self.jurisdiction
-        # narrow the set down to the pay periods requested by the user
-        dataset = self.selectRange(plexus=plexus, timecards=timecards)
-        # get the employee index and time punches
-        employees, punches = self.punches(plexus=plexus, dataset=dataset)
-
-        # MGA: here is how we would narrow the search down to the active employees
-        # activeEmployees = tuple(eid for eid in punches if len(punches[eid][self.end]) > 0)
-
-        # build the employee name filter
-        namefilter = re.compile('|'.join(name.lower() for name in self.name))
-        # identify the employees of interest
-        eids = tuple(
-            eid
-            for eid, name in employees.items()
-            if namefilter.search(', '.join(name).lower()) #and eid in activeEmployees
-            )
-
-        # for each employee in the target group
-        for eid in eids:
+        # get the time data
+        dataset = self.punches(plexus=plexus, latest=True)
+        # go through the time cards
+        for eid, (last, first), punches in dataset:
             # initialize the instance count
             instances = 0
-            # get the name of the employee
-            last, first = employees[eid]
             # assemble the name of the output file
-            name = ''.join(''.join((last, first)).split()) + '-pay.csv'
+            outfile = ''.join(''.join((last, first)).split()) + '-pay.csv'
             # open it
-            writer = csv.writer(open(name, 'w'))
+            writer = csv.writer(open(outfile, 'w'))
             # leave behind the employee name
             writer.writerow(("Employee:", last, first))
 
-            # write my heders
+            # write my headers
             writer.writerow(("Pay Period", "", "Raw", "", "Breaks", "", "Difference", ""))
             writer.writerow(("Start", "End",
                              "Regular", "Overtime", "Regular", "Overtime", "Regular", "Overtime"))
@@ -248,9 +231,9 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             rawRegular, rawSesqui, rawDouble = 0,0,0
             brkRegular, brkSesqui, brkDouble = 0,0,0
             # and for each available time card
-            for payday in sorted(punches[eid], reverse=True):
+            for payday in sorted(punches, reverse=True):
                 # get the tasks
-                tasks = punches[eid][payday]
+                tasks = punches[payday]
                 # compute the start of the pay period
                 start = payday - 13*day
                 # initialize the row
@@ -294,7 +277,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             # show me
             print(
                 "{name:25}: {instances:3d}: {reg:6.2f} {ovr:6.2f} {dbl:6.2f}".format(
-                    name = ', '.join(employees[eid]),
+                    name = '{}, {}'.format(last, first),
                     instances = instances,
                     reg = rawRegular - brkRegular,
                     ovr = rawSesqui - brkSesqui,
@@ -308,26 +291,10 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         """
         Collect all the clock punches of select employees in separate files
         """
-        # for date arithmetic
-        day = datetime.timedelta(1)
-        # narrow the set down to the pay periods requested by the user
-        dataset = self.selectRange(plexus=plexus)
-        # get the employee index and time punches
-        employees, punches = self.punches(plexus=plexus, dataset=dataset)
-
-        # build the employee name filter
-        namefilter = re.compile('|'.join(name.lower() for name in self.name))
-        # identify the employees of interest
-        eids = tuple(
-            eid
-            for eid, name in employees.items()
-            if namefilter.search(', '.join(name).lower())
-            )
-
-        # for each employee in the target group
-        for eid in eids:
-            # get the name of the employee
-            last, first = employees[eid]
+        # get the data set
+        dataset = self.punches(plexus=plexus, latest=False)
+        # get the selected employees and their timecards
+        for eid, (last, first), punches in dataset:
             # assemble the name of the output file
             name = ''.join(''.join((last, first)).split()) + '-time.csv'
             # make a CSV writer
@@ -336,11 +303,9 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             writer.writerow((last, first))
 
             # focus on the paydays that are relevant for this employee
-            paydays = punches[eid]
-            # go through them
-            for payday in sorted(paydays, reverse=True):
+            for payday in sorted(punches, reverse=True):
                 # get the days worked during this pay period
-                entries = paydays[payday]
+                entries = punches[payday]
                 # and go through them in order
                 for date in sorted(entries, reverse=True):
                     # go through each task
@@ -370,27 +335,12 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         include = str(tex["include"].uri)
         graphics = str(tex["graphics"].uri)
 
-        # find the data set for the requested pay period
-        payday, node = self.select(plexus=plexus)
-        # let the user know what we are doing
-        plexus.info.log('parsing clock punches from {!r}'.format(str(node.uri)))
-
-        # build the employee index
-        employees = {}
-        # build the punch table
-        punches = praxis.patterns.vivify(levels=2, atom=praxis.vendors.ecrs.model.punchlist)
-        # make a punch parser
-        parser = praxis.vendors.ecrs.reports.punches()
-        # open the timecards
-        with node.open() as stream:
-            # parse the input stream
-            parser.parse(stream=stream, names=employees, punches=punches)
-
-        # setup a counter increment
-        day = datetime.timedelta(days=1)
-        # compute the pay period assuming it's the fourteen days that end on {payday}
-        payend = payday
-        paystart = payend - 13*day
+        # get the timecards
+        timecards = self.timecards(plexus=plexus)
+        # resolve the time period
+        paystart, payend = self.resolveInterval(plexus=plexus, timecards=timecards, latest=True)
+        # get the time card dataset
+        dataset = self.punches(plexus=plexus, timecards=timecards, latest=True)
 
         # create the file
         doc = open("{:%Y%m%d}-detail.tex".format(payend), "w")
@@ -429,27 +379,19 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         ]
         print('\n'.join(preamble), file=doc)
 
-        # go through the employees
-        # set up the employee name regex
-        regex = re.compile("|".join(name.lower() for name in self.name))
         # for each employee
-        for eid, name in sorted(employees.items(), key=operator.itemgetter(1)):
-            # build the employee's full name
-            fullname = ', '.join(name)
-            # should we skip this employee?
-            if not regex.search(fullname.lower()): continue
-
+        for eid, (last, first), punches in dataset:
             # the attendance header
             header = [
                 "",
-                "% attendance for {1} {0}".format(*name),
-                "\\begin{{attendance}}{{{1} {0}}}".format(*name),
+                "% attendance for {first} {last}".format(first=first, last=last),
+                "\\begin{{attendance}}{{{first} {last}}}".format(first=first, last=last),
                 ]
             # inject it
             print('\n'.join(header), file=doc)
 
             # get the punches
-            timecard = punches[eid]
+            timecard = punches[payend]
             # prime the streaming overtime calculator
             overtime = self.jurisdiction.overtime2(start=paystart, workweeks=2, timecard=timecard)
             # initialize the counter of work days
@@ -601,20 +543,56 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         etc.discover(levels=1)
         # get the folder with the timecards
         folder = etc["timecards"].discover()
-        # collect all entries that look like timecards
-        timecards = [
-            (datetime.date(year = int(match.group('year')),
-                           month = int(match.group('month')),
-                           day = int(match.group('day'))),
-             node)
-            for node,match in folder.find(pattern=self.TIMECARDS)]
-        # sort them
-        timecards.sort()
-        # and return them
+        # filter for the contents of interest
+        contents = folder.find(pattern=self.TIMECARDS)
+        # collect all entries that look like time cards
+        timecards = sorted(((datetime.date(year=int(match.group('year')),
+                                           month=int(match.group('month')),
+                                           day=int(match.group('day'))),
+                             node)
+                            for node, match in contents))
+        # if there aren't any
+        if not timecards:
+            # complain
+            raise plexus.error.log('could not find any time cards in {!r}'.format(str(folder.uri)))
+
+        # otherwise, return them
+
         return timecards
 
 
-    def select(self, plexus):
+    def selectRange(self, plexus, timecards, latest=True):
+        """
+        Narrow down the time card dataset according to the user specifications
+        """
+        # units
+        day = datetime.timedelta(1)
+        # payroll happens biweekly
+        # MGA: pull this from the client configuration
+        payperiod = 14*day
+        # resolve the time interval of interest
+        start, end = self.resolveInterval(plexus=plexus, timecards=timecards, latest=latest)
+
+        # otherwise, loop over the available time cards
+        for date, node in timecards:
+            # if the time interval has a left edge and the payday is not after it
+            if date < start:
+                # skip it
+                continue
+            # if the time interval has a right edge and the payday is more than one pay period
+            # in the future
+            if date - end >= payperiod:
+                # skip it
+                continue
+
+            # otherwise, it is within range
+            yield date, node
+
+        # all done
+        return
+
+
+    def selectPayday(self, plexus):
         """
         Identify the timecards for the pay period specified by the user
         """
@@ -653,57 +631,14 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         return payday, node
 
 
-    def selectRange(self, plexus):
-        """
-        Identify the timecards that are consistent with the period specified by the user
-        """
-        # N.B.: the logic below assumes that {timecards} are sorted by date
-
-        # grab the time cards
-        timecards = self.timecards(plexus=plexus)
-        # units
-        day = datetime.timedelta(1)
-        # adjust the interval endpoints
-        # if no starting point has been specified
-        if self.start is None:
-            # backup to the first day of the first pay period
-            self.start = timecards[0][0] - 13*day
-        # similarly, if no end date has been specified
-        if self.end is None:
-            # adjust it to the last day of the last pay period
-            self.end = timecards[-1][0]
-
-        # payroll is biweekly
-        fourteen = 14*day
-        # my filter
-        def choose(entry, start=self.start, end=self.end, duration=fourteen):
-            """
-            Pick timecards whose dates that are no earlier than {start} and no later than {end}
-            """
-            # unpack
-            stamp = entry[0]
-            # if it's in the interval
-            if (stamp >= start) and (stamp-end < duration):
-                # all good
-                return True
-            # otherwise reject it
-            return False
-
-        # go through the timecards and filter them
-        selection = tuple(filter(choose, timecards))
-        # adjust my time range one last time
-        self.start = selection[0][0] - 13*day
-        self.end = selection[-1][0]
-        # and return the selected datasets
-        return selection
-
-
-    def punches(self, plexus, dataset, warnings=None, errors=None):
+    def punches(self, plexus, timecards=None, latest=True, warnings=None, errors=None):
         """
         Load the clock punches from the sequence of {date, vnode} pairs
         """
         # build the employee index
         employees = {}
+        # force initialization of the timecards
+        if timecards is None: timecards = self.timecards(plexus=plexus)
         # and the punch data
         index = praxis.patterns.vivify(levels=3, atom=praxis.vendors.ecrs.model.punchlist)
 
@@ -715,7 +650,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         parser = praxis.vendors.ecrs.reports.punches()
 
         # go through the timecard specs
-        for payperiod, node in dataset:
+        for payperiod, node in self.selectRange(plexus=plexus, timecards=timecards, latest=latest):
             # build the punch table
             punches = praxis.patterns.vivify(levels=2, atom=praxis.vendors.ecrs.model.punchlist)
             # open the file
@@ -755,8 +690,67 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             # flush
             plexus.warning.log('{} warning{} total'.format(count, '' if count == 1 else 's'))
 
-        # return the employee index and time punches
-        return employees, index
+        # now, build the employee name filter
+        namefilter = re.compile('|'.join(name.lower() for name in self.name))
+        # identify the employees of interest
+        eids = tuple(
+            eid
+            for eid, name in sorted(employees.items(), key=operator.itemgetter(1))
+            if namefilter.search("{first} {last}".format(last=name[0], first=name[1]).lower())
+            )
+
+        # for each employee in the target group
+        for eid in eids:
+            # send off the employee id, name and time cards
+            yield eid, employees[eid], index[eid]
+
+        # all done
+        return
+
+
+    def resolveInterval(self, plexus, timecards, latest):
+        """
+        Compute the time interval of interest based on the user input and available time cards
+        """
+        # units
+        day = datetime.timedelta(1)
+        # payroll happens biweekly
+        # MGA: pull this from the client configuration
+        payperiod = 14*day
+
+        # identify the time period of interest; if a specific payday were specified
+        if self.payday is not None:
+            # it becomes the entire range
+            start = self.payday - payperiod + day
+            end = self.payday
+            # all done
+            return start, end
+
+        # if there is no specified payday and the user wants only the latest data
+        if latest:
+            # grab the payday of the last timecard
+            end = timecards[-1][0]
+            # back up to the first day of this period
+            start = end - payperiod + day
+            # all done
+            return start, end
+
+        # unpack the start of the range specified by the user
+        start = self.start
+        # if nothing were specified
+        if start is None:
+            # back up to the earliest day in the first pay period of record
+            start = timecards[0][0] - payperiod + day
+
+        # unpack the end of the range specified by the user
+        end = self.end
+        # if nothing were specified
+        if end is None:
+            # go to the last day of the last pay period on record
+            end = timecards[-1][0]
+
+        # all done
+        return start, end
 
 
     # constants
