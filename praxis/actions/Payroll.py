@@ -400,6 +400,8 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             for date, (reg, ovr, dbl) in overtime:
                 # increment the workday counter
                 workdays += 1
+                # get the tasks
+                tasks = timecard[date]
                 # build date args
                 datearg = "{{{0.day}}}{{{0.month}}}{{{0.year}}}".format(date)
                 # initialize the content
@@ -412,15 +414,16 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
                         "\\rowcolor[gray]{.95}",
                         ]
 
+                # colorize dates where we cannot show the full in/out detail because there are
+                # too many punches
+                marker = '\\color{praxis@multi}' if len(tasks) > 2 else ''
+
                 # prime the line
                 line += [
                     "  % punches",
                     "  \\simpledate\\formatdate{} &".format(datearg),
-                    "  \\shortdayofweekname{} &".format(datearg),
-                    ]
-
-                # get the tasks
-                tasks = timecard[date]
+                    "  {{{}\\shortdayofweekname{}}} &".format(marker, datearg),
+                ]
 
                 # if there are no tasks
                 if not tasks:
@@ -443,10 +446,10 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
 
                     # adjust
                     line += [
-                        "\\formattime{} &".format(ein),
-                        "\\formattime{} &".format(lin),
-                        "\\formattime{} &".format(lout),
-                        "\\formattime{} &".format(eout),
+                        "  \\formattime{} &".format(ein),
+                        "  \\formattime{} &".format(lin),
+                        "  \\formattime{} &".format(lout),
+                        "  \\formattime{} &".format(eout),
                         ]
                 # if there is only one task
                 elif len(tasks) == 1:
@@ -456,16 +459,28 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
 
                     # adjust
                     line += [
-                        "\\formattime{} &".format(ein),
-                        "&",
-                        "&",
-                        "\\formattime{} &".format(eout),
+                        "  \\formattime{} &".format(ein),
+                        "  &",
+                        "  &",
+                        "  \\formattime{} &".format(eout),
                         ]
                 # if there are more than 2
-                if len(tasks) > 2:
-                    # raise a firewall
-                    plexus.firewall.log(
-                        "{2} {1} has more than two tasks on {0}".format(date, *name))
+                elif len(tasks) > 2:
+                    # report an error
+                    plexus.warning.log(
+                        "{1} {2} has more than two tasks on {0}".format(date, first, last))
+                    # unpack the first and the last
+                    ein = "{{{0.hour}}}{{{0.minute}}}{{{0.second}}}".format(tasks[0].start)
+                    lin = "{{{0.hour}}}{{{0.minute}}}{{{0.second}}}".format(tasks[0].finish)
+                    lout = "{{{0.hour}}}{{{0.minute}}}{{{0.second}}}".format(tasks[-1].start)
+                    eout = "{{{0.hour}}}{{{0.minute}}}{{{0.second}}}".format(tasks[-1].finish)
+                    # adjust
+                    line += [
+                        "  \\formattime{} &".format(ein),
+                        "  \\formattime{} &".format(lin),
+                        "  \\formattime{} &".format(lout),
+                        "  \\formattime{} &".format(eout),
+                        ]
 
                 # format the hours
                 reg = "{:.2f}".format(reg) if reg else ''
