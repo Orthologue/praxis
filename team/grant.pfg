@@ -7,6 +7,6 @@
 grant:
   repository = /home/projects/praxis/repository
   readers = 
-  writers = alec.aivazis, michael.aivazis
+  writers = alec.aivazis, michael.aivazis, radish
 
 ; end of file
