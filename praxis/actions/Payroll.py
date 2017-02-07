@@ -376,6 +376,9 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             "% the document",
             "\\begin{document}",
             "",
+            "% the table of contents",
+            "\\tableofcontents\\newpage",
+            "",
         ]
         print('\n'.join(preamble), file=doc)
 
