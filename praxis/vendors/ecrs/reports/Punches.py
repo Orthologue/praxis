@@ -145,6 +145,34 @@ class Punches:
         return names, punches, warnings, errors
 
 
+    def filter(self, stream, **kwds):
+        """
+        Throw away everything except the employee name and punch info
+        """
+        # get the csv package
+        import csv
+        # create a reader
+        reader = csv.reader(stream, **kwds)
+
+        # start reading
+        for record in reader:
+            # extract what we care about
+            info = record[self.OFFSET_EMPLOYEE].strip()
+            clockin = record[self.OFFSET_CLOCKIN].strip()
+            clockout = record[self.OFFSET_CLOCKOUT].strip()
+            # build an empty list with the right length
+            filtered = ['']*len(record)
+            # populate
+            filtered[self.OFFSET_EMPLOYEE] = info
+            filtered[self.OFFSET_CLOCKIN] = clockin
+            filtered[self.OFFSET_CLOCKOUT] = clockout
+            # make the filtered record available
+            yield filtered
+
+        # all done
+        return
+
+
     # constants -- for version 3.2.02 of the CATAPULT report
     OFFSET_EMPLOYEE = 6
     OFFSET_CLOCKIN = 10

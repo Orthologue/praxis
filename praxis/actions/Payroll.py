@@ -200,6 +200,41 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         return 0
 
 
+    @praxis.export(tip='filter the required columns from an ECRS time report')
+    def filter(self, plexus, **kwds):
+        # find the data set for the requested pay period
+        payday, node = self.selectPayday(plexus=plexus)
+        # check
+        if node is None:
+            # we were unable to locate a matching pay date
+            plexus.error.log("unable to locate time cards for payday {.payday}".format(self))
+            # all done
+            return 1
+
+        # form the na,e of the outfile
+        ofile = node.uri.name
+        # let the user know what we are doing
+        plexus.info.log('parsing clock punches from {!r}'.format(str(node.uri)))
+        plexus.info.log('placing filtered output in {!r}'.format(ofile))
+
+        # get the csv package
+        import csv
+        # create the output stream
+        ostream  = open(ofile, mode="w")
+        # make a writer
+        writer = csv.writer(ostream)
+
+        # make a punch parser
+        parser = praxis.vendors.ecrs.reports.punches()
+        # open the timecards
+        with node.open() as stream:
+            # clean up the input stream and save it
+            writer.writerows(parser.filter(stream=stream))
+
+        # all done
+        return 0
+
+
     @praxis.export(tip='assess the impact of employees not taking breaks')
     def breaks(self, plexus, **kwds):
         """
