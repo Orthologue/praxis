@@ -111,10 +111,8 @@ class Praxis(pyre.plexus, family='praxis.components.plexus'):
         indent = ' '*4
         # make some space
         self.info.line()
-        # get the help header
-        for line in praxis._praxis_header.splitlines():
-            # and display it
-            self.info.line(line)
+        # display the help header
+        self.info.line(praxis.meta.header)
 
         # reset the pile of actions
         actions = []

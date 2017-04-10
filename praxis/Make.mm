@@ -6,7 +6,7 @@
 #
 
 # project defaults
-PROJECT = praxis
+include praxis.def
 # the package name
 PACKAGE = praxis
 # clean up
@@ -24,9 +24,19 @@ RECURSE_DIRS = \
     support \
     vendors \
 
+# get today's date
+TODAY = ${strip ${shell date -u}}
+# grab the revision number
+REVISION = ${strip ${shell bzr revno}}
+# if not there
+ifeq ($(REVISION),)
+REVISION = 0
+endif
+
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
     exceptions.py \
+    meta.py \
     __init__.py
 
 # the standard build targets
@@ -41,13 +51,27 @@ clean::
 distclean::
 	BLD_ACTION="distclean" $(MM) recurse
 
-export:: __init__.py export-python-modules
+export:: meta.py export-python-modules
 	BLD_ACTION="export" $(MM) recurse
-	@$(RM) __init__.py
+	@$(RM) meta.py
 
-# construct my {__init__.py}
-__init__.py: __init__py
-	@sed -e "s:BZR_REVNO:$$(bzr revno):g" __init__py > __init__.py
+revision: meta.py export-python-modules
+	@$(RM) meta.py
+
+# construct my {meta.py}
+meta.py: meta Make.mm
+	@sed \
+          -e "s:MAJOR:$(PROJECT_MAJOR):g" \
+          -e "s:MINOR:$(PROJECT_MINOR):g" \
+          -e "s:REVISION:$(REVISION):g" \
+          -e "s|TODAY|$(TODAY)|g" \
+          meta > meta.py
+
+# shortcuts for building specific subdirectories
+.PHONY: $(RECURSE_DIRS)
+
+$(RECURSE_DIRS):
+	(cd $@; $(MM))
 
 
 # end of file

@@ -27,12 +27,8 @@ class About(praxis.command, family='praxis.actions.about'):
         """
         Print the copyright note of the praxis package
         """
-        # get the lines
-        for line in praxis._praxis_copyright.splitlines():
-            # and push them to the plexus info channel
-            plexus.info.line(line)
-        # flush
-        plexus.info.log()
+        # log the copyright note
+        plexus.info.log(praxis.meta.copyright)
         # all done
         return
 
@@ -42,14 +38,8 @@ class About(praxis.command, family='praxis.actions.about'):
         """
         Print out the license and terms of use of the praxis package
         """
-        # make some space
-        plexus.info.line()
-        # get the lines
-        for line in praxis._praxis_acknowledgments.splitlines():
-            # and push them to the plexus info channel
-            plexus.info.line(line)
-        # flush
-        plexus.info.log()
+        # log the acknowledgments
+        plexus.info.log(praxis.meta.acknowledgments)
         # all done
         return
 
@@ -59,14 +49,8 @@ class About(praxis.command, family='praxis.actions.about'):
         """
         Print out the license and terms of use of the praxis package
         """
-        # make some space
-        plexus.info.line()
-        # get the lines
-        for line in praxis._praxis_license.splitlines():
-            # and push them to the plexus info channel
-            plexus.info.line(line)
-        # flush
-        plexus.info.log()
+        # log the license
+        plexus.info.log(praxis.meta.license)
         # all done
         return
 
@@ -89,14 +73,12 @@ class About(praxis.command, family='praxis.actions.about'):
         """
         Print the version of the praxis package
         """
-        # make some space
-        plexus.info.line()
-        # invoke the package header and push it to the plexus info channel
-        plexus.info.line(praxis._praxis_header)
+        # log the version number
+        plexus.info.line(praxis.meta.banner)
         # get the framework
         import pyre
         # show its version number also
-        plexus.info.line(pyre._pyre_header)
+        plexus.info.line(pyre.meta.banner)
         # flush
         plexus.info.log()
         # all done
