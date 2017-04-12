@@ -24,9 +24,8 @@ class Primer(praxis.command, family='praxis.actions.db'):
     tables = praxis.properties.set(default=None, schema=praxis.properties.str())
     tables.doc = 'restrict the tables affected to this set'
 
-    sections = praxis.properties.set(
-        schema = praxis.properties.str(),
-        default = {'types', 'company', 'staff'})
+    sections = praxis.properties.set(schema = praxis.properties.str())
+    sections.default = {'types', 'company', 'staff'}
     sections.doc = 'restrict the db sections to prime to this set'
 
 

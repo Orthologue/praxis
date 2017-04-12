@@ -18,7 +18,6 @@ class Entity(praxis.db.table, id='entities'):
     Entity declarations
     """
 
-
     # data layout
     entity = praxis.db.str().primary()
     type = praxis.db.reference(key=EntityType.type).notNull()

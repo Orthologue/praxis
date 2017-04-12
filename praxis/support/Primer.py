@@ -376,7 +376,7 @@ class Primer:
         # get the phone type factory
         factory = plexus.datastore.schema.tenderType.pyre_immutable
         # build the records
-        yield factory(type='cash', description='credit card')
+        yield factory(type='cash', description='cash')
         yield factory(type='credit', description='credit card')
         yield factory(type='debit', description='debit card')
         yield factory(type='gift', description='gift card')
