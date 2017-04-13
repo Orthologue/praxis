@@ -33,6 +33,7 @@ from .Company import Company as company
 from .Item import Item as item
 from .Person import Person as person
 from .Employee import Employee as employee
+from .Employer import Employer as employer
 # attributes
 from .Email import Email as email
 from .Location import Location as location
@@ -58,7 +59,7 @@ typeTables = (
 # the table list, sorted by dependency
 tables = typeTables + (
     # atoms
-    entity, company, item, person, employee,
+    entity, company, item, person, employee, employer,
     # attributes
     email, location, phone, uri,
     # connections between atoms and their attributes

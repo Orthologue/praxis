@@ -17,6 +17,7 @@ EXPORT_PYTHON_MODULES = \
     ContactType.py \
     Email.py \
     Employee.py \
+    Employer.py \
     Employment.py \
     EmploymentType.py \
     Entity.py \
