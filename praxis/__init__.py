@@ -16,24 +16,39 @@ def copyright():
     """
     Return the praxis copyright note
     """
+    # pull and return the meta-data
     return meta.copyright
+
 
 def license():
     """
     Print the praxis license
     """
+    # pull and return the meta-data
     return meta.license
+
 
 def version():
     """
     Return the praxis version
     """
+    # pull and return the meta-data
     return meta.version
+
+
+def built():
+    """
+    Return the build time
+    """
+    # pull and return the meta-data
+    return meta.date
+
 
 def credits():
     """
     Print the acknowledgments
     """
+    # pull and return the meta-data
     return meta.acknowledgments
 
 
@@ -66,7 +81,7 @@ from pyre import (
     # db support
     db, records, tabular,
     # miscellaneous packages
-    patterns, tracking, units,
+    patterns, primitives, tracking, units,
 )
 
 # fire up
