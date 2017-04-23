@@ -12,6 +12,7 @@ PACKAGE = vendors/ecrs/reports
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
+    Daily.py \
     Punches.py \
     Staff.py \
     Transactions.py \

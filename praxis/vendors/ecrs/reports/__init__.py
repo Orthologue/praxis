@@ -13,5 +13,8 @@ from .Staff import Staff as staff
 # the transaction parser
 from .Transactions import Transactions as transactions
 
+# performance reports
+from .Daily import Daily as daily
+
 
 # end of file
