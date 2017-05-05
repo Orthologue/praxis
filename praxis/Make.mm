@@ -17,6 +17,7 @@ RECURSE_DIRS = \
     actions \
     components \
     compliance \
+    hardware \
     ingest \
     model \
     queries \

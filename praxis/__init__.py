@@ -108,6 +108,8 @@ from . import (
     queries,
     # the data model
     model,
+    # various pieces of hardware
+    hardware,
     # vendors
     vendors,
     # my actions
