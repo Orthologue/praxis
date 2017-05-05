@@ -26,14 +26,14 @@ def test():
         p.selectCharacterSize(width=2, height=4),
 
         # EPSON logo in a box
-        b'\xc9' + b'\xcd'*11 + b'\xbb' + p.lf(),
-        b'\xba\x20\x20\x20\x45\x50\x53\x4F\x4e\x20\x20\x20\xba' + p.lf(),
-        b'\xba\x20\x20\x20',
+        b'\xc9' + b'\xcd'*11 + b'\xbb\n',
+        b'\xba   EPSON   \xba\n',
+        b'\xba   ',
         p.selectCharacterSize(width=1, height=1),
         b'Thank you ',
         p.selectCharacterSize(width=2, height=4),
-        b'\x20\x20\x20\xba' + p.lf(),
-        b'\xc8' + b'\xcd'*11 + b'\xbc' + p.lf(),
+        b'   \xba' + p.lf(),
+        b'\xc8' + b'\xcd'*11 + b'\xbc\n',
 
         # go back to defaults
         p.selectDefaultLineSpacing(),
@@ -46,17 +46,17 @@ def test():
 
         # print the receipt details A
         p.selectJustification(layout='left'),
-        b'TM-Uxxx                            6.75' + p.lf(),
-        b'TM-Hxxx                            6.00' + p.lf(),
-        b'PS-Hxxx                            1.70' + p.lf() + p.lf(),
+        b'TM-Uxxx                               6.75\n',
+        b'TM-Hxxx                               6.00\n',
+        b'PS-Hxxx                               1.70\n\n',
 
         # print the receipt details B
         p.selectCharacterSize(width=1,height=2),
-        b'TOTAL                             14.45' + p.lf(),
+        b'TOTAL                                14.45\n',
         p.selectCharacterSize(width=1,height=1),
-        b'---------------------------------------' + p.lf(),
-        b'PAID                              50.00' + p.lf(),
-        b'CHANGE                            35.55' + p.lf(),
+        b'------------------------------------------\n',
+        b'PAID                                 50.00\n',
+        b'CHANGE                               35.55\n',
 
         # open the drawer
         p.pulse(pin=2, on=4, off=400),
