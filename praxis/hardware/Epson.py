@@ -12,12 +12,148 @@ class Epson:
 
 
     # interface
+    # print commands
+    def lf(self):
+        """
+        Print and advance by a line
+        """
+        # generate
+        return bytes([self.LF])
+
+
+    def ff(self):
+        """
+        Page mode: print and return to standard mode
+        """
+        # generate
+        return bytes([self.FF])
+
+
+    def cr(self):
+        """
+        Print and carriage return
+        """
+        # generate
+        return bytes([self.CR])
+
+
+    def pageframe(self):
+        """
+        Page mode: print the buffered data but do not clear it or alter the print position
+        """
+        # generate the sequence
+        return bytes([self.ESC, self.FF])
+
+
+    def feed(self, lines=None, units=None):
+        """
+        Print the data in the buffer and feed the indicated number of {lines}
+        """
+        # set up a buffer
+        instructions = []
+        # if the number of vertical units were specified
+        if units is not None:
+            # add the sequence to the instructions
+            instructions.append(bytes([self.ESC, ord('J'), units]))
+        # if the number of lines were specified
+        if lines is not None:
+            # add the sequence to the instructions
+            instructions.append(bytes([self.ESC, ord('d'), lines]))
+
+        # put it all  together
+        return b''.join(instructions)
+
+
+    # line spacing commands
     def selectDefaultLineSpacing(self):
         """
         Set the line spacing back to its default value; see {setDefaultLineSpacing}
         """
         # generate the sequence
         return bytes([self.ESC, ord('2')])
+
+
+    def setDefaultLineSpacing(self, units):
+        """
+        Set line spacing
+        """
+        # generate the sequence
+        return bytes([self.ESC, ord('3'), units])
+
+
+
+    # character commands
+    def can(self):
+        """
+        Page mode: erase the print buffer
+        """
+        # generate
+        return bytes([self.CAN])
+
+
+    def setRightSideSpacing(self, units):
+        """
+        Set the right side character spacing to motion {unit}s
+        """
+        # generate
+        return bytes([self.ESC, ord(' '), units])
+
+
+    def setPrintMode(self, font=1,
+                        emphasized=False,
+                        doubleHeight=False, doubleWidth=False, underline=False):
+        """
+        Select the character font and style
+        """
+        # initialize the code
+        code = 0x00
+        # choose the font
+        if font == 2: code |= 0x01
+        # pick the emphasis mode
+        if emphasized: code |= 0x08
+        # pick the height
+        if doubleHeight: code != 0x10
+        # pick the width
+        if doubleWidth: code != 0x20
+        # select the underline mode
+        if underline: code != 0x80
+
+        # generate the sequence
+        return bytes([self.ESC, ord('!'), code])
+
+
+    def underline(self, thickness=0):
+        """
+        Turn on underline mode
+
+        The {thickness} of the underline is specified in dots, in the range [0,2]
+        """
+        # generate the sequence
+        return bytes([self.ESC, ord('-'), thickness])
+
+
+    def emphasize(self, state=False):
+        """
+        Control emphasize mode
+        """
+        # generate the sequence
+        return bytes([self.ESC, ord('E'), (1 if state else 0)])
+
+
+    def doublestrike(self, state=False):
+        """
+        Control double-strike mode
+        """
+        # generate the sequence
+        return bytes([self.ESC, ord('G'), (1 if state else 0)])
+
+
+    def selectFont(self, font=0):
+        """
+        Select the character font
+        """
+        # generate the sequence
+        return bytes([self.ESC, ord('M'), font])
 
 
     def selectCharacterSize(self, width, height):
@@ -47,32 +183,17 @@ class Epson:
 
         # parse
         if layout == 'c':
+            # center
             code = 0x01
         elif layout == 'r':
+            # right justify
             code = 0x02
         else:
+            # left justify
             code = 0x00
 
         # generate the escape sequence
         return bytes([self.ESC, ord('a'), code])
-
-    def feed(self, lines=None, units=None):
-        """
-        Print the data in the buffer and feed the indicated number of {lines}
-        """
-        # set up a buffer
-        instructions = []
-        # if the number of vertical units were specified
-        if units is not None:
-            # add the sequence to the instructions
-            instructions.append(bytes([self.ESC, ord('J'), units]))
-        # if the number of lines were specified
-        if lines is not None:
-            # add the sequence to the instructions
-            instructions.append(bytes([self.ESC, ord('d'), lines]))
-
-        # put it all  together
-        return b''.join(instructions)
 
 
     # mechanism control commands
@@ -128,37 +249,6 @@ class Epson:
         return bytes([self.GS, ord('V'), 97+cut, units])
 
 
-    def setDefaultLineSpacing(self, units):
-        """
-        Set line spacing
-        """
-        # generate the sequence
-        return bytes([self.ESC, ord('3'), units])
-
-
-    def setPrintMode(self, font=1,
-                        emphasized=False,
-                        doubleHeight=False, doubleWidth=False, underline=False):
-        """
-        Select the character font and style
-        """
-        # initialize the code
-        code = 0x00
-        # choose the font
-        if font == 2: code |= 0x01
-        # pick the emphasis mode
-        if emphasized: code |= 0x08
-        # pick the height
-        if doubleHeight: code != 0x10
-        # pick the width
-        if doubleWidth: code != 0x20
-        # select the underline mode
-        if underline: code != 0x80
-
-        # generate the sequence
-        return bytes([self.ESC, ord('!'), code])
-
-
     def reset(self):
         """
         Reset the printer
@@ -166,27 +256,8 @@ class Epson:
         # generate the sequence
         return bytes([self.ESC, ord('@')])
 
+
     # access to the constants
-    def lf(self):
-        """
-        Convert into a byte
-        """
-        return bytes([self.LF])
-
-
-    def ff(self):
-        """
-        Convert into a byte
-        """
-        return bytes([self.FF])
-
-
-    def cr(self):
-        """
-        Convert into a byte
-        """
-        return bytes([self.CR])
-
     def esc(self):
         """
         Convert into a byte

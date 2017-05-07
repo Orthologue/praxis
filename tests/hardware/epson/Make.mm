@@ -14,12 +14,16 @@ PROJ_CLEAN += *.eps
 
 all: test clean
 
-test: sanity samples
+test: sanity samples info
 
 sanity:
 	${PYTHON} ./sanity.py
 
 samples:
 	${PYTHON} ./receipt.py
+	${PYTHON} ./barcode.py
+
+info:
+	${PYTHON} ./fonts.py
 
 # end of file

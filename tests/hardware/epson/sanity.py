@@ -14,7 +14,7 @@ Sanity check: verify that support for the EPSON printer is accessible
 
 def test():
     # access
-    import praxis.hardware
+    import praxis
     # instantiate
     praxis.hardware.epson()
     # all done

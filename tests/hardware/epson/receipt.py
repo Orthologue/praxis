@@ -14,7 +14,7 @@ The 'receipt' programming example from the EPSON distribution
 
 def test():
     # access
-    import praxis.hardware
+    import praxis
     # make an instance
     p = praxis.hardware.epson()
     # build a document
@@ -64,8 +64,11 @@ def test():
         # select cut mode and cut the paper
         p.feedAndCut(full=False),
         ]
+
+    # build the output file name out of this one
+    name = praxis.primitives.path(__file__).stem + '.eps'
     # open a file
-    stream = open("receipt.eps", "wb")
+    stream = open(name, "wb")
     # render
     stream.write(b''.join(doc))
     # flush
