@@ -6,12 +6,12 @@
 #
 
 
-# superclass
-from .Type import Type
+# access to my superclass
+from .. import base
 
 
 # table declaration
-class ItemType(Type, id='item_types'):
+class ItemType(base.type, id='item_types'):
     """
     A table of the various types of items
 

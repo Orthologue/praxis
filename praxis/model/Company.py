@@ -11,7 +11,7 @@ import praxis
 
 
 # class declaration
-class Company(praxis.db.object, schema=praxis.schema.company):
+class Company(praxis.db.object, schema=praxis.schema.crm.company):
     """
     The company model
     """
@@ -31,7 +31,7 @@ class Company(praxis.db.object, schema=praxis.schema.company):
 
 
     # implementation details
-    class byName(praxis.db.query, company=praxis.schema.company):
+    class byName(praxis.db.query, company=praxis.schema.crm.company):
         """
         Retrieve companies by name
         """

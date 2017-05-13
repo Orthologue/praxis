@@ -6,14 +6,14 @@
 #
 
 
-# superclass
-from .Type import Type
+# access to my superclass
+from .. import base
 
 
 # table declaration
-class EmploymentType(Type, id='employment_types'):
+class TenderType(base.type, id='tender_types'):
     """
-    A table of the various types of employments
+    A table of the various types of tender information
     """
 
 

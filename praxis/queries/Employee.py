@@ -12,10 +12,10 @@ from .. import db, schema
 
 # the query declaration
 class Employee(db.query,
-                 person=schema.person,
-                 employee=schema.employee,
-                 company=schema.company,
-                 employment=schema.employment,
+                 person=schema.crm.person,
+                 employee=schema.hr.employee,
+                 company=schema.crm.company,
+                 employment=schema.hr.employment,
                  ):
     """
     Retrieve an employee record given an employment id

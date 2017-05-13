@@ -6,17 +6,17 @@
 #
 
 
-# superclass
-from .Type import Type
+# access to my superclass
+from .. import base
 
 
 # table declaration
-class URIType(Type, id='uri_types'):
+class PayType(base.type, id='pay_types'):
     """
-    A table of the various types of uris
+    A table of the various compensation types
 
     The current primer fills this table with the following values:
-        web, facebook, instagram, twitter, vine, youtube
+        partner, contractor, hourly, salary
     """
 
 

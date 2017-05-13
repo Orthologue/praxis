@@ -6,17 +6,17 @@
 #
 
 
-# superclass
-from .Type import Type
+# access to my superclass
+from .. import base
 
 
 # table declaration
-class PhoneType(Type, id='phone_types'):
+class URIType(base.type, id='uri_types'):
     """
-    A table of the various types of phone numbers
+    A table of the various types of uris
 
     The current primer fills this table with the following values:
-        cell, voice, fax, pager
+        web, facebook, instagram, twitter, vine, youtube
     """
 
 

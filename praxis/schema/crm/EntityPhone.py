@@ -8,19 +8,19 @@
 
 # access to the framework
 import praxis
-# my superclass
-from .Temporary import Temporary
+# access to my superclass
+from .. import base
 # and the tables i refer to
 from .Entity import Entity
-from .URI import URI
-from .URIType import URIType
+from .Phone import Phone
+from .PhoneType import PhoneType
 from .ContactPurpose import ContactPurpose
 
 
 # table declaration
-class EntityURI(Temporary, id='entity_uris'):
+class EntityPhone(base.temporary, id='entity_phones'):
     """
-    URIs associated with entities
+    The phone numbers of entities
     """
 
     # don't forget that this table derives from {Temporary}, hence it describes a relationship
@@ -28,10 +28,10 @@ class EntityURI(Temporary, id='entity_uris'):
 
     # associating an entity
     entity = praxis.db.reference(key=Entity.entity).notNull()
-    # with a URI
-    uri = praxis.db.reference(key=URI.uri).notNull()
-    # of a particular kind
-    type = praxis.db.reference(key=URIType.type).notNull()
+    # with a phone number
+    phone = praxis.db.reference(key=Phone.number).notNull()
+    # of a particular type
+    type = praxis.db.reference(key=PhoneType.type).notNull()
     # for a particular purpose
     purpose = praxis.db.reference(key=ContactPurpose.purpose).notNull()
 

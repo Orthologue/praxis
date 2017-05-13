@@ -7,11 +7,11 @@
 
 
 # superclass
-from .Type import Type
+from .. import base
 
 
 # table declaration
-class ContactType(Type, id='contact_types'):
+class ContactType(base.type, id='contact_types'):
     """
     A table of the various types of contact information
 

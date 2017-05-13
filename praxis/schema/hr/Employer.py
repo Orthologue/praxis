@@ -9,7 +9,7 @@
 # access to the framework
 import praxis
 # access to the table of entities
-from .Entity import Entity
+from .. import crm
 
 
 # table declaration
@@ -18,7 +18,7 @@ class Employer(praxis.db.table, id='employers'):
     Information about employers
     """
 
-    employer = praxis.db.reference(key=Entity.entity).primary()
+    employer = praxis.db.reference(key=crm.entity.entity).primary()
     employer.doc = "the entity whose attributes these are"
 
     # tax id

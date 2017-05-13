@@ -6,17 +6,17 @@
 #
 
 
-# superclass
-from .Type import Type
+# access to my superclass
+from .. import base
 
 
 # table declaration
-class PayType(Type, id='pay_types'):
+class PhoneType(base.type, id='phone_types'):
     """
-    A table of the various compensation types
+    A table of the various types of phone numbers
 
     The current primer fills this table with the following values:
-        partner, contractor, hourly, salary
+        cell, voice, fax, pager
     """
 
 

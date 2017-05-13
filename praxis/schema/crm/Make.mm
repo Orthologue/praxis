@@ -8,31 +8,31 @@
 # project defaults
 PROJECT = praxis
 # the package name
-PACKAGE = schema
-
-RECURSE_DIRS = \
-    base \
-    crm \
-    hr \
-    sales \
+PACKAGE = schema/crm
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
+    Company.py \
+    ContactPurpose.py \
+    ContactType.py \
+    Email.py \
+    Entity.py \
+    EntityEmail.py \
+    EntityLocation.py \
+    EntityPhone.py \
+    EntityType.py \
+    EntityURI.py \
+    Location.py \
+    Person.py \
+    Phone.py \
+    PhoneType.py \
+    URI.py \
+    URIType.py \
     __init__.py
 
 # the standard build targets
 all: export
 
-tidy::
-	BLD_ACTION="tidy" $(MM) recurse
-
-clean::
-	BLD_ACTION="clean" $(MM) recurse
-
-distclean::
-	BLD_ACTION="distclean" $(MM) recurse
-
 export:: export-package-python-modules
-	BLD_ACTION="export" $(MM) recurse
 
 # end of file

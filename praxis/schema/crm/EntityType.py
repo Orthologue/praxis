@@ -6,12 +6,12 @@
 #
 
 
-# superclass
-from .Type import Type
+# access to my superclass
+from .. import base
 
 
 # table declaration
-class EntityType(Type, id='entity_types'):
+class EntityType(base.type, id='entity_types'):
     """
     A table of the various types of entities
 

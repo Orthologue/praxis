@@ -9,7 +9,7 @@
 # access to the framework
 import praxis
 # access to the table of people
-from .Person import Person
+from .. import crm
 
 
 # table declaration
@@ -18,7 +18,7 @@ class Employee(praxis.db.table, id='employees'):
     Personal information about employees
     """
 
-    employee = praxis.db.reference(key=Person.entity).primary()
+    employee = praxis.db.reference(key=crm.person.entity).primary()
     employee.doc = "the entity whose attributes these are"
 
     # tax id

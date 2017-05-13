@@ -11,7 +11,7 @@ from .. import db, schema
 
 
 # the query declaration
-class Company(db.query, company=schema.company):
+class Company(db.query, company=schema.crm.company):
     """
     Retrieve a company record given its name
     """

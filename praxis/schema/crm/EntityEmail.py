@@ -8,26 +8,26 @@
 
 # access to the framework
 import praxis
-# my superclass
-from .Temporary import Temporary
+# access to my superclass
+from .. import base
 # and the tables i refer to
 from .Entity import Entity
-from .Location import Location
+from .Email import Email
 from .ContactPurpose import ContactPurpose
 
 
 # table declaration
-class EntityLocation(Temporary, id='entity_locations'):
+class EntityEmail(base.temporary, id='entity_emails'):
     """
-    Physical locations associated with entities
+    The email addresses of entities
     """
 
     # don't forget that this table derives from {Temporary}, hence it describes a relationship
     # with a potentially finite duration
 
-    # associating an entity with a location
+    # associating an entity with an email address
     entity = praxis.db.reference(key=Entity.entity).notNull()
-    location = praxis.db.reference(key=Location.location).notNull()
+    email = praxis.db.reference(key=Email.email).notNull()
     # for a particular purpose
     purpose = praxis.db.reference(key=ContactPurpose.purpose).notNull()
 

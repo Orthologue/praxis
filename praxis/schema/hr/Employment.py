@@ -8,17 +8,17 @@
 
 # access to the framework
 import praxis
-# my superclass
-from .Temporary import Temporary
+# access to my superclass
+from .. import base
 # and the tables i refer to
-from .Entity import Entity
+from .. import crm
 from .EmploymentType import EmploymentType
 from .PayType import PayType
 from .PayFrequency import PayFrequency
 
 
 # table declaration
-class Employment(Temporary, id='employments'):
+class Employment(base.temporary, id='employments'):
     """
     Establish an employee-employer relationship between two entities
     """
@@ -27,10 +27,10 @@ class Employment(Temporary, id='employments'):
     id.doc = "the employee id; meant to support external data sources"
 
     # the parties
-    employee = praxis.db.reference(key=Entity.entity).notNull()
+    employee = praxis.db.reference(key=crm.entity.entity).notNull()
     employee.doc = "the employed entity"
 
-    employer = praxis.db.reference(key=Entity.entity).notNull()
+    employer = praxis.db.reference(key=crm.entity.entity).notNull()
     employer.doc = "the employing entity"
 
     # payroll info
