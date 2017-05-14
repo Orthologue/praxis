@@ -196,6 +196,14 @@ class Epson:
         return bytes([self.ESC, ord('a'), code])
 
 
+    def smoothing(self, state=True):
+        """
+        Turn smoothing on for large characters
+        """
+        # generate the escape sequence
+        return bytes([self.GS, ord('b'), (1 if state else 0)])
+
+
     # mechanism control commands
     def cut(self, full=True):
         """

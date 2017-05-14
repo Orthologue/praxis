@@ -54,7 +54,7 @@ def test():
         p.selectCharacterSize(width=1,height=2),
         b'TOTAL                                14.45\n',
         p.selectCharacterSize(width=1,height=1),
-        b'------------------------------------------\n',
+        b'----+----|----+----|----+----|----+----|--\n',
         b'PAID                                 50.00\n',
         b'CHANGE                               35.55\n',
 
