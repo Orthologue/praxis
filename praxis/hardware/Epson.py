@@ -8,6 +8,7 @@
 
 class Epson:
     """
+    The EPSON POS set of commands
     """
 
 
@@ -156,6 +157,14 @@ class Epson:
         return bytes([self.ESC, ord('M'), font])
 
 
+    def selectCharacterTable(self, page):
+        """
+        Select the character table for characters with the high bit set
+        """
+        # generate the sequence
+        return bytes([self.ESC, ord('t'), page])
+
+
     def selectCharacterSize(self, width, height):
         """
         Pick the character width
@@ -296,6 +305,13 @@ class Epson:
     ESC = 0x1b
     FS  = 0x1c
     GS  = 0x1d
+
+    pages = {
+        'cp437': 0,   # latin
+        'cp850': 2,   # multi-lingual
+        'cp851': 11,  # greek
+        'cp858': 19,  # euro
+    }
 
 
 # end of file
