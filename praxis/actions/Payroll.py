@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2017 all rights reserved
+# (c) 1998-2018 all rights reserved
 #
 
 
@@ -387,7 +387,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             "%",
             "% michael a.g. aïvázis",
             "% urban radish",
-            "% (c) 1998-2017 all rights reserved",
+            "% (c) 1998-2018 all rights reserved",
             "%",
             "% adjust the include path",
             "\makeatletter",
