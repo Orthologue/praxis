@@ -129,7 +129,7 @@ class Punches:
                 warnings.append(self.ParsingError(description=msg, locator=here))
 
             # check that the clock out is later than the clock in
-            if clockin >= clockout:
+            if clockin > clockout:
                 msg = "{}: clock out before clock in: in: {}, out: {}".format(
                     " ".join(reversed(name)), clockin, clockout)
                 # build a locator
