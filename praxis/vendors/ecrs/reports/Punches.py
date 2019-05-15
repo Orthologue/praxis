@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2018 all rights reserved
+# (c) 1998-2019 all rights reserved
 #
 
 
@@ -147,7 +147,8 @@ class Punches:
 
     def filter(self, stream, **kwds):
         """
-        Throw away everything except the employee name and punch info
+        Throw away everything except the employee name and punch info; also keep the zeroth column
+        where we record downstream updates of the record when the mispunch log is applied
         """
         # get the csv package
         import csv
@@ -157,12 +158,14 @@ class Punches:
         # start reading
         for record in reader:
             # extract what we care about
+            status = record[self.OFFSET_STATUS].strip()
             info = record[self.OFFSET_EMPLOYEE].strip()
             clockin = record[self.OFFSET_CLOCKIN].strip()
             clockout = record[self.OFFSET_CLOCKOUT].strip()
             # build an empty list with the right length
             filtered = ['']*len(record)
             # populate
+            filtered[self.OFFSET_STATUS] = status
             filtered[self.OFFSET_EMPLOYEE] = info
             filtered[self.OFFSET_CLOCKIN] = clockin
             filtered[self.OFFSET_CLOCKOUT] = clockout
@@ -174,6 +177,7 @@ class Punches:
 
 
     # constants -- for version 3.2.02 of the CATAPULT report
+    OFFSET_STATUS = 0
     OFFSET_EMPLOYEE = 6
     OFFSET_CLOCKIN = 10
     OFFSET_CLOCKOUT = 11

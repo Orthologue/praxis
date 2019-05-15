@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2014 all rights reserved
+# (c) 1998-2019 all rights reserved
 #
 
 """
@@ -37,4 +37,4 @@ class Creator(praxis.dbapp):
         return 0
 
 
-# end of file 
+# end of file

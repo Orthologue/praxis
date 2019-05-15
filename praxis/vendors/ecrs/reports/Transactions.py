@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2018 all rights reserved
+# (c) 1998-2019 all rights reserved
 #
 
 
@@ -95,7 +95,7 @@ class Transactions:
                 invoice.finish = datetime.datetime.strptime(
                     record[self.OFFSET_FINISH], self.TIME_FORMAT)
                 # show me
-                print('invoice {0.tid}: cashier: {0.cashier}'.format(invoice))
+                print(f'invoice {invoice.tid}: cashier: {invoice.cashier}')
 
             # in any case, this record contains information about this invoice
             item = record[self.OFFSET_ITEMID].strip()
@@ -188,7 +188,7 @@ class Transactions:
             # if we know nothing about it
             if not match:
                 # show me
-                print('{!r}'.format(description))
+                print(f'invoice {invoice.tid}: no match: {description!r}')
                 # and bail
                 raise SystemExit(0)
 
@@ -625,6 +625,7 @@ class Transactions:
         if kind != 'DEBIT':
             # extract the number
             info = next(records)[self.OFFSET_DESCRIPTION]
+            print(kind, info)
             approval = self.CARD_APPROVAL.match(info).group(1)
             # print('    approval: {!r}'.format(approval))
         # otherwise
@@ -755,7 +756,7 @@ class Transactions:
         r'(?P<subtotal>SUBTOTAL)$',
         r'(?P<total>TOTAL)$',
         r'(?P<tendered>TOTAL TENDERED)$',
-        r'(?P<change>Change)$',
+        r'(?P<change>(Change)|(CHANGE))$',
         r'(?P<cardinfo>--- Card Information ---)$',
         r'(?P<giftinfo>Gift Card Account #{13})$',
         #
@@ -773,11 +774,11 @@ class Transactions:
 
         ]))
 
-    CARD_TYPE = re.compile('Card Type: (.+) \((Manual|Swiped)\)')
+    CARD_TYPE = re.compile('Card Type:\s+([^\s]+)\s+\((Manual|Swiped)\)')
     CARD_ACCOUNT = re.compile('Account #: (.+)')
-    CARD_EXPIRATION = re.compile('Exp Date : (\d{4})')
-    CARD_AMOUNT = re.compile('Amount: (.+)')
-    CARD_APPROVAL = re.compile('Approval #: (.+)')
+    CARD_EXPIRATION = re.compile('Exp Date : (\d\d/?\d\d)')
+    CARD_AMOUNT = re.compile('(?:----\s)?Amount: (.+)')
+    CARD_APPROVAL = re.compile('Approval #:\s+(.+)')
     CARD_DATE = re.compile('Date: (.+)')
     CARD_REFERENCE = re.compile('Reference #: (.+)')
     CARD_SIGNATURE = re.compile('Signature Captured')

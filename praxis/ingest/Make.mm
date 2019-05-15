@@ -2,7 +2,7 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2018 all rights reserved
+# (c) 1998-2019 all rights reserved
 #
 
 # the project name
@@ -12,6 +12,7 @@ PACKAGE = ingest
 
 # the list of python modules
 EXPORT_PYTHON_MODULES = \
+    Mispunch.py \
     ScheduleParser.py \
     ScheduleScanner.py \
     Staff.py \

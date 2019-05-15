@@ -2,12 +2,16 @@
 #
 # michael a.g. aïvázis
 # orthologue
-# (c) 1998-2018 all rights reserved
+# (c) 1998-2019 all rights reserved
 #
 
 
 # externals
-import csv, datetime, itertools, re, operator
+import csv
+import datetime
+import itertools
+import re
+import operator
 # get the package
 import praxis
 
@@ -43,6 +47,9 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
 
     jurisdiction = praxis.compliance.jurisdiction(default='us.california')
     jurisdiction.doc = 'compliant calculators for the company jurisdiction'
+
+    log = praxis.properties.istream(default="mispunch.csv")
+    log.doc = 'the file with the mispunch log entries'
 
 
     # behaviors
@@ -211,16 +218,14 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             # all done
             return 1
 
-        # form the na,e of the outfile
+        # form the name of the output file
         ofile = node.uri.name
         # let the user know what we are doing
         plexus.info.log('parsing clock punches from {!r}'.format(str(node.uri)))
         plexus.info.log('placing filtered output in {!r}'.format(ofile))
 
-        # get the csv package
-        import csv
         # create the output stream
-        ostream  = open(ofile, mode="w")
+        ostream = open(ofile, mode="w")
         # make a writer
         writer = csv.writer(ostream)
 
@@ -387,7 +392,7 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
             "%",
             "% michael a.g. aïvázis",
             "% urban radish",
-            "% (c) 1998-2018 all rights reserved",
+            "% (c) 1998-2019 all rights reserved",
             "%",
             "% adjust the include path",
             "\makeatletter",
@@ -662,6 +667,255 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
         return 0
 
 
+    @praxis.export(tip='merge information from the mispunch log')
+    def mispunch(self, plexus, **kwds):
+        """
+        Load data from a mispunch log and merge it with the existing clock punches
+        """
+        # make a channel
+        channel = plexus.info
+        # find the data set for the requested pay period
+        payday, node = self.selectPayday(plexus=plexus)
+        # check
+        if node is None:
+            # we were unable to locate a matching pay date
+            plexus.error.log("unable to locate time cards for payday {.payday}".format(self))
+            # all done
+            return 1
+
+        # build the employee index
+        employees = {}
+        # build the punch table
+        punches = praxis.patterns.vivify(levels=2, atom=praxis.vendors.ecrs.model.punchlist)
+        # initialize the event piles
+        errors = [] # parsing errors
+        warnings = [] # parsing warnings
+        # make a punch parser
+        parser = praxis.vendors.ecrs.reports.punches()
+        # open the timecards
+        with node.open() as stream:
+            # parse the input stream
+            parser.parse(stream=stream, names=employees, punches=punches,
+                         warnings=warnings, errors=errors)
+        # if there were any errors
+        if errors:
+            # check in
+            plexus.error.line('while parsing the clock punches:')
+            # go through them
+            for error in errors:
+                # and print them out
+                plexus.error.line(str(error))
+            # get the count
+            count = len(errors)
+            # flush
+            plexus.error.log('{} error{} total'.format(count, '' if count == 1 else 's'))
+
+        # if there were any warnings
+        if warnings:
+            # check in
+            plexus.warning.line('while parsing the clock punches:')
+            # go through them
+            for warning in warnings:
+                # and print them out
+                plexus.warning.line(str(warning))
+            # get the count
+            count = len(warnings)
+            # flush
+            plexus.warning.log('{} warning{} total'.format(count, '' if count == 1 else 's'))
+
+        # invert the employee index
+        names = { (last, first): eid for eid, (last, first) in employees.items() }
+
+        # units
+        day = datetime.timedelta(1)
+        # find the beginning of this payperiod
+        earliest = payday - 13*day
+        # show me
+        channel.log(f"payday: {payday}")
+        channel.log(f"first day: {earliest}")
+
+        # get task factory
+        newTask = praxis.vendors.ecrs.model.task
+
+        # make a mispunch parser
+        mispunch = praxis.ingest.mispunch()
+        # read the data
+        corrections = mispunch.read(stream=self.log)
+        # go through the corrections
+        for idx, correction in enumerate(corrections):
+            # check whether this correction has been processed before
+            if correction.status:
+                # and skip it
+                continue
+            # get the date of the correction
+            date = correction.date
+            # if it's not known
+            if not date:
+                # skip this correction; it's incomplete
+                channel = plexus.warning
+                # show me
+                channel.log(f"record {idx}: missing date")
+                # and skip it
+                continue
+            # check whether it falls within this pay period
+            if date < earliest or date > payday:
+                # and if not, skip it too
+                continue
+
+            # get the person's first and last name
+            first = correction.first
+            last = correction.last
+
+            # attempt to
+            try:
+                # retrieve the employee id from the time records
+                eid = names[(last,first)]
+            # if this fails
+            except KeyError:
+                # there had better be a value in the mispunch log
+                eid = correction.id
+                # if not
+                if not eid:
+                    # complain
+                    raise plexus.error.log(f"no employee id for {first} {last}")
+                # add this employee to the employee index
+                employees[eid] = (last, first)
+
+            # unpack the times
+            start = correction.start
+            lunchOut = correction.lunchOut
+            lunchIn = correction.lunchIn
+            end = correction.end
+
+            # turn them into date times
+            start = datetime.datetime.combine(date, start) if start else start
+            lunchOut = datetime.datetime.combine(date, lunchOut) if lunchOut else lunchOut
+            lunchIn = datetime.datetime.combine(date, lunchIn) if lunchIn else lunchIn
+            end = datetime.datetime.combine(date, end) if end else end
+
+            # find the punch
+            punch = punches[eid][date]
+            # if it's empty
+            if not punch:
+                # initialize the pile
+                additions = []
+                # this is a new entry
+                if start and lunchOut:
+                    additions.append(newTask(name='addition', start=start, finish=lunchOut))
+                if lunchIn and end:
+                    additions.append(newTask(name='addition', start=lunchIn, finish=end))
+                if start and end and not lunchIn and not lunchOut:
+                    additions.append(newTask(name='addition', start=start, finish=end))
+                # show me
+                channel.log(f"{first} {last} on {date}: {len(additions)} new tasks")
+                # add them to the pile
+                punches[eid][date].extend(additions)
+                # all done
+                continue
+
+            # if there is exactly one task
+            if len(punch) == 1:
+                # get it
+                task = punch[0]
+                # mark it as corrected
+                task.name = "correction"
+                # valid cases are
+
+                # if i have a start
+                if start:
+                    # adjust the start time
+                    task.start = start
+                    channel.log(f"{first} {last} on {date}: adjusting start time")
+                # if i have a lunch out
+                if lunchOut:
+                    # adjust the end time
+                    task.finish = lunchOut
+                    channel.log(f"{first} {last} on {date}: adjusting lunch out")
+                    # now, if i have a lunch in and an end
+                    if lunchIn and end:
+                        # make a new task
+                        newT = newTask(name="addition", start=lunchIn, finish=end)
+                        # and add it to the pile
+                        punch.append(newT)
+                        channel.log(f"{first} {last} on {date}: new task for missing lunch")
+                    # all done with this one
+                    continue
+                # if i have an end
+                if end:
+                    # adjust the end time
+                    task.finish = end
+                    channel.log(f"{first} {last} on {date}: adjusting end time")
+                # all done
+                continue
+
+            # if there is more than two tasks
+            if len(punch) > 2:
+                # complain
+                channel.log(f"{first} {last} on {date}: mispunch on date with more than 2 tasks")
+
+            # get the first and last tasks
+            t0 = punch[0]
+            t1 = punch[-1]
+            # if i have a start
+            if start:
+                # adjust
+                t0.name = "correction"
+                t0.start = start
+                channel.log(f"{first} {last} on {date}: adjusting start time")
+            # if I have a lunch out
+            if lunchOut:
+                # adjust
+                t0.name = "correction"
+                t0.finish = lunchOut
+                channel.log(f"{first} {last} on {date}: adjusting lunch out")
+            # if i have a lunch in
+            if lunchIn:
+                # adjust
+                t1.name = "correction"
+                t1.start = lunchIn
+                channel.log(f"{first} {last} on {date}: adjusting lunch in")
+            # if a finish
+            if end:
+                # adjust
+                t1.name = "correction"
+                t1.finish = end
+                channel.log(f"{first} {last} on {date}: adjusting end time")
+
+        # all done with processing; build the output file by creating a file in the current
+        # directory with the same name as the timecard file
+        with open(node.uri.name, mode="w") as stream:
+            # make a writer
+            writer = csv.writer(stream)
+            # make a record prototype
+            row = ['']*18
+            # go through all the employee ids
+            for eid in sorted(punches.keys()):
+                # get the dates
+                dates = punches[eid]
+                # and all dates
+                for date in sorted(dates.keys()):
+                    # go through the tasks
+                    for task in dates[date]:
+                        # adjust the row
+                        if task.name == "correction":
+                            row[0] = '!'
+                        elif task.name == "addition":
+                            row[0] = '+'
+                        else:
+                            row[0] = ''
+                        # generate the employee info
+                        last, first = employees[eid]
+                        row[self.OFFSET_EMPLOYEE] = f"{int(eid):,}   {last},  {first}"
+                        # render the punch
+                        row[self.OFFSET_CLOCKIN] = task.start.strftime(self.TIME_FORMAT)
+                        row[self.OFFSET_CLOCKOUT] = task.finish.strftime(self.TIME_FORMAT)
+                        # save the row
+                        writer.writerow(row)
+
+        # all done
+        return 0
+
+
     # implementation details
     def payperiod(self, data):
         """
@@ -896,6 +1150,13 @@ class Payroll(praxis.command, family='praxis.actions.payroll'):
     # constants
     days = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ]
     TIMECARDS = r"(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})-time.csv"
+
+    # constants -- for version 3.2.02 of the CATAPULT report
+    OFFSET_EMPLOYEE = 6
+    OFFSET_CLOCKIN = 10
+    OFFSET_CLOCKOUT = 11
+
+    TIME_FORMAT = "%m/%d/%Y %I:%M:%S%p"
 
 
 # end of file
